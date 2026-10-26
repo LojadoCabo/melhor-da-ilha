@@ -1,0 +1,8 @@
+{
+  "name": "Remix MELHOR DA ILHA — Guia Local da Ilha de Itaparica e RMS",
+  "description": "Guia comercial e de serviços moderno da Ilha de Itaparica e Região Metropolitana de Salvador. Encontre negócios locais, telefones, WhatsApp, horários e rotas com busca rápida e filtros.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
