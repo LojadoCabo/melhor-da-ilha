@@ -22,8 +22,9 @@
       ]
     },
     "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
     "noEmit": true
   },
-  "include": ["src"],
+  "include": ["src", "server.ts"],
   "exclude": ["dist", "public", "node_modules"]
 }

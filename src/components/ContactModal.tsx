@@ -58,6 +58,23 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
       showToast('Por favor preencha seu nome e mensagem.');
       return;
     }
+    // Persist to Firestore
+    try {
+      const inqId = `inq-${Date.now()}`;
+      import('../lib/firebase').then(({ db, doc, setDoc }) => {
+        setDoc(doc(db, 'inquiries', inqId), {
+          name: name.trim(),
+          email: contact.includes('@') ? contact.trim() : `${name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'usuario'}@contato.local`,
+          phone: contact.trim(),
+          message: message.trim(),
+          type: 'contact',
+          createdAt: new Date().toISOString()
+        }).catch(err => console.warn('Inquiry Firestore write error:', err));
+      });
+    } catch (e) {
+      console.warn(e);
+    }
+
     setSent(true);
     showToast('Mensagem enviada com sucesso! Retornaremos em breve.');
   };

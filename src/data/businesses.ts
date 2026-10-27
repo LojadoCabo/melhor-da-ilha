@@ -1,4 +1,5 @@
 import { Business } from '../types';
+import { VERA_CRUZ_CLIENTS } from './veraCruzBusinesses';
 
 export const BUSINESSES: Business[] = [
   // ==========================================
@@ -2846,5 +2847,6 @@ export const BUSINESSES: Business[] = [
     isOpenNow: true,
     openingHoursText: 'Todos os dias: 06:00 às 20:00',
     coverImage: 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&w=700&q=80'
-  }
+  },
+  ...VERA_CRUZ_CLIENTS
 ];

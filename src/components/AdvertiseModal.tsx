@@ -84,6 +84,24 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
       onBusinessAdded(newBiz);
     }
 
+    // Persist lead to Firestore
+    try {
+      const inqId = `adv-${Date.now()}`;
+      import('../lib/firebase').then(({ db, doc, setDoc }) => {
+        setDoc(doc(db, 'inquiries', inqId), {
+          name: formData.name.trim(),
+          email: `${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'anuncio'}@anunciante.local`,
+          phone: formData.whatsapp || formData.phone,
+          businessName: formData.name.trim(),
+          message: `Plano: ${selectedPlan}. Cidade: ${formData.city} (${formData.neighborhood}). Serviços: ${formData.services || 'Não especificado'}. Descrição: ${formData.description}`,
+          type: 'advertise',
+          createdAt: new Date().toISOString()
+        }).catch(err => console.warn('Advertise lead Firestore write error:', err));
+      });
+    } catch (e) {
+      console.warn(e);
+    }
+
     setSubmitted(true);
     showToast('Cadastro recebido! Seu negócio foi adicionado com sucesso.');
   };

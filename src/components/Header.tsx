@@ -10,11 +10,16 @@ import {
   Phone,
   Layers,
   MapPin,
-  Share2,
-  MessageSquareHeart
+  Sparkles,
+  MessageSquareHeart,
+  LogIn,
+  LogOut,
+  User as UserIcon,
+  Loader2
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useFavorites } from '../context/FavoritesContext';
+import { useAuth } from '../context/AuthContext';
 
 interface HeaderProps {
   onOpenAdvertise: () => void;
@@ -24,6 +29,7 @@ interface HeaderProps {
   onOpenContact: () => void;
   onGoHome: () => void;
   onOpenTestimonials?: () => void;
+  onOpenConcierge: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -33,15 +39,40 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenFavorites,
   onOpenContact,
   onGoHome,
-  onOpenTestimonials
+  onOpenTestimonials,
+  onOpenConcierge
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { favorites } = useFavorites();
+  const { user, loading, loginWithGoogle, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [authBusy, setAuthBusy] = useState(false);
+
+  const handleLogin = async () => {
+    try {
+      setAuthBusy(true);
+      await loginWithGoogle();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setAuthBusy(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      setAuthBusy(true);
+      await logout();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setAuthBusy(false);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3">
         {/* Brand / Logo */}
         <button
           type="button"
@@ -94,6 +125,17 @@ export const Header: React.FC<HeaderProps> = ({
               Depoimentos
             </button>
           )}
+
+          {/* Concierge Button Desktop */}
+          <button
+            type="button"
+            onClick={onOpenConcierge}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 border border-teal-200/80 dark:border-teal-800/60 hover:bg-teal-100 transition-colors"
+          >
+            <Sparkles className="w-4 h-4 text-amber-500 animate-spin" style={{ animationDuration: '4s' }} />
+            <span>Concierge IA</span>
+          </button>
+
           <button
             type="button"
             onClick={onOpenAdvertise}
@@ -110,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
         </nav>
 
-        {/* Actions (Dark Mode, Favorites, Advertise CTA) */}
+        {/* Actions (Dark Mode, Favorites, Auth, Advertise CTA) */}
         <div className="flex items-center gap-2">
           {/* Dark Mode toggle */}
           <button
@@ -140,6 +182,75 @@ export const Header: React.FC<HeaderProps> = ({
               </span>
             )}
           </button>
+
+          {/* User Authentication Status */}
+          {user ? (
+            <div className="relative group">
+              <button
+                type="button"
+                className="flex items-center gap-2 p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all border border-slate-200/80 dark:border-slate-700"
+                title={`Conectado como ${user.displayName || user.email}`}
+              >
+                {user.photoURL ? (
+                  <img
+                    src={user.photoURL}
+                    alt={user.displayName || 'Avatar'}
+                    className="w-6 h-6 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-6 h-6 rounded-full bg-teal-600 text-white flex items-center justify-center text-xs font-bold">
+                    {(user.displayName || user.email || 'U')[0].toUpperCase()}
+                  </div>
+                )}
+                <span className="hidden lg:inline max-w-[100px] truncate">
+                  {user.displayName?.split(' ')[0] || 'Minha Conta'}
+                </span>
+              </button>
+              {/* Dropdown Menu */}
+              <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-2 hidden group-hover:block z-50">
+                <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800">
+                  <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                    {user.displayName || 'Usuário'}
+                  </p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                    {user.email}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={onOpenFavorites}
+                  className="w-full text-left px-3 py-2 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors flex items-center gap-2 mt-1"
+                >
+                  <Heart className="w-3.5 h-3.5 text-rose-500" />
+                  <span>Favoritos na Nuvem</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  disabled={authBusy}
+                  className="w-full text-left px-3 py-2 text-xs text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors flex items-center gap-2 mt-1"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span>Sair da Conta</span>
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={handleLogin}
+              disabled={loading || authBusy}
+              aria-label="Entrar com Google"
+              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-xs font-semibold border border-slate-200 dark:border-slate-700 transition-colors"
+            >
+              {authBusy ? (
+                <Loader2 className="w-4 h-4 animate-spin text-teal-600" />
+              ) : (
+                <LogIn className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+              )}
+              <span className="hidden sm:inline">Entrar</span>
+            </button>
+          )}
 
           {/* Advertise Button Desktop */}
           <button
@@ -177,6 +288,19 @@ export const Header: React.FC<HeaderProps> = ({
             <Compass className="w-4 h-4 text-teal-600" />
             <span>Explorar Início</span>
           </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              onOpenConcierge();
+              setMobileMenuOpen(false);
+            }}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800"
+          >
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            <span>Concierge IA com Maps Grounding</span>
+          </button>
+
           <button
             type="button"
             onClick={() => {
@@ -186,7 +310,7 @@ export const Header: React.FC<HeaderProps> = ({
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800"
           >
             <Layers className="w-4 h-4 text-teal-600" />
-            <span>Todas as Categorias (12)</span>
+            <span>Todas as Categorias</span>
           </button>
           <button
             type="button"
@@ -235,7 +359,40 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Fale Conosco / Contato</span>
           </button>
 
-          <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
+          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-2">
+            {!user ? (
+              <button
+                type="button"
+                onClick={() => {
+                  handleLogin();
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 font-semibold text-sm border border-slate-200 dark:border-slate-700"
+              >
+                <LogIn className="w-4 h-4 text-teal-600" />
+                <span>Entrar com Google</span>
+              </button>
+            ) : (
+              <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-between">
+                <div className="truncate">
+                  <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                    {user.displayName || user.email}
+                  </p>
+                  <p className="text-[10px] text-teal-600 dark:text-teal-400">
+                    Sincronizado na Nuvem
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg"
+                  title="Sair"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+
             <button
               type="button"
               onClick={() => {

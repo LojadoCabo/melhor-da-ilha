@@ -1,0 +1,94 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile information in the system",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "The unique Firebase Auth UID" },
+        "email": { "type": "string", "format": "email", "description": "User email address" },
+        "displayName": { "type": "string", "maxLength": 100, "description": "Display name of the user" },
+        "photoURL": { "type": "string", "maxLength": 500, "description": "Avatar photo URL" },
+        "createdAt": { "type": "string", "description": "ISO timestamp of account creation" },
+        "updatedAt": { "type": "string", "description": "ISO timestamp of last update" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "Favorite": {
+      "title": "Favorite",
+      "description": "A saved business favorite by a user",
+      "type": "object",
+      "properties": {
+        "businessId": { "type": "string", "maxLength": 100, "description": "Unique business ID from catalog" },
+        "businessName": { "type": "string", "maxLength": 150, "description": "Business title/trade name" },
+        "businessCity": { "type": "string", "maxLength": 80, "description": "City or municipality name" },
+        "categoryId": { "type": "string", "maxLength": 80, "description": "Category identifier" },
+        "createdAt": { "type": "string", "description": "ISO timestamp when favorited" }
+      },
+      "required": ["businessId", "businessName", "businessCity", "createdAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A user recommendation or review for a local business",
+      "type": "object",
+      "properties": {
+        "businessId": { "type": "string", "maxLength": 100, "description": "Target business ID" },
+        "userId": { "type": "string", "maxLength": 128, "description": "Author UID" },
+        "userName": { "type": "string", "maxLength": 100, "description": "Author display name" },
+        "userAvatar": { "type": "string", "maxLength": 500, "description": "Author photo URL" },
+        "rating": { "type": "number", "description": "Rating score between 1 and 5" },
+        "comment": { "type": "string", "minLength": 5, "maxLength": 1000, "description": "User review text" },
+        "createdAt": { "type": "string", "description": "ISO timestamp" }
+      },
+      "required": ["businessId", "userId", "userName", "rating", "comment", "createdAt"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "A contact or business advertisement inquiry lead",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "minLength": 2, "maxLength": 100, "description": "Contact person name" },
+        "email": { "type": "string", "format": "email", "description": "Contact email" },
+        "phone": { "type": "string", "maxLength": 30, "description": "Phone or WhatsApp" },
+        "businessName": { "type": "string", "maxLength": 120, "description": "Business name (if advertising)" },
+        "message": { "type": "string", "minLength": 5, "maxLength": 1500, "description": "Message or plan details" },
+        "type": { "type": "string", "enum": ["advertise", "contact", "claim"], "description": "Inquiry intent" },
+        "createdAt": { "type": "string", "description": "ISO timestamp" }
+      },
+      "required": ["name", "email", "message", "type", "createdAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "A multi-turn AI concierge conversation message",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "enum": ["user", "model"], "description": "Message author role" },
+        "content": { "type": "string", "maxLength": 8000, "description": "Message text" },
+        "createdAt": { "type": "string", "description": "ISO timestamp" }
+      },
+      "required": ["role", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile store, accessible by the user or admin"
+    },
+    "/users/{userId}/favorites/{businessId}": {
+      "schema": "Favorite",
+      "description": "User saved favorites collection"
+    },
+    "/businesses/{businessId}/reviews/{reviewId}": {
+      "schema": "Review",
+      "description": "Public business reviews and testimonials"
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": "Inquiry",
+      "description": "Business advertising requests and contact submissions"
+    },
+    "/users/{userId}/chats/{chatId}": {
+      "schema": "ChatMessage",
+      "description": "AI Concierge chat history per user"
+    }
+  }
+}
