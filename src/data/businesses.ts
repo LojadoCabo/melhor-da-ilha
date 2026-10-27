@@ -8,6 +8,20 @@ import { RMS_EXTRA_BATCH5 } from './rmsBusinessesBatch5';
 import { RMS_EXTRA_BATCH6 } from './rmsBusinessesBatch6';
 import { RMS_EXTRA_BATCH7 } from './rmsBusinessesBatch7';
 import { RMS_EXTRA_BATCH8 } from './rmsBusinessesBatch8';
+import { NIGHTLIFE_BATCH9 } from './nightlifeBatch9';
+import { NIGHTLIFE_BATCH10 } from './nightlifeBatch10';
+import { NIGHTLIFE_BATCH11 } from './nightlifeBatch11';
+import { NIGHTLIFE_BATCH12 } from './nightlifeBatch12';
+import { NIGHTLIFE_BATCH13 } from './nightlifeBatch13';
+import { NIGHTLIFE_BATCH14 } from './nightlifeBatch14';
+import { NIGHTLIFE_BATCH15 } from './nightlifeBatch15';
+import { CATALOG_EXPANSION_BATCH16 } from './catalogExpansionBatch16';
+import { CATALOG_EXPANSION_BATCH17 } from './catalogExpansionBatch17';
+import { CATALOG_EXPANSION_BATCH18 } from './catalogExpansionBatch18';
+import { CATALOG_EXPANSION_BATCH19 } from './catalogExpansionBatch19';
+import { CATALOG_EXPANSION_BATCH20 } from './catalogExpansionBatch20';
+import { CATALOG_EXPANSION_BATCH21 } from './catalogExpansionBatch21';
+import { CATALOG_EXPANSION_BATCH22 } from './catalogExpansionBatch22';
 
 export const BUSINESSES: Business[] = [
   // ==========================================
@@ -2827,5 +2841,19 @@ export const BUSINESSES: Business[] = [
   ...RMS_EXTRA_BATCH5,
   ...RMS_EXTRA_BATCH6,
   ...RMS_EXTRA_BATCH7,
-  ...RMS_EXTRA_BATCH8
+  ...RMS_EXTRA_BATCH8,
+  ...NIGHTLIFE_BATCH9,
+  ...NIGHTLIFE_BATCH10,
+  ...NIGHTLIFE_BATCH11,
+  ...NIGHTLIFE_BATCH12,
+  ...NIGHTLIFE_BATCH13,
+  ...NIGHTLIFE_BATCH14,
+  ...NIGHTLIFE_BATCH15,
+  ...CATALOG_EXPANSION_BATCH16,
+  ...CATALOG_EXPANSION_BATCH17,
+  ...CATALOG_EXPANSION_BATCH18,
+  ...CATALOG_EXPANSION_BATCH19,
+  ...CATALOG_EXPANSION_BATCH20,
+  ...CATALOG_EXPANSION_BATCH21,
+  ...CATALOG_EXPANSION_BATCH22
 ];
