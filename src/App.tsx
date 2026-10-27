@@ -25,6 +25,7 @@ import { ContactModal } from './components/ContactModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { ConciergeChatModal } from './components/ConciergeChatModal';
+import { ClientMiniSite } from './components/ClientMiniSite';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 import {
@@ -68,14 +69,77 @@ function MainAppContent() {
   const [isConciergeOpen, setIsConciergeOpen] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
+  // Dedicated Client Mini-Site View (/meu-site)
+  const [miniSiteBusiness, setMiniSiteBusiness] = useState<Business | null>(null);
+  const [isMiniSiteOpen, setIsMiniSiteOpen] = useState(false);
+
+  const { favorites, showToast } = useFavorites();
+
+  // URL path listener for /meu-site or ?biz=
+  React.useEffect(() => {
+    const checkPath = () => {
+      const pathname = window.location.pathname;
+      const hash = window.location.hash;
+      const search = window.location.search;
+      if (pathname === '/meu-site' || hash.includes('/meu-site') || search.includes('meu-site')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const bizSlug = urlParams.get('biz');
+        const match =
+          businesses.find(b => b.slug === bizSlug || b.id === bizSlug) ||
+          businesses.find(b => b.isRmsPremium) ||
+          businesses[0];
+        setMiniSiteBusiness(match || businesses[0]);
+        setIsMiniSiteOpen(true);
+      }
+    };
+    checkPath();
+    window.addEventListener('popstate', checkPath);
+    window.addEventListener('hashchange', checkPath);
+    return () => {
+      window.removeEventListener('popstate', checkPath);
+      window.removeEventListener('hashchange', checkPath);
+    };
+  }, [businesses]);
+
+  const handleOpenMiniSite = (biz?: Business) => {
+    const target = biz || businesses.find(b => b.isRmsPremium) || businesses[0];
+    setMiniSiteBusiness(target);
+    setIsMiniSiteOpen(true);
+    window.history.pushState({}, '', `/meu-site?biz=${target.slug || target.id}`);
+  };
+
+  const handleCloseMiniSite = () => {
+    setIsMiniSiteOpen(false);
+    window.history.pushState({}, '', '/');
+  };
+
   // Mobile Bottom Navigation
   const [mobileTab, setMobileTab] = useState<'home' | 'categories' | 'cities' | 'favorites' | 'advertise'>('home');
-
-  const { favorites } = useFavorites();
 
   // Handle business addition from Advertise modal
   const handleBusinessAdded = (newBiz: Business) => {
     setBusinesses(prev => [newBiz, ...prev]);
+
+    if (newBiz.isRmsPremium) {
+      setFilters(prev => ({
+        ...prev,
+        sortBy: 'featured',
+        cityId: 'all',
+        categoryId: 'all',
+        query: ''
+      }));
+      setShowFavoritesOnly(false);
+      showToast(`🌟 ${newBiz.name} subiu para o TOPO com estrela CLIENTE PREMIUM ⭐!`);
+    } else {
+      showToast(`Negócio ${newBiz.name} cadastrado com sucesso!`);
+    }
+
+    setTimeout(() => {
+      const resultsEl = document.getElementById('directory-results');
+      if (resultsEl) {
+        resultsEl.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 250);
   };
 
   // Filter updates
@@ -134,6 +198,17 @@ function MainAppContent() {
     }
   };
 
+  if (isMiniSiteOpen && miniSiteBusiness) {
+    return (
+      <ClientMiniSite
+        business={miniSiteBusiness}
+        onBackToDirectory={handleCloseMiniSite}
+        onSelectAnotherBusiness={biz => handleOpenMiniSite(biz)}
+        allBusinesses={businesses}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-[#f8f9fa] dark:bg-[#0b1320] text-slate-800 dark:text-slate-100 transition-colors duration-200">
       {/* Toast Notification */}
@@ -160,6 +235,7 @@ function MainAppContent() {
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
         onOpenConcierge={() => setIsConciergeOpen(true)}
+        onOpenMiniSite={() => handleOpenMiniSite()}
       />
 
       <main className="flex-1">
@@ -259,6 +335,7 @@ function MainAppContent() {
                   business={business}
                   onSelect={biz => setSelectedBusiness(biz)}
                   onShare={biz => setSharingBusiness(biz)}
+                  onOpenMiniSite={biz => handleOpenMiniSite(biz)}
                 />
               ))}
             </div>
@@ -382,6 +459,7 @@ function MainAppContent() {
         isOpen={Boolean(selectedBusiness)}
         onClose={() => setSelectedBusiness(null)}
         onShare={biz => setSharingBusiness(biz)}
+        onOpenMiniSite={biz => handleOpenMiniSite(biz)}
       />
 
       {/* Social Share Modal */}

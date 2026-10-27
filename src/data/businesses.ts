@@ -1,5 +1,7 @@
 import { Business } from '../types';
 import { VERA_CRUZ_CLIENTS } from './veraCruzBusinesses';
+import { RMS_EXTRA_PART1 } from './rmsBusinessesPart1';
+import { RMS_EXTRA_PART2 } from './rmsBusinessesPart2';
 
 export const BUSINESSES: Business[] = [
   // ==========================================
@@ -2851,5 +2853,7 @@ export const BUSINESSES: Business[] = [
     openingHoursText: 'Todos os dias: 06:00 às 20:00',
     coverImage: 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&w=700&q=80'
   },
-  ...VERA_CRUZ_CLIENTS
+  ...VERA_CRUZ_CLIENTS,
+  ...RMS_EXTRA_PART1,
+  ...RMS_EXTRA_PART2
 ];

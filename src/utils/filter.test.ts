@@ -127,6 +127,19 @@ test('sortBusinesses sorts by rating, review count and name', () => {
   assert.equal(byName[0].id, 'b2'); // "Restaurante" before "Silveira"
 });
 
+test('sortBusinesses places isRmsPremium at top when sorted by featured', () => {
+  const premiumBiz: Business = {
+    ...mockBusinesses[1],
+    id: 'b-premium',
+    name: 'Auto Elétrica Premium',
+    isRmsPremium: true,
+    rating: 4.1
+  };
+  const list = [mockBusinesses[0], premiumBiz];
+  const sorted = sortBusinesses(list, 'featured');
+  assert.equal(sorted[0].id, 'b-premium');
+});
+
 test('getCategoryCounts aggregates counts accurately', () => {
   const counts = getCategoryCounts(mockBusinesses);
   assert.equal(counts['automoveis-motos-bicicletas'], 1);
