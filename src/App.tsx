@@ -89,6 +89,9 @@ function MainAppContent() {
         setMiniSiteBusiness(match || businesses[0]);
         setIsMiniSiteOpen(true);
       }
+      if (search.includes('anuncio') || search.includes('anunciar') || search.includes('cadastro') || search.includes('plano')) {
+        setIsAdvertiseOpen(true);
+      }
     };
     checkPath();
     window.addEventListener('popstate', checkPath);
@@ -497,6 +500,8 @@ function MainAppContent() {
         isOpen={isAdvertiseOpen}
         onClose={() => setIsAdvertiseOpen(false)}
         onBusinessAdded={handleBusinessAdded}
+        businesses={businesses}
+        onOpenMiniSite={handleOpenMiniSite}
       />
 
       {/* Contact Support Modal */}

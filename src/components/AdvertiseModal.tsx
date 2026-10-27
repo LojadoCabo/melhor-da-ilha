@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   X,
   PlusCircle,
@@ -6,27 +6,38 @@ import {
   Send,
   MessageCircle,
   ShieldCheck,
-  Star
+  Star,
+  Sparkles,
+  ArrowRight,
+  ExternalLink,
+  Search
 } from 'lucide-react';
 import { CATEGORIES } from '../data/categories';
 import { CITIES } from '../data/cities';
+import { BUSINESSES as fallbackBusinesses } from '../data/businesses';
+import { Business } from '../types';
 import { useFavorites } from '../context/FavoritesContext';
 
 interface AdvertiseModalProps {
   isOpen: boolean;
   onClose: () => void;
   onBusinessAdded?: (biz: any) => void;
+  businesses?: Business[];
+  onOpenMiniSite?: (biz: Business) => void;
 }
 
 export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
   isOpen,
   onClose,
-  onBusinessAdded
+  onBusinessAdded,
+  businesses,
+  onOpenMiniSite
 }) => {
   const { showToast } = useFavorites();
   const [submitted, setSubmitted] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<'free' | 'destaque' | 'premium'>('premium');
   const [createdBiz, setCreatedBiz] = useState<any>(null);
+  const [dismissMatch, setDismissMatch] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -40,7 +51,93 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
     services: ''
   });
 
+  // Intelligent matching to detect if the establishment is already registered
+  const matchedBusiness = useMemo(() => {
+    if (dismissMatch) return null;
+
+    const normalize = (str: string) =>
+      str
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .trim();
+
+    const nameQuery = normalize(formData.name);
+    const cleanDigits = formData.whatsapp.replace(/\D/g, '');
+
+    if (nameQuery.length < 3 && cleanDigits.length < 8) {
+      return null;
+    }
+
+    const catalog = businesses && businesses.length > 0 ? businesses : fallbackBusinesses;
+
+    // 1. Check matching phone / WhatsApp (if at least 8 digits)
+    if (cleanDigits.length >= 8) {
+      const phoneMatch = catalog.find(b => {
+        const bPhoneDigits = b.phone ? b.phone.replace(/\D/g, '') : '';
+        const bWaDigits = b.whatsapp ? b.whatsapp.replace(/\D/g, '') : '';
+        return (
+          (bPhoneDigits && bPhoneDigits.endsWith(cleanDigits)) ||
+          (cleanDigits.length >= 8 && bPhoneDigits.includes(cleanDigits)) ||
+          (bWaDigits && bWaDigits.endsWith(cleanDigits)) ||
+          (cleanDigits.length >= 8 && bWaDigits.includes(cleanDigits))
+        );
+      });
+      if (phoneMatch) return phoneMatch;
+    }
+
+    // 2. Check matching name (if at least 3 chars)
+    if (nameQuery.length >= 3) {
+      const exactMatch = catalog.find(b => normalize(b.name) === nameQuery);
+      if (exactMatch) return exactMatch;
+
+      if (nameQuery.length >= 4) {
+        const startsWithMatch = catalog.find(b => normalize(b.name).startsWith(nameQuery));
+        if (startsWithMatch) return startsWithMatch;
+      }
+
+      if (nameQuery.length >= 5) {
+        const includesMatch = catalog.find(b => normalize(b.name).includes(nameQuery));
+        if (includesMatch) return includesMatch;
+      }
+    }
+
+    return null;
+  }, [formData.name, formData.whatsapp, dismissMatch, businesses]);
+
   if (!isOpen) return null;
+
+  // Handle claiming / upgrading an existing business profile
+  const handleUpgradeExisting = (plan: 'destaque' | 'premium') => {
+    if (!matchedBusiness) return;
+    const isPremium = plan === 'premium';
+    const planName = isPremium ? 'RMS Premium (R$ 59/mês)' : 'Destaque Ilha (R$ 29/mês)';
+
+    const updatedBiz: Business = {
+      ...matchedBusiness,
+      isRmsPremium: isPremium,
+      isFeatured: true,
+      planType: plan,
+      badgeText: isPremium ? 'CLIENTE PREMIUM ⭐' : 'Destaque Ilha',
+      registeredAt: Date.now()
+    };
+
+    setCreatedBiz(updatedBiz);
+    setSelectedPlan(plan);
+
+    if (onBusinessAdded) {
+      onBusinessAdded(updatedBiz);
+    }
+
+    // Direct WhatsApp invitation message
+    const msg = encodeURIComponent(
+      `Olá equipe MELHOR DA ILHA! Meu estabelecimento "${matchedBusiness.name}" em ${matchedBusiness.cityName} já faz parte do time no guia e vim pelo anúncio para assinar o plano ${planName}. Como posso finalizar a ativação?`
+    );
+    window.open(`https://wa.me/5571999545085?text=${msg}`, '_blank');
+
+    setSubmitted(true);
+    showToast(`🎉 Parabéns! ${matchedBusiness.name} agora é ${isPremium ? 'CLIENTE PREMIUM' : 'Destaque'}!`);
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,11 +146,17 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
       return;
     }
 
+    // If an existing business is matched, guide user to upgrade
+    if (matchedBusiness) {
+      handleUpgradeExisting(selectedPlan === 'free' ? 'destaque' : selectedPlan);
+      return;
+    }
+
     const selectedCityObj = CITIES.find(c => c.name === formData.city) || CITIES[0];
     const selectedCatObj = CATEGORIES.find(c => c.name === formData.category) || CATEGORIES[0];
     const isRmsPremium = selectedPlan === 'premium';
 
-    const newBiz = {
+    const newBiz: Business = {
       id: `custom-${Date.now()}`,
       name: formData.name.trim(),
       slug: formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
@@ -91,7 +194,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
       onBusinessAdded(newBiz);
     }
 
-    // Persist lead to Firestore
+    // Persist lead to Firestore if available
     try {
       const inqId = `adv-${Date.now()}`;
       import('../lib/firebase').then(({ db, doc, setDoc }) => {
@@ -115,13 +218,13 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
 
   const handleWhatsAppContact = () => {
     const text = encodeURIComponent(
-      `Olá equipe MELHOR DA ILHA! Quero cadastrar meu negócio: ${formData.name || '(Nome)'} em ${formData.city} no plano ${selectedPlan.toUpperCase()}.`
+      `Olá equipe MELHOR DA ILHA! Quero cadastrar/atualizar meu negócio: ${formData.name || '(Nome)'} em ${formData.city} no plano ${selectedPlan.toUpperCase()}.`
     );
     window.open(`https://wa.me/5571999545085?text=${text}`, '_blank');
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/65 backdrop-blur-md overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-md overflow-y-auto">
       <div
         className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto max-h-[92vh] flex flex-col overflow-y-auto transition-all duration-200"
         role="dialog"
@@ -131,7 +234,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
         <button
           onClick={onClose}
           aria-label="Fechar modal de cadastro"
-          className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+          className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 z-10"
         >
           <X className="w-5 h-5" />
         </button>
@@ -147,13 +250,107 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                   Anuncie no Melhor da Ilha
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                  Seja encontrado por moradores e turistas na Ilha e Salvador
+                  Cadastre sua empresa ou ative seu plano comercial na Ilha de Itaparica e RMS
                 </p>
               </div>
             </div>
 
-            {/* Plans selector */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-6">
+            {/* Smart Detection Banner: When establishment already exists in catalog */}
+            {matchedBusiness && (
+              <div className="mb-5 p-4 rounded-2xl bg-gradient-to-br from-amber-500/15 via-yellow-500/10 to-transparent border-2 border-amber-500/60 dark:bg-amber-950/40 text-slate-900 dark:text-white shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 shadow-md font-black text-xl">
+                    🎉
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider mb-1">
+                      VOCÊ JÁ FAZ PARTE DO NOSSO TIME!
+                    </div>
+                    <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight">
+                      "{matchedBusiness.name}" já está cadastrado no Guia Melhor da Ilha!
+                    </h3>
+                    <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                      Identificamos o seu negócio cadastrado em <strong>{matchedBusiness.cityName}</strong> ({matchedBusiness.neighborhood}). Seu perfil já está ativo no catálogo básico.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Upsell to 29 or 59 plan */}
+                <div className="mt-3 pt-3 border-t border-amber-500/30 space-y-2.5">
+                  <p className="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
+                    <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+                    <span>Como você veio pelo nosso anúncio, convide seu negócio para subir ao topo e assinar um plano mensal:</span>
+                  </p>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    {/* Plano 29 */}
+                    <div className="p-3 rounded-xl border border-teal-500/50 bg-white/90 dark:bg-slate-900/90 shadow-sm flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-extrabold text-xs text-slate-900 dark:text-white flex items-center gap-1">
+                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                            Plano Destaque
+                          </span>
+                          <span className="font-black text-xs text-teal-600 dark:text-teal-400">
+                            R$ 29/mês
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">
+                          Selo Verificado oficial, topo na categoria e botão de WhatsApp direto destacado.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleUpgradeExisting('destaque')}
+                        className="mt-2.5 w-full py-2 px-3 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
+                      >
+                        <span>Assinar Plano R$ 29/mês</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    {/* Plano 59 */}
+                    <div className="p-3 rounded-xl border-2 border-amber-500 bg-amber-50/50 dark:bg-amber-950/40 shadow-sm flex flex-col justify-between ring-1 ring-amber-400/40">
+                      <div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-extrabold text-xs text-slate-900 dark:text-white flex items-center gap-1">
+                            <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                            RMS Premium
+                          </span>
+                          <span className="font-black text-xs text-amber-600 dark:text-amber-400">
+                            R$ 59/mês
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-600 dark:text-slate-300 mt-1 leading-snug">
+                          Destaque máximo no topo do site com estrela dourada + Mini-Site exclusivo em <strong>melhordailha.online/meu-site</strong>.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleUpgradeExisting('premium')}
+                        className="mt-2.5 w-full py-2 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 transition-all shadow-md"
+                      >
+                        <span>Assinar Plano R$ 59/mês</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="text-right pt-1">
+                    <button
+                      type="button"
+                      onClick={() => setDismissMatch(true)}
+                      className="text-[11px] text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 underline"
+                    >
+                      Não é o seu negócio? Continuar preenchendo um novo cadastro
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Plans selector for new registrations */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-5">
               {/* Free */}
               <button
                 type="button"
@@ -171,17 +368,17 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                 </div>
               </button>
 
-              {/* Destaque Ilha */}
+              {/* Destaque Ilha - R$ 29 */}
               <button
                 type="button"
                 onClick={() => setSelectedPlan('destaque')}
                 className={`relative p-3 rounded-2xl text-left border transition-all ${
                   selectedPlan === 'destaque'
-                    ? 'border-teal-500 bg-teal-50/60 dark:bg-teal-950/40 shadow-sm'
+                    ? 'border-teal-500 bg-teal-50/60 dark:bg-teal-950/40 shadow-sm ring-2 ring-teal-500/40'
                     : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
                 }`}
               >
-                <span className="absolute -top-2 right-2 px-1.5 py-0.5 rounded-full bg-amber-500 text-slate-950 font-black text-[9px] uppercase tracking-wide">
+                <span className="absolute -top-2 right-2 px-1.5 py-0.5 rounded-full bg-teal-500 text-white font-black text-[9px] uppercase tracking-wide">
                   Mais Popular
                 </span>
                 <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1">
@@ -194,7 +391,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                 </div>
               </button>
 
-              {/* RMS Premium */}
+              {/* RMS Premium - R$ 59 */}
               <button
                 type="button"
                 onClick={() => setSelectedPlan('premium')}
@@ -214,7 +411,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                 </div>
                 <div className="text-base font-extrabold text-amber-600 dark:text-amber-400">R$ 59/mês</div>
                 <div className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-tight font-medium">
-                  Sobe ao topo com estrela <strong>CLIENTE PREMIUM ⭐</strong> + Bônus de <strong>Mini-Site em melhordailha.online/meu-site</strong>
+                  Topo com estrela <strong>CLIENTE PREMIUM ⭐</strong> + Bônus de <strong>Mini-Site</strong>
                 </div>
               </button>
             </div>
@@ -226,14 +423,24 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
                     Nome do Negócio ou Profissional *
                   </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Ex: Pousada Sol, Restaurante Maré..."
-                    value={formData.name}
-                    onChange={e => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                  />
+                  <div className="relative">
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ex: Pousada Sol, Oficina Silva, Dr. Marcos..."
+                      value={formData.name}
+                      onChange={e => {
+                        setFormData({ ...formData, name: e.target.value });
+                        if (dismissMatch) setDismissMatch(false);
+                      }}
+                      className="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    />
+                    {matchedBusiness && (
+                      <span className="absolute right-2.5 top-2 px-1.5 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[9px] font-black">
+                        JÁ NO GUIA
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div>
@@ -278,7 +485,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                   </label>
                   <input
                     type="text"
-                    placeholder="Ex: Mar Grande, Ponta de Areia, Barra Grande..."
+                    placeholder="Ex: Mar Grande, Ponta de Areia, Pituba, Centro..."
                     value={formData.neighborhood}
                     onChange={e => setFormData({ ...formData, neighborhood: e.target.value })}
                     className="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
@@ -296,7 +503,10 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                     required
                     placeholder="Ex: (71) 98842-1920"
                     value={formData.whatsapp}
-                    onChange={e => setFormData({ ...formData, whatsapp: e.target.value })}
+                    onChange={e => {
+                      setFormData({ ...formData, whatsapp: e.target.value });
+                      if (dismissMatch) setDismissMatch(false);
+                    }}
                     className="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
@@ -333,7 +543,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                   Descrição ou Apresentação
                 </label>
                 <textarea
-                  rows={3}
+                  rows={2}
                   placeholder="Conte sobre sua história, horário de funcionamento e diferenciais..."
                   value={formData.description}
                   onChange={e => setFormData({ ...formData, description: e.target.value })}
@@ -356,7 +566,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-md shadow-teal-600/20 transition-all hover:scale-102"
                 >
                   <Send className="w-4 h-4" />
-                  <span>Concluir Cadastro</span>
+                  <span>{matchedBusiness ? 'Ativar Plano no Meu Negócio' : 'Concluir Cadastro'}</span>
                 </button>
               </div>
             </form>
@@ -368,7 +578,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
             </div>
 
             <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-              {selectedPlan === 'premium' ? '🎉 Mini-Site Criado & Perfil no Topo!' : 'Cadastro Concluído com Sucesso!'}
+              {selectedPlan === 'premium' ? '🎉 Mini-Site Ativo & Perfil no Topo!' : 'Parabéns! Cadastro Ativado com Sucesso!'}
             </h3>
 
             {selectedPlan === 'premium' ? (
@@ -403,7 +613,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                           {createdBiz?.name || formData.name}
                         </h4>
                         <p className="text-xs text-slate-300">
-                          {formData.neighborhood}, {formData.city} · {formData.category}
+                          {createdBiz?.neighborhood || formData.neighborhood}, {createdBiz?.cityName || formData.city} · {createdBiz?.categoryName || formData.category}
                         </p>
                       </div>
 
@@ -416,11 +626,11 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                     </div>
 
                     <p className="text-xs text-slate-300 italic bg-slate-800/50 p-2.5 rounded-xl border border-slate-700/50">
-                      "{formData.description || 'Atendimento de alta qualidade na Ilha de Itaparica e RMS.'}"
+                      "{createdBiz?.description || formData.description || 'Atendimento de alta qualidade na Ilha de Itaparica e RMS.'}"
                     </p>
 
                     <div className="flex flex-wrap gap-1.5 pt-1">
-                      {(formData.services ? formData.services.split(',') : ['Atendimento no WhatsApp', 'Orçamento Rápido']).map((s, idx) => (
+                      {(createdBiz?.services || (formData.services ? formData.services.split(',') : ['Atendimento no WhatsApp', 'Orçamento Rápido'])).map((s: string, idx: number) => (
                         <span key={idx} className="px-2 py-0.5 rounded-md bg-teal-950/80 border border-teal-800 text-[10px] text-teal-300 font-medium">
                           ✓ {s.trim()}
                         </span>
@@ -446,7 +656,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
               </div>
             ) : (
               <p className="max-w-md mx-auto text-sm text-slate-600 dark:text-slate-300">
-                O seu negócio <strong>{formData.name}</strong> já foi incluído no guia e está pronto para ser visto por milhares de clientes na Ilha e RMS.
+                O seu negócio <strong>{createdBiz?.name || formData.name}</strong> foi atualizado com sucesso no Guia Melhor da Ilha no plano {selectedPlan === 'destaque' ? 'Destaque Ilha (R$ 29/mês)' : 'Gratuito'}.
               </p>
             )}
 

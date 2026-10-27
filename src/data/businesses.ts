@@ -22,6 +22,22 @@ import { CATALOG_EXPANSION_BATCH19 } from './catalogExpansionBatch19';
 import { CATALOG_EXPANSION_BATCH20 } from './catalogExpansionBatch20';
 import { CATALOG_EXPANSION_BATCH21 } from './catalogExpansionBatch21';
 import { CATALOG_EXPANSION_BATCH22 } from './catalogExpansionBatch22';
+import { CATALOG_EXPANSION_BATCH23 } from './catalogExpansionBatch23';
+import { CATALOG_EXPANSION_BATCH24 } from './catalogExpansionBatch24';
+import { CATALOG_EXPANSION_BATCH25 } from './catalogExpansionBatch25';
+import { CATALOG_EXPANSION_BATCH26 } from './catalogExpansionBatch26';
+import { CATALOG_EXPANSION_BATCH27 } from './catalogExpansionBatch27';
+import { CATALOG_EXPANSION_BATCH28 } from './catalogExpansionBatch28';
+import { CATALOG_EXPANSION_BATCH29 } from './catalogExpansionBatch29';
+import { CATALOG_EXPANSION_BATCH30 } from './catalogExpansionBatch30';
+import { CATALOG_EXPANSION_BATCH31 } from './catalogExpansionBatch31';
+import { CATALOG_EXPANSION_BATCH32 } from './catalogExpansionBatch32';
+import { CATALOG_EXPANSION_BATCH33 } from './catalogExpansionBatch33';
+import { CATALOG_EXPANSION_BATCH34 } from './catalogExpansionBatch34';
+import { CATALOG_EXPANSION_BATCH35 } from './catalogExpansionBatch35';
+import { CATALOG_EXPANSION_BATCH36 } from './catalogExpansionBatch36';
+import { CATALOG_EXPANSION_BATCH37 } from './catalogExpansionBatch37';
+import { CATALOG_EXPANSION_BATCH38 } from './catalogExpansionBatch38';
 
 export const BUSINESSES: Business[] = [
   // ==========================================
@@ -2855,5 +2871,21 @@ export const BUSINESSES: Business[] = [
   ...CATALOG_EXPANSION_BATCH19,
   ...CATALOG_EXPANSION_BATCH20,
   ...CATALOG_EXPANSION_BATCH21,
-  ...CATALOG_EXPANSION_BATCH22
+  ...CATALOG_EXPANSION_BATCH22,
+  ...CATALOG_EXPANSION_BATCH23,
+  ...CATALOG_EXPANSION_BATCH24,
+  ...CATALOG_EXPANSION_BATCH25,
+  ...CATALOG_EXPANSION_BATCH26,
+  ...CATALOG_EXPANSION_BATCH27,
+  ...CATALOG_EXPANSION_BATCH28,
+  ...CATALOG_EXPANSION_BATCH29,
+  ...CATALOG_EXPANSION_BATCH30,
+  ...CATALOG_EXPANSION_BATCH31,
+  ...CATALOG_EXPANSION_BATCH32,
+  ...CATALOG_EXPANSION_BATCH33,
+  ...CATALOG_EXPANSION_BATCH34,
+  ...CATALOG_EXPANSION_BATCH35,
+  ...CATALOG_EXPANSION_BATCH36,
+  ...CATALOG_EXPANSION_BATCH37,
+  ...CATALOG_EXPANSION_BATCH38
 ];
