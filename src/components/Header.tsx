@@ -10,7 +10,8 @@ import {
   Phone,
   Layers,
   MapPin,
-  Share2
+  Share2,
+  MessageSquareHeart
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useFavorites } from '../context/FavoritesContext';
@@ -22,6 +23,7 @@ interface HeaderProps {
   onOpenFavorites: () => void;
   onOpenContact: () => void;
   onGoHome: () => void;
+  onOpenTestimonials?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -30,7 +32,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenCities,
   onOpenFavorites,
   onOpenContact,
-  onGoHome
+  onGoHome,
+  onOpenTestimonials
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { favorites } = useFavorites();
@@ -82,6 +85,15 @@ export const Header: React.FC<HeaderProps> = ({
           >
             Municípios
           </button>
+          {onOpenTestimonials && (
+            <button
+              type="button"
+              onClick={onOpenTestimonials}
+              className="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            >
+              Depoimentos
+            </button>
+          )}
           <button
             type="button"
             onClick={onOpenAdvertise}
@@ -198,6 +210,19 @@ export const Header: React.FC<HeaderProps> = ({
             <Heart className="w-4 h-4 text-rose-500" />
             <span>Meus Favoritos ({favorites.length})</span>
           </button>
+          {onOpenTestimonials && (
+            <button
+              type="button"
+              onClick={() => {
+                onOpenTestimonials();
+                setMobileMenuOpen(false);
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-slate-800 dark:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-800"
+            >
+              <MessageSquareHeart className="w-4 h-4 text-teal-600" />
+              <span>Depoimentos de Usuários</span>
+            </button>
+          )}
           <button
             type="button"
             onClick={() => {

@@ -62,6 +62,17 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
   ]);
   const [showReviewSuccess, setShowReviewSuccess] = useState(false);
 
+  React.useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen || !business) return null;
 
   const favorited = isFavorite(business.id);

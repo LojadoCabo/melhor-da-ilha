@@ -22,6 +22,7 @@ import { CitiesModal } from './components/CitiesModal';
 import { AdvertiseModal } from './components/AdvertiseModal';
 import { ContactModal } from './components/ContactModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
+import { TestimonialsSection } from './components/TestimonialsSection';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 import {
@@ -150,6 +151,10 @@ function MainAppContent() {
           setShowFavoritesOnly(false);
           setFilters(defaultFilters);
           window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onOpenTestimonials={() => {
+          const el = document.getElementById('depoimentos-usuarios');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
       />
 
@@ -326,6 +331,19 @@ function MainAppContent() {
             </div>
           </div>
         </section>
+
+        {/* User Testimonials Section: "Depoimentos de Usuários" */}
+        <div id="depoimentos-usuarios">
+          <TestimonialsSection
+            onSelectBusiness={businessId => {
+              const matched = businesses.find(b => b.id === businessId || b.name.toLowerCase().includes(businessId.toLowerCase()));
+              if (matched) {
+                setSelectedBusiness(matched);
+              }
+            }}
+            onOpenContact={() => setIsContactOpen(true)}
+          />
+        </div>
       </main>
 
       {/* Footer */}
@@ -342,6 +360,10 @@ function MainAppContent() {
         }}
         onOpenAdvertise={() => setIsAdvertiseOpen(true)}
         onOpenContact={() => setIsContactOpen(true)}
+        onOpenTestimonials={() => {
+          const el = document.getElementById('depoimentos-usuarios');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
       />
 
       {/* Mobile Bottom Navigation */}

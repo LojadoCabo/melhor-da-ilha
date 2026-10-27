@@ -92,7 +92,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
     const text = encodeURIComponent(
       `Olá equipe MELHOR DA ILHA! Quero cadastrar meu negócio: ${formData.name || '(Nome)'} em ${formData.city} no plano ${selectedPlan.toUpperCase()}.`
     );
-    window.open(`https://wa.me/5571988421920?text=${text}`, '_blank');
+    window.open(`https://wa.me/5571999545085?text=${text}`, '_blank');
   };
 
   return (

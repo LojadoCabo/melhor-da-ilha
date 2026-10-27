@@ -218,7 +218,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Todos os dias: 11:00 às 16:30',
-    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=700&q=80'
   },
 
   // ==========================================
@@ -257,7 +257,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Terça a Domingo: 11:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Ícone da Orla'
   },
   {
@@ -470,7 +470,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Domingo: 10:30 às 15:30 e 18:00 às 22:30',
-    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Top Delivery SFC'
   },
   {
@@ -539,7 +539,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 11:00 às 16:00',
-    coverImage: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'supermercado-oliveira-sfc',
@@ -573,7 +573,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 20:30 | Domingo: 07:00 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'clinica-sao-bento-sfc',
@@ -896,7 +896,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: false,
     isOpenNow: true,
     openingHoursText: 'Todos os dias: 11:00 às 16:30 e 18:30 às 22:30',
-    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1541544741938-0af808871cc0?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Ponto Nobre Candeias'
   },
   {
@@ -1110,7 +1110,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: false,
     isOpenNow: true,
     openingHoursText: 'Todos os dias: 10:30 às 16:30',
-    coverImage: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Tradição na Estrada'
   },
   {
@@ -1322,7 +1322,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Domingo: 12:00 às 23:00',
-    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Alta Gastronomia'
   },
   {
@@ -1395,7 +1395,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: false,
     isOpenNow: true,
     openingHoursText: 'Todos os dias: 09:30 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'mecanica-socorro-linha-verde-msj',
@@ -1429,7 +1429,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Oficina: 07:30 às 18:00 | Reboque e Socorro: 24 Horas',
-    coverImage: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'drogaria-farma-forte-praia-do-forte',
@@ -1464,7 +1464,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Domingo: 07:30 às 22:30',
-    coverImage: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'supermercado-central-mata-sede',
@@ -1498,7 +1498,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 20:00 | Domingo: 07:00 às 12:30',
-    coverImage: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1583258292688-d0213dc5a3a8?auto=format&fit=crop&w=700&q=80'
   },
 
   // ==========================================
@@ -1537,7 +1537,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Domingo: 11:00 às 16:00',
-    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Tradição Pojucana'
   },
   {
@@ -1572,7 +1572,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 21:00 | Domingo: 07:30 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1586015555751-63bb77f4322a?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'pojuca-auto-pecas-mecanica',
@@ -1606,7 +1606,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:30 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1615906655593-ad0386982a0f?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'grafica-speed-pojuca',
@@ -1677,7 +1677,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 20:00 | Domingo: 07:00 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'barbearia-retro-pojucana',
@@ -1752,7 +1752,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:30 | Sábado: 08:00 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1608248597359-324225a073f4?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Referência em Vilas'
   },
   {
@@ -1788,7 +1788,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 21:00 | Domingo: 07:00 às 14:00',
-    coverImage: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1534723452862-4c874018d66d?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'otica-mercadao-lauro-de-freitas',
@@ -1824,7 +1824,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:30 às 18:30 | Sábado: 08:30 às 14:00',
-    coverImage: 'https://images.unsplash.com/photo-1591076482161-42ce6da69f67?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1574258495973-f010dfbb5371?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Preço de Fábrica'
   },
   {
@@ -1899,7 +1899,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 07:30 às 17:30 | Sábado: 08:00 às 12:00',
-    coverImage: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1625047509168-a7026f36de04?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'espaco-renascer-vilas',
@@ -2012,7 +2012,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Domingo: 11:30 às 16:30 e 18:30 às 23:00',
-    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Executivo & Polo'
   },
   {
@@ -2117,7 +2117,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:00 | Sábado: 08:00 às 14:00',
-    coverImage: 'https://images.unsplash.com/photo-1578844251758-2f71da64c96f?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'pet-care-guarajuba-camacari',
@@ -2152,7 +2152,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:30 às 19:00 | Domingo: 09:00 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1548767797-d8c844163c4c?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=700&q=80'
   },
 
   // ==========================================
@@ -2192,7 +2192,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Terça a Domingo: 11:30 às 00:00',
-    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Ponto Alto no Imbuí'
   },
   {
@@ -2378,6 +2378,45 @@ export const BUSINESSES: Business[] = [
     openingHoursText: 'Segunda a Sábado: 08:00 às 20:00 (Com agendamento)',
     coverImage: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=700&q=80'
   },
+  {
+    id: 'loja-do-cabo-ltda-salvador',
+    name: 'Loja do Cabo Ltda',
+    slug: 'loja-do-cabo-ltda',
+    tagline: 'Suplementos naturais, vigor e vitalidade masculina com envio discreto',
+    description: 'Empresa baiana especializada em suplementos naturais e fórmulas avançadas para vigor, energia e vitalidade masculina. Linha completa incluindo Tada Power, TadaMaxx, Erectus Plus, Erectus Retard, Caps Turbo e Madeirada. Atendimento humanizado e consultivo via WhatsApp, embalagens 100% discretas e entrega rápida para Salvador, Ilha de Itaparica e toda a Região Metropolitana.',
+    categoryId: 'saude-e-bem-estar',
+    categoryName: 'Saúde e Bem-estar',
+    cityId: 'salvador',
+    cityName: 'Salvador',
+    neighborhood: 'Caminho das Árvores',
+    address: 'Av. Tancredo Neves, 1632, Torre Sul - Caminho das Árvores, Salvador - BA',
+    phone: '(71) 98382-1218',
+    whatsapp: '5571983821218',
+    instagram: '@loja.do.cabo.ltda',
+    websiteStatus: 'active',
+    websiteStatusText: 'Site Oficial no Ar',
+    website: 'https://lojadocabo.com/',
+    googleMapsUrl: 'https://maps.google.com/?q=Loja+do+Cabo+Ltda+Salvador+BA',
+    rating: 5.0,
+    reviewCount: 312,
+    priceLevel: '$$',
+    tags: ['Suplementos', 'Saúde Masculina', 'Vitalidade', 'Nutracêuticos', 'Tada Power', 'Erectus', 'Salvador', 'Entrega Rápida'],
+    services: [
+      'Linha exclusiva: Tada Power, TadaMaxx, Erectus Plus, Caps Turbo e Madeirada',
+      'Atendimento consultivo e suporte direto pelo WhatsApp oficial (71) 98382-1218',
+      'Envio 100% discreto em embalagem neutra sem identificação externa',
+      'Entrega expressa para Salvador, Ilha de Itaparica e municípios da RMS',
+      'Fórmulas com ingredientes naturais, laudo técnico e procedência garantida'
+    ],
+    isVerified: true,
+    isFeatured: true,
+    hasDelivery: true,
+    isOpenNow: true,
+    openingHoursText: 'Segunda a Sábado: 08:00 às 20:00 | Loja Online 24h',
+    coverImage: '/extracted/lojadocabo/cover-loja-do-cabo.jpg',
+    logoUrl: '/extracted/lojadocabo/logo-loja-do-cabo.png',
+    badgeText: 'Site Oficial Verificado'
+  },
 
   // ==========================================
   // 12. VERA CRUZ - ILHA DE ITAPARICA (6 Negócios)
@@ -2394,8 +2433,8 @@ export const BUSINESSES: Business[] = [
     cityName: 'Vera Cruz',
     neighborhood: 'Mar Grande',
     address: 'Av. Beira Mar, 420 - Próximo ao Terminal das Lanchinhas, Mar Grande',
-    phone: '(71) 98842-1920',
-    whatsapp: '5571988421920',
+    phone: '(71) 99117-1830',
+    whatsapp: '5571991171830',
     instagram: '@silveiramotos.oficial',
     websiteStatus: 'none',
     websiteStatusText: 'Sem Site (WhatsApp Direto)',
@@ -2523,7 +2562,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Aberto 24 Horas todos os dias',
-    coverImage: 'https://images.unsplash.com/photo-1578844251758-2f71da64c96f?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1504222490345-c075b6008014?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'panificadora-mar-grande-vera-cruz',
@@ -2557,7 +2596,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Todos os dias: 05:30 às 20:30',
-    coverImage: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'drogaria-central-da-ilha-vera-cruz',
@@ -2591,7 +2630,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 22:00 | Domingo: 07:30 às 14:00',
-    coverImage: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1576602975754-efdf313b9342?auto=format&fit=crop&w=700&q=80'
   },
 
   // ==========================================
@@ -2630,7 +2669,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Terça a Domingo: 11:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80',
+    coverImage: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=700&q=80',
     badgeText: 'Top Gastronomia'
   },
   {
@@ -2702,7 +2741,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:30 às 21:00 | Domingo: 08:00 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1471864190281-a93a3070b6de?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'oficina-guincho-itaparica-manguinhos',
@@ -2736,7 +2775,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Oficina: 07:00 às 19:00 | Reboque: 24 Horas',
-    coverImage: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1580274455191-1c62238fa333?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'pousada-fonte-da-bica-itaparica',
@@ -2772,7 +2811,7 @@ export const BUSINESSES: Business[] = [
     hasDelivery: false,
     isOpenNow: true,
     openingHoursText: 'Recepção 24 horas para hóspedes',
-    coverImage: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=700&q=80'
   },
   {
     id: 'padaria-colonial-itaparica',
@@ -2787,7 +2826,7 @@ export const BUSINESSES: Business[] = [
     neighborhood: 'Centro Histórico',
     address: 'Praça da Quitanda, 08 - Centro Histórico, Itaparica - BA',
     phone: '(71) 99240-3355',
-    whatsapp: '5571992403355',
+    whatsapp: '5571992441233',
     websiteStatus: 'none',
     websiteStatusText: 'Sem Site (WhatsApp Direto)',
     googleMapsUrl: 'https://maps.google.com/?q=Praca+da+Quitanda+08+Centro+Historico+Itaparica+BA',
@@ -2806,6 +2845,6 @@ export const BUSINESSES: Business[] = [
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Todos os dias: 06:00 às 20:00',
-    coverImage: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1517433670267-08bbd4be890f?auto=format&fit=crop&w=700&q=80'
   }
 ];

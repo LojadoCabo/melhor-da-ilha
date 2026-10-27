@@ -32,3 +32,21 @@ test('every business has valid address, phone or whatsapp, and coordinates/mapsU
 test('total business count is at least 65 (13 municipalities * 5 businesses)', () => {
   assert.ok(BUSINESSES.length >= 65, `Expected at least 65 businesses, found ${BUSINESSES.length}`);
 });
+
+test('every business has a unique cover image (zero duplicates)', () => {
+  const images = BUSINESSES.map(b => b.coverImage);
+  const uniqueImages = new Set(images);
+  
+  if (uniqueImages.size !== images.length) {
+    // Find duplicates for helpful error reporting
+    const counts: Record<string, number> = {};
+    const duplicates: string[] = [];
+    for (const img of images) {
+      counts[img] = (counts[img] || 0) + 1;
+      if (counts[img] === 2) duplicates.push(img);
+    }
+    assert.fail(`Found duplicate cover images: ${duplicates.join(', ')}`);
+  }
+  
+  assert.equal(uniqueImages.size, images.length, 'All business cover images must be unique');
+});
