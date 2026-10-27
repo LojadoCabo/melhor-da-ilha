@@ -2,6 +2,12 @@ import { Business } from '../types';
 import { VERA_CRUZ_CLIENTS } from './veraCruzBusinesses';
 import { RMS_EXTRA_PART1 } from './rmsBusinessesPart1';
 import { RMS_EXTRA_PART2 } from './rmsBusinessesPart2';
+import { RMS_EXTRA_BATCH3 } from './rmsBusinessesBatch3';
+import { RMS_EXTRA_BATCH4 } from './rmsBusinessesBatch4';
+import { RMS_EXTRA_BATCH5 } from './rmsBusinessesBatch5';
+import { RMS_EXTRA_BATCH6 } from './rmsBusinessesBatch6';
+import { RMS_EXTRA_BATCH7 } from './rmsBusinessesBatch7';
+import { RMS_EXTRA_BATCH8 } from './rmsBusinessesBatch8';
 
 export const BUSINESSES: Business[] = [
   // ==========================================
@@ -2855,5 +2861,11 @@ export const BUSINESSES: Business[] = [
   },
   ...VERA_CRUZ_CLIENTS,
   ...RMS_EXTRA_PART1,
-  ...RMS_EXTRA_PART2
+  ...RMS_EXTRA_PART2,
+  ...RMS_EXTRA_BATCH3,
+  ...RMS_EXTRA_BATCH4,
+  ...RMS_EXTRA_BATCH5,
+  ...RMS_EXTRA_BATCH6,
+  ...RMS_EXTRA_BATCH7,
+  ...RMS_EXTRA_BATCH8
 ];
