@@ -2453,11 +2453,14 @@ export const BUSINESSES: Business[] = [
     ],
     isVerified: true,
     isFeatured: true,
+    isRmsPremium: true,
+    planType: 'premium',
+    registeredAt: Date.now() - 50000,
     hasDelivery: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:30 às 18:00',
     coverImage: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=700&q=80',
-    badgeText: 'Destaque Ilha'
+    badgeText: 'CLIENTE PREMIUM ⭐'
   },
   {
     id: 'ilha-forte-materiais',

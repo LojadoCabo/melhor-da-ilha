@@ -24,6 +24,7 @@ interface BusinessModalProps {
   isOpen: boolean;
   onClose: () => void;
   onShare: (business: Business) => void;
+  onOpenMiniSite?: (business: Business) => void;
 }
 
 interface UserReview {
@@ -38,7 +39,8 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
   business,
   isOpen,
   onClose,
-  onShare
+  onShare,
+  onOpenMiniSite
 }) => {
   const { isFavorite, toggleFavorite, showToast } = useFavorites();
   const [userRating, setUserRating] = useState<number>(5);
@@ -154,6 +156,16 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
 
             {/* Badges on banner */}
             <div className="absolute bottom-4 left-4 right-4 flex flex-wrap items-center gap-2">
+              {business.isRmsPremium ? (
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 text-slate-950 shadow-lg border border-amber-200 animate-pulse">
+                  <Star className="w-3.5 h-3.5 fill-slate-950" />
+                  CLIENTE PREMIUM ⭐
+                </span>
+              ) : business.badgeText ? (
+                <span className="px-3 py-1 rounded-full text-xs font-bold bg-amber-500 text-slate-950 shadow-sm">
+                  {business.badgeText}
+                </span>
+              ) : null}
               <span className="px-3 py-1 rounded-full text-xs font-semibold bg-teal-600 text-white shadow-sm">
                 {business.categoryName}
               </span>
@@ -358,6 +370,35 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
                 </div>
               </div>
             </div>
+
+            {/* RMS Premium Mini-Site Dedicated Button */}
+            {business.isRmsPremium && (
+              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950/40 dark:to-yellow-950/30 border border-amber-300 dark:border-amber-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">
+                    <Star className="w-4 h-4 fill-slate-950" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-amber-900 dark:text-amber-200">
+                      Mini-Site Oficial no Ar (Bônus Premium)
+                    </div>
+                    <div className="text-[11px] font-mono text-teal-700 dark:text-teal-400">
+                      melhordailha.online/meu-site
+                    </div>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    if (onOpenMiniSite) onOpenMiniSite(business);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-sm transition-colors text-center"
+                >
+                  Abrir Página do Cliente →
+                </button>
+              </div>
+            )}
 
             {/* Social Channels */}
             {(business.instagram || business.facebook || business.website) && (

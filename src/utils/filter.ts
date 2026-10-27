@@ -112,6 +112,13 @@ export function sortBusinesses(
     case 'featured':
     default:
       return list.sort((a, b) => {
+        // Cliente Plano RMS Premium R$ 59/mês sobe imediatamente para o topo absoluto
+        if (a.isRmsPremium && !b.isRmsPremium) return -1;
+        if (!a.isRmsPremium && b.isRmsPremium) return 1;
+        if (a.isRmsPremium && b.isRmsPremium) {
+          return (b.registeredAt || 0) - (a.registeredAt || 0);
+        }
+
         if (a.isFeatured && !b.isFeatured) return -1;
         if (!a.isFeatured && b.isFeatured) return 1;
         return b.rating - a.rating;

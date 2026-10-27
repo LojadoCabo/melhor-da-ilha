@@ -51,6 +51,9 @@ export interface Business {
   coverImage: string;
   logoUrl?: string;
   badgeText?: string;
+  isRmsPremium?: boolean;
+  planType?: 'free' | 'destaque' | 'premium';
+  registeredAt?: number;
 }
 
 export interface FilterState {

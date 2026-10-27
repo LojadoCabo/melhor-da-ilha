@@ -30,6 +30,7 @@ interface HeaderProps {
   onGoHome: () => void;
   onOpenTestimonials?: () => void;
   onOpenConcierge: () => void;
+  onOpenMiniSite?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -40,7 +41,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenContact,
   onGoHome,
   onOpenTestimonials,
-  onOpenConcierge
+  onOpenConcierge,
+  onOpenMiniSite
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { favorites } = useFavorites();
@@ -135,6 +137,19 @@ export const Header: React.FC<HeaderProps> = ({
             <Sparkles className="w-4 h-4 text-amber-500 animate-spin" style={{ animationDuration: '4s' }} />
             <span>Concierge IA</span>
           </button>
+
+          {/* Meu-site Premium Bonus Link */}
+          {onOpenMiniSite && (
+            <button
+              type="button"
+              onClick={onOpenMiniSite}
+              className="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-black text-amber-900 dark:text-amber-200 bg-amber-50 dark:bg-amber-950/40 border border-amber-300/80 dark:border-amber-700/60 hover:bg-amber-100 transition-colors"
+              title="Acessar bônus do Plano Premium: melhordailha.online/meu-site"
+            >
+              <span className="text-amber-500">⭐</span>
+              <span className="font-mono">meu-site</span>
+            </button>
+          )}
 
           <button
             type="button"

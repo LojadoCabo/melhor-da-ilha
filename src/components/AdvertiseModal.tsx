@@ -51,6 +51,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
     if (onBusinessAdded) {
       const selectedCityObj = CITIES.find(c => c.name === formData.city) || CITIES[0];
       const selectedCatObj = CATEGORIES.find(c => c.name === formData.category) || CATEGORIES[0];
+      const isRmsPremium = selectedPlan === 'premium';
 
       const newBiz = {
         id: `custom-${Date.now()}`,
@@ -72,13 +73,16 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
         priceLevel: '$$' as const,
         tags: [formData.category.split(' ')[0], formData.neighborhood],
         services: formData.services ? formData.services.split(',').map(s => s.trim()) : ['Atendimento Local'],
-        isVerified: selectedPlan !== 'free',
-        isFeatured: selectedPlan === 'premium',
+        isVerified: true,
+        isFeatured: isRmsPremium || selectedPlan === 'destaque',
+        isRmsPremium: isRmsPremium,
+        planType: selectedPlan,
+        registeredAt: Date.now(),
         hasDelivery: true,
         isOpenNow: true,
         openingHoursText: 'Segunda a Sábado: Horário Comercial',
         coverImage: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=700&q=80',
-        badgeText: selectedPlan === 'premium' ? 'Novo Destaque' : undefined
+        badgeText: isRmsPremium ? 'CLIENTE PREMIUM ⭐' : (selectedPlan === 'destaque' ? 'Destaque Ilha' : undefined)
       };
 
       onBusinessAdded(newBiz);
@@ -191,19 +195,23 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
               <button
                 type="button"
                 onClick={() => setSelectedPlan('premium')}
-                className={`p-3 rounded-2xl text-left border transition-all ${
+                className={`relative p-3 rounded-2xl text-left border transition-all ${
                   selectedPlan === 'premium'
-                    ? 'border-teal-500 bg-teal-50/50 dark:bg-teal-950/30'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                    ? 'border-amber-400 bg-amber-50/70 dark:bg-amber-950/40 shadow-md ring-2 ring-amber-400/50'
+                    : 'border-slate-200 dark:border-slate-800 hover:border-amber-300'
                 }`}
               >
+                <span className="absolute -top-2 right-2 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 font-black text-[9px] uppercase tracking-wide shadow-sm flex items-center gap-0.5">
+                  <Star className="w-2.5 h-2.5 fill-slate-950 text-slate-950" />
+                  TOPO DO SITE
+                </span>
                 <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 text-amber-500" />
-                  RMS Premium
+                  <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                  Plano RMS Premium
                 </div>
-                <div className="text-base font-extrabold text-teal-600 dark:text-teal-400">R$ 59/mês</div>
-                <div className="text-[11px] text-slate-500 mt-1 leading-tight">
-                  Destaque na Home, banner e divulgação nas redes
+                <div className="text-base font-extrabold text-amber-600 dark:text-amber-400">R$ 59/mês</div>
+                <div className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-tight font-medium">
+                  Sobe ao topo com estrela <strong>CLIENTE PREMIUM ⭐</strong> + Bônus de <strong>Mini-Site em melhordailha.online/meu-site</strong>
                 </div>
               </button>
             </div>
@@ -358,9 +366,23 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
             <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
               Cadastro Concluído com Sucesso!
             </h3>
-            <p className="max-w-md mx-auto text-sm text-slate-600 dark:text-slate-300">
-              O seu negócio <strong>{formData.name}</strong> já foi incluído no guia e está pronto para ser visto por milhares de clientes na Ilha e RMS.
-            </p>
+            {selectedPlan === 'premium' ? (
+              <div className="max-w-md mx-auto space-y-2 text-sm text-slate-600 dark:text-slate-300">
+                <p>
+                  O seu negócio <strong>{formData.name}</strong> foi cadastrado no <strong>Plano RMS Premium R$ 59/mês</strong> e subiu imediatamente para o <span className="text-amber-600 dark:text-amber-400 font-black">TOPO DO SITE</span> com a estrela dourada de <strong>CLIENTE PREMIUM ⭐</strong>!
+                </p>
+                <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700/60 text-xs text-amber-900 dark:text-amber-200 font-medium">
+                  🎁 <strong>BÔNUS EXCLUSIVO ATIVADO:</strong> Sua página oficial com mini-site pronto já está reservada em:
+                  <div className="font-mono font-bold text-teal-700 dark:text-teal-300 mt-1">
+                    melhordailha.online/meu-site
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <p className="max-w-md mx-auto text-sm text-slate-600 dark:text-slate-300">
+                O seu negócio <strong>{formData.name}</strong> já foi incluído no guia e está pronto para ser visto por milhares de clientes na Ilha e RMS.
+              </p>
+            )}
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
               <button
                 type="button"
