@@ -29,7 +29,6 @@ interface HeaderProps {
   onOpenContact: () => void;
   onGoHome: () => void;
   onOpenTestimonials?: () => void;
-  onOpenConcierge: () => void;
   onOpenMiniSite?: () => void;
 }
 
@@ -41,7 +40,6 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenContact,
   onGoHome,
   onOpenTestimonials,
-  onOpenConcierge,
   onOpenMiniSite
 }) => {
   const { theme, toggleTheme } = useTheme();
@@ -74,22 +72,22 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3">
-        {/* Brand / Logo */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-3">
+        {/* Brand / Logo - Optimized for Mobile & Desktop */}
         <button
           type="button"
           onClick={onGoHome}
-          className="flex items-center gap-3 text-left group focus:outline-none"
+          className="flex items-center gap-2 sm:gap-3 text-left group focus:outline-none shrink-0 cursor-pointer select-none py-1"
           aria-label="Ir para a página inicial do Melhor da Ilha"
         >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-teal-700 via-teal-600 to-emerald-500 text-white flex items-center justify-center shadow-md shadow-teal-700/20 group-hover:scale-105 transition-transform">
-            <Compass className="w-6 h-6 animate-pulse" />
+          <div className="w-9 h-9 sm:w-11 sm:h-11 shrink-0 aspect-square rounded-xl sm:rounded-2xl bg-gradient-to-tr from-teal-700 via-teal-600 to-emerald-500 text-white flex items-center justify-center shadow-md shadow-teal-700/20 group-hover:scale-105 transition-transform">
+            <Compass className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse" />
           </div>
-          <div>
-            <span className="block font-black text-lg sm:text-xl tracking-tight text-slate-900 dark:text-white leading-none">
+          <div className="flex flex-col justify-center min-w-0">
+            <span className="block font-black text-[15px] sm:text-xl tracking-tight text-slate-900 dark:text-white leading-none whitespace-nowrap">
               MELHOR DA ILHA
             </span>
-            <span className="block text-[10px] sm:text-[11px] font-semibold text-teal-700 dark:text-teal-400 tracking-wider uppercase mt-1">
+            <span className="block text-[9px] sm:text-[11px] font-semibold text-teal-700 dark:text-teal-400 tracking-wider uppercase mt-1 leading-none whitespace-nowrap">
               Guia Ilha de Itaparica & RMS
             </span>
           </div>
@@ -128,15 +126,6 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {/* Concierge Button Desktop */}
-          <button
-            type="button"
-            onClick={onOpenConcierge}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-bold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 border border-teal-200/80 dark:border-teal-800/60 hover:bg-teal-100 transition-colors"
-          >
-            <Sparkles className="w-4 h-4 text-amber-500 animate-spin" style={{ animationDuration: '4s' }} />
-            <span>Concierge IA</span>
-          </button>
 
           {/* Meu-site Premium Bonus Link */}
           {onOpenMiniSite && (
@@ -304,17 +293,6 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Explorar Início</span>
           </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              onOpenConcierge();
-              setMobileMenuOpen(false);
-            }}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-teal-700 dark:text-teal-300 bg-teal-50 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800"
-          >
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            <span>Concierge IA com Maps Grounding</span>
-          </button>
 
           <button
             type="button"

@@ -24,7 +24,6 @@ import { AdvertiseModal } from './components/AdvertiseModal';
 import { ContactModal } from './components/ContactModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { TestimonialsSection } from './components/TestimonialsSection';
-import { ConciergeChatModal } from './components/ConciergeChatModal';
 import { ClientMiniSite } from './components/ClientMiniSite';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
@@ -66,7 +65,6 @@ function MainAppContent() {
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isCitiesOpen, setIsCitiesOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
-  const [isConciergeOpen, setIsConciergeOpen] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
 
   // Dedicated Client Mini-Site View (/meu-site)
@@ -234,7 +232,6 @@ function MainAppContent() {
           const el = document.getElementById('depoimentos-usuarios');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
-        onOpenConcierge={() => setIsConciergeOpen(true)}
         onOpenMiniSite={() => handleOpenMiniSite()}
       />
 
@@ -509,31 +506,7 @@ function MainAppContent() {
         onClose={() => setIsContactOpen(false)}
       />
 
-      {/* Floating Concierge IA Trigger Button */}
-      <div className="fixed bottom-20 md:bottom-8 right-4 sm:right-6 z-40">
-        <button
-          type="button"
-          onClick={() => setIsConciergeOpen(true)}
-          className="group flex items-center gap-2.5 px-4 py-3 rounded-full bg-gradient-to-r from-teal-600 via-emerald-600 to-teal-700 text-white shadow-xl shadow-teal-900/30 hover:shadow-teal-700/50 hover:scale-105 active:scale-95 transition-all cursor-pointer border border-teal-300/40"
-          aria-label="Abrir Concierge IA Guia da Ilha com Maps Grounding"
-        >
-          <div className="w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-amber-300">
-            <Sparkles className="w-4 h-4 animate-spin" style={{ animationDuration: '5s' }} />
-          </div>
-          <div className="text-left hidden sm:block">
-            <div className="text-xs font-black tracking-wide leading-tight">Concierge IA</div>
-            <div className="text-[10px] text-teal-100 font-medium">Maps Grounding</div>
-          </div>
-          <span className="sm:hidden text-xs font-black">IA</span>
-        </button>
-      </div>
 
-      {/* Concierge Chat Modal with Maps Grounding */}
-      <ConciergeChatModal
-        isOpen={isConciergeOpen}
-        onClose={() => setIsConciergeOpen(false)}
-        onSelectBusinessQuery={handleQuickSearch}
-      />
     </div>
   );
 }
