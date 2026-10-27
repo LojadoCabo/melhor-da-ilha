@@ -2428,48 +2428,8 @@ export const BUSINESSES: Business[] = [
   },
 
   // ==========================================
-  // 12. VERA CRUZ - ILHA DE ITAPARICA (6 Negócios)
+  // 12. VERA CRUZ - ILHA DE ITAPARICA (5 Negócios)
   // ==========================================
-  {
-    id: 'silveira-motos',
-    name: 'Silveira Motos & Peças',
-    slug: 'silveira-motos-pecas',
-    tagline: 'Oficina especializada, motopeças multimarcas e socorro na Ilha',
-    description: 'Referência em serviços mecânicos de motos, revisão preventiva, injeção eletrônica, troca de óleo, pneus e venda de peças originais. Atendimento rápido e socorro mecânico para toda a Ilha de Itaparica.',
-    categoryId: 'automoveis-motos-bicicletas',
-    categoryName: 'Automóveis, Motos e Bicicletas',
-    cityId: 'vera-cruz',
-    cityName: 'Vera Cruz',
-    neighborhood: 'Mar Grande',
-    address: 'Av. Beira Mar, 420 - Próximo ao Terminal das Lanchinhas, Mar Grande',
-    phone: '(71) 99117-1830',
-    whatsapp: '5571991171830',
-    instagram: '@silveiramotos.oficial',
-    websiteStatus: 'none',
-    websiteStatusText: 'Sem Site (WhatsApp Direto)',
-    googleMapsUrl: 'https://maps.google.com/?q=Av+Beira+Mar+420+Mar+Grande+Vera+Cruz+BA',
-    rating: 4.9,
-    reviewCount: 156,
-    priceLevel: '$$',
-    tags: ['Motos', 'Mecânica', 'Peças', 'Pneus', 'Socorro 24h', 'Mar Grande'],
-    services: [
-      'Revisão geral e elétrica de motocicletas Honda, Yamaha e Shineray',
-      'Venda de capacetes, capas e acessórios',
-      'Troca rápida de óleo e filtros',
-      'Pneus, câmaras de ar e alinhamento',
-      'Socorro e resgate em Mar Grande, Barra Grande e Berlinque'
-    ],
-    isVerified: true,
-    isFeatured: true,
-    isRmsPremium: true,
-    planType: 'premium',
-    registeredAt: Date.now() - 50000,
-    hasDelivery: true,
-    isOpenNow: true,
-    openingHoursText: 'Segunda a Sábado: 07:30 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=700&q=80',
-    badgeText: 'CLIENTE PREMIUM ⭐'
-  },
   {
     id: 'ilha-forte-materiais',
     name: 'Ilha Forte Materiais de Construção',

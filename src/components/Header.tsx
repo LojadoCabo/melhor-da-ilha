@@ -29,7 +29,6 @@ interface HeaderProps {
   onOpenContact: () => void;
   onGoHome: () => void;
   onOpenTestimonials?: () => void;
-  onOpenMiniSite?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -39,8 +38,7 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenFavorites,
   onOpenContact,
   onGoHome,
-  onOpenTestimonials,
-  onOpenMiniSite
+  onOpenTestimonials
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { favorites } = useFavorites();
@@ -127,18 +125,7 @@ export const Header: React.FC<HeaderProps> = ({
           )}
 
 
-          {/* Meu-site Premium Bonus Link */}
-          {onOpenMiniSite && (
-            <button
-              type="button"
-              onClick={onOpenMiniSite}
-              className="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-black text-amber-900 dark:text-amber-200 bg-amber-50 dark:bg-amber-950/40 border border-amber-300/80 dark:border-amber-700/60 hover:bg-amber-100 transition-colors"
-              title="Acessar bônus do Plano Premium: melhordailha.online/meu-site"
-            >
-              <span className="text-amber-500">⭐</span>
-              <span className="font-mono">meu-site</span>
-            </button>
-          )}
+
 
           <button
             type="button"

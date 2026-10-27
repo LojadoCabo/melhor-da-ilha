@@ -6,8 +6,8 @@ import { Business, FilterState } from '../types';
 const mockBusinesses: Business[] = [
   {
     id: 'b1',
-    name: 'Silveira Motos & Peças',
-    slug: 'silveira-motos',
+    name: 'Vera Cruz Motos & Peças',
+    slug: 'vera-cruz-motos',
     tagline: 'Oficina de motos e peças em Mar Grande',
     description: 'Revisão, troca de óleo e socorro mecânico',
     categoryId: 'automoveis-motos-bicicletas',
@@ -124,7 +124,7 @@ test('sortBusinesses sorts by rating, review count and name', () => {
   assert.equal(byRating[0].id, 'b1'); // 4.9 vs 4.5
 
   const byName = sortBusinesses(mockBusinesses, 'name');
-  assert.equal(byName[0].id, 'b2'); // "Restaurante" before "Silveira"
+  assert.equal(byName[0].id, 'b2'); // "Restaurante" before "Vera"
 });
 
 test('sortBusinesses places isRmsPremium at top when sorted by featured', () => {
@@ -150,7 +150,7 @@ test('filterBusinesses filters by websiteFilter', () => {
   const bizWithWebsite = {
     ...mockBusinesses[0],
     websiteStatus: 'active' as const,
-    website: 'https://silveiramotos.com.br'
+    website: 'https://veracruzmotos.com.br'
   };
   const bizWithoutWebsite = {
     ...mockBusinesses[1],

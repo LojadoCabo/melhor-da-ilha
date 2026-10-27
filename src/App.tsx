@@ -232,7 +232,6 @@ function MainAppContent() {
           const el = document.getElementById('depoimentos-usuarios');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
-        onOpenMiniSite={() => handleOpenMiniSite()}
       />
 
       <main className="flex-1">
