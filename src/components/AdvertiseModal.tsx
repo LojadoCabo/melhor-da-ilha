@@ -372,202 +372,187 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-2 sm:p-4 bg-black/70 backdrop-blur-md overflow-y-auto overflow-x-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm overflow-hidden">
       <div
-        className="relative w-full max-w-[calc(100vw-1rem)] mx-auto max-w-2xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto max-h-[92vh] flex flex-col overflow-y-auto overflow-x-hidden transition-all duration-200"
+        className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 flex flex-col max-h-[92vh] transition-all duration-200 overflow-hidden"
         role="dialog"
         aria-modal="true"
         aria-labelledby="advertise-modal-title"
       >
-        <button
-          onClick={onClose}
-          aria-label="Fechar modal de cadastro"
-          className="absolute top-5 right-5 p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg transition-colors hover:bg-slate-100 dark:hover:bg-slate-800 z-10"
-        >
-          <X className="w-5 h-5" />
-        </button>
-
-        {!submitted ? (
-          <>
-            <div className="flex items-center gap-3 mb-4 pr-10">
-              <div className="w-11 h-11 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0">
-                <PlusCircle className="w-6 h-6" />
-              </div>
-              <div>
-                <h2 id="advertise-modal-title" className="text-xl sm:text-2xl font-bold text-slate-900 dark:text-white">
-                  Anuncie no Melhor da Ilha
-                </h2>
-                <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
-                  Cadastre sua empresa ou ative seu plano comercial na Ilha de Itaparica e RMS
-                </p>
-              </div>
+        {/* Header - Fixed */}
+        <div className="flex items-center justify-between p-5 sm:p-7 pb-4 border-b border-slate-100 dark:border-slate-800/60 shrink-0">
+          <div className="flex items-center gap-3 pr-8">
+            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-teal-50 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0">
+              <PlusCircle className="w-6 h-6" />
             </div>
+            <div>
+              <h2 id="advertise-modal-title" className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight">
+                Anuncie no Melhor da Ilha
+              </h2>
+              <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Cadastre sua empresa ou ative seu plano comercial na Ilha de Itaparica e RMS
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            aria-label="Fechar modal de cadastro"
+            className="p-2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-xl transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
-            {/* Smart Detection Banner: When establishment already exists in catalog */}
-            {matchedBusiness && (
-              <div className="mb-5 p-4 rounded-2xl bg-gradient-to-br from-amber-500/15 via-yellow-500/10 to-transparent border-2 border-amber-500/60 dark:bg-amber-950/40 text-slate-900 dark:text-white shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 shadow-md font-black text-xl">
-                    🎉
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider mb-1">
-                      VOCÊ JÁ FAZ PARTE DO NOSSO TIME!
+        {/* Form Wrap */}
+        <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
+          {/* Scrollable Content Body */}
+          <div className="flex-1 overflow-y-auto p-5 sm:p-8 pt-4 custom-scrollbar">
+            {!submitted ? (
+              <>
+              {/* Smart Detection Banner */}
+              {matchedBusiness && (
+                <div className="mb-6 p-4 rounded-2xl bg-gradient-to-br from-amber-500/15 via-yellow-500/10 to-transparent border-2 border-amber-500/60 dark:bg-amber-950/40 text-slate-900 dark:text-white shadow-lg animate-in fade-in slide-in-from-top-2 duration-300">
+                  <div className="flex items-start gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center shrink-0 shadow-md font-black text-xl">
+                      🎉
                     </div>
-                    <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight">
-                      "{matchedBusiness.name}" já está cadastrado no Guia Melhor da Ilha!
-                    </h3>
-                    <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
-                      Identificamos o seu negócio cadastrado em <strong>{matchedBusiness.cityName}</strong> ({matchedBusiness.neighborhood}). Seu perfil já está ativo no catálogo básico.
+                    <div className="flex-1 min-w-0">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider mb-1">
+                        VOCÊ JÁ FAZ PARTE DO NOSSO TIME!
+                      </div>
+                      <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight">
+                        "{matchedBusiness.name}" já está cadastrado no Guia Melhor da Ilha!
+                      </h3>
+                      <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                        Identificamos o seu negócio cadastrado em <strong>{matchedBusiness.cityName}</strong> ({matchedBusiness.neighborhood}). Seu perfil já está ativo no catálogo básico.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-amber-500/30 space-y-3">
+                    <p className="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
+                      <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+                      <span>Assine um plano mensal para subir ao topo:</span>
                     </p>
-                  </div>
-                </div>
 
-                {/* Upsell to 29 or 59 plan */}
-                <div className="mt-3 pt-3 border-t border-amber-500/30 space-y-2.5">
-                  <p className="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
-                    <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-                    <span>Como você veio pelo nosso anúncio, convide seu negócio para subir ao topo e assinar um plano mensal:</span>
-                  </p>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    {/* Plano 29 */}
-                    <div className="p-3 rounded-xl border border-teal-500/50 bg-white/90 dark:bg-slate-900/90 shadow-sm flex flex-col justify-between">
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="font-extrabold text-xs text-slate-900 dark:text-white flex items-center gap-1">
-                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                            Plano Destaque
-                          </span>
-                          <span className="font-black text-xs text-teal-600 dark:text-teal-400">
-                            R$ 29/mês
-                          </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {/* Upgrade Option 1 */}
+                      <div className="p-3.5 rounded-xl border border-teal-500/50 bg-white/90 dark:bg-slate-900/90 shadow-sm flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <span className="font-extrabold text-xs text-slate-900 dark:text-white flex items-center gap-1">
+                              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+                              Plano Destaque
+                            </span>
+                            <span className="font-black text-xs text-teal-600 dark:text-teal-400">
+                              R$ 29/mês
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">
+                            Selo Verificado oficial e topo na categoria.
+                          </p>
                         </div>
-                        <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">
-                          Selo Verificado oficial, topo na categoria e botão de WhatsApp direto destacado.
-                        </p>
+                        <button
+                          type="button"
+                          onClick={() => handleUpgradeExisting('destaque', true)}
+                          className="mt-3 w-full py-2 px-3 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                        >
+                          <Lock className="w-3.5 h-3.5" />
+                          <span>Pagar R$ 29 (Mercado Pago)</span>
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleUpgradeExisting('destaque', true)}
-                        className="mt-2.5 w-full py-2 px-3 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
-                      >
-                        <Lock className="w-3.5 h-3.5" />
-                        <span>Pagar R$ 29/mês (Mercado Pago)</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
 
-                    {/* Plano 59 */}
-                    <div className="p-3 rounded-xl border-2 border-amber-500 bg-amber-50/50 dark:bg-amber-950/40 shadow-sm flex flex-col justify-between ring-1 ring-amber-400/40">
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="font-extrabold text-xs text-slate-900 dark:text-white flex items-center gap-1">
-                            <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
-                            RMS Premium
-                          </span>
-                          <span className="font-black text-xs text-amber-600 dark:text-amber-400">
-                            R$ 59/mês
-                          </span>
+                      {/* Upgrade Option 2 */}
+                      <div className="p-3.5 rounded-xl border-2 border-amber-500 bg-amber-50/50 dark:bg-amber-950/40 shadow-sm flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center justify-between">
+                            <span className="font-extrabold text-xs text-slate-900 dark:text-white flex items-center gap-1">
+                              <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                              RMS Premium
+                            </span>
+                            <span className="font-black text-xs text-amber-600 dark:text-amber-400">
+                              R$ 59/mês
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-600 dark:text-slate-300 mt-1 leading-snug">
+                            Destaque máximo + Mini-Site exclusivo.
+                          </p>
                         </div>
-                        <p className="text-[10px] text-slate-600 dark:text-slate-300 mt-1 leading-snug">
-                          Destaque máximo no topo do site com estrela dourada + Mini-Site exclusivo em <strong>melhordailha.online/meu-site</strong>.
-                        </p>
+                        <button
+                          type="button"
+                          onClick={() => handleUpgradeExisting('premium', true)}
+                          className="mt-3 w-full py-2 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 shadow-md"
+                        >
+                          <Lock className="w-3.5 h-3.5" />
+                          <span>Pagar R$ 59 (Mercado Pago)</span>
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleUpgradeExisting('premium', true)}
-                        className="mt-2.5 w-full py-2 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 transition-all shadow-md"
-                      >
-                        <Lock className="w-3.5 h-3.5" />
-                        <span>Pagar R$ 59/mês (Mercado Pago)</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
-                      </button>
                     </div>
                   </div>
 
-                  <div className="text-right pt-1">
-                    <button
-                      type="button"
-                      onClick={() => setDismissMatch(true)}
-                      className="text-[11px] text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 underline"
-                    >
-                      Não é o seu negócio? Continuar preenchendo um novo cadastro
+                  <div className="text-right mt-3">
+                    <button type="button" onClick={() => setDismissMatch(true)} className="text-[10px] text-slate-500 hover:underline">
+                      Não é o meu negócio? Continuar cadastro.
                     </button>
                   </div>
                 </div>
+              )}
+
+              {/* Plans selector for new registrations */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                <button
+                  type="button"
+                  onClick={() => setSelectedPlan('free')}
+                  className={`p-3.5 rounded-2xl text-left border transition-all ${
+                    selectedPlan === 'free'
+                      ? 'border-teal-500 bg-teal-50/50 dark:bg-teal-950/30 ring-2 ring-teal-500/20'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                  }`}
+                >
+                  <div className="font-bold text-xs text-slate-900 dark:text-white">Gratuito</div>
+                  <div className="text-base font-extrabold text-teal-600 dark:text-teal-400">R$ 0</div>
+                  <div className="text-[10px] text-slate-500 mt-1 leading-tight">Presença básica no guia.</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedPlan('destaque')}
+                  className={`relative p-3.5 rounded-2xl text-left border transition-all ${
+                    selectedPlan === 'destaque'
+                      ? 'border-teal-500 bg-teal-50/60 dark:bg-teal-950/40 shadow-sm ring-2 ring-teal-500/40'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
+                  }`}
+                >
+                  <span className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-teal-500 text-white font-black text-[8px] uppercase tracking-wide shadow-sm z-10">
+                    Mais Popular
+                  </span>
+                  <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1">
+                    <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" /> Destaque
+                  </div>
+                  <div className="text-base font-extrabold text-teal-600 dark:text-teal-400">R$ 29/mês</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedPlan('premium')}
+                  className={`relative p-3.5 rounded-2xl text-left border transition-all ${
+                    selectedPlan === 'premium'
+                      ? 'border-amber-400 bg-amber-50/70 dark:bg-amber-950/40 shadow-md ring-2 ring-amber-400/50'
+                      : 'border-slate-200 dark:border-slate-800 hover:border-amber-300'
+                  }`}
+                >
+                  <span className="absolute -top-2 right-2 px-2 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 font-black text-[8px] uppercase tracking-wide shadow-sm z-10">
+                    ★ TOPO DO SITE
+                  </span>
+                  <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1">
+                    <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" /> RMS Premium
+                  </div>
+                  <div className="text-base font-extrabold text-amber-600 dark:text-amber-400">R$ 59/mês</div>
+                </button>
               </div>
-            )}
 
-            {/* Plans selector for new registrations */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-5">
-              {/* Free */}
-              <button
-                type="button"
-                onClick={() => setSelectedPlan('free')}
-                className={`p-3 rounded-2xl text-left border transition-all ${
-                  selectedPlan === 'free'
-                    ? 'border-teal-500 bg-teal-50/50 dark:bg-teal-950/30'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
-                }`}
-              >
-                <div className="font-bold text-xs text-slate-900 dark:text-white">Gratuito</div>
-                <div className="text-base font-extrabold text-teal-600 dark:text-teal-400">R$ 0</div>
-                <div className="text-[11px] text-slate-500 mt-1 leading-tight">
-                  Presença no guia, telefone e WhatsApp
-                </div>
-              </button>
-
-              {/* Destaque Ilha - R$ 29 */}
-              <button
-                type="button"
-                onClick={() => setSelectedPlan('destaque')}
-                className={`relative p-3 rounded-2xl text-left border transition-all ${
-                  selectedPlan === 'destaque'
-                    ? 'border-teal-500 bg-teal-50/60 dark:bg-teal-950/40 shadow-sm ring-2 ring-teal-500/40'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-slate-300'
-                }`}
-              >
-                <span className="absolute -top-2 right-2 px-1.5 py-0.5 rounded-full bg-teal-500 text-white font-black text-[9px] uppercase tracking-wide">
-                  Mais Popular
-                </span>
-                <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-                  Destaque Ilha
-                </div>
-                <div className="text-base font-extrabold text-teal-600 dark:text-teal-400">R$ 29/mês</div>
-                <div className="text-[11px] text-slate-500 mt-1 leading-tight">
-                  Selo Verificado, topo da categoria e suporte
-                </div>
-              </button>
-
-              {/* RMS Premium - R$ 59 */}
-              <button
-                type="button"
-                onClick={() => setSelectedPlan('premium')}
-                className={`relative p-3 rounded-2xl text-left border transition-all ${
-                  selectedPlan === 'premium'
-                    ? 'border-amber-400 bg-amber-50/70 dark:bg-amber-950/40 shadow-md ring-2 ring-amber-400/50'
-                    : 'border-slate-200 dark:border-slate-800 hover:border-amber-300'
-                }`}
-              >
-                <span className="absolute -top-2 right-2 px-1.5 py-0.5 rounded-full bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 font-black text-[9px] uppercase tracking-wide shadow-sm flex items-center gap-0.5">
-                  <Star className="w-2.5 h-2.5 fill-slate-950 text-slate-950" />
-                  TOPO DO SITE
-                </span>
-                <div className="font-bold text-xs text-slate-900 dark:text-white flex items-center gap-1">
-                  <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
-                  Plano RMS Premium
-                </div>
-                <div className="text-base font-extrabold text-amber-600 dark:text-amber-400">R$ 59/mês</div>
-                <div className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-tight font-medium">
-                  Topo com estrela <strong>CLIENTE PREMIUM ⭐</strong> + Bônus de <strong>Mini-Site</strong>
-                </div>
-              </button>
-            </div>
-
-            {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+              {/* Form Body Content */}
+              <form onSubmit={handleSubmit} className="space-y-4 pb-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
@@ -856,57 +841,9 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                  Descrição ou Apresentação
-                </label>
-                <textarea
-                  rows={2}
-                  placeholder="Conte sobre sua história, horário de funcionamento e diferenciais..."
-                  value={formData.description}
-                  onChange={e => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
               </div>
-
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <button
-                  type="button"
-                  onClick={handleWhatsAppContact}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-emerald-500/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 text-xs font-bold transition-colors"
-                >
-                  <MessageCircle className="w-4 h-4 text-emerald-600" />
-                  <span>Falar com o Comercial</span>
-                </button>
-
-                <button
-                  type="submit"
-                  className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold shadow-md transition-all hover:scale-102 ${
-                    selectedPlan === 'premium'
-                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 shadow-amber-500/20 font-black'
-                      : 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-600/20'
-                  }`}
-                >
-                  {selectedPlan !== 'free' ? (
-                    <>
-                      <Lock className="w-4 h-4" />
-                      <span>
-                        {selectedPlan === 'premium'
-                          ? 'Pagar R$ 59/mês no Mercado Pago (Sem sair)'
-                          : 'Pagar R$ 29/mês no Mercado Pago (Sem sair)'}
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4" />
-                      <span>{matchedBusiness ? 'Ativar Cadastro Gratuito' : 'Concluir Cadastro Gratuito'}</span>
-                    </>
-                  )}
-                </button>
-              </div>
-            </form>
-          </>
-        ) : (
+            </>
+          ) : (
           <div className="py-4 text-center space-y-4">
             <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-8 h-8" />
@@ -1021,7 +958,48 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
               </button>
             </div>
           </div>
-        )}
+          </div>
+
+          {!submitted && (
+            <div className="p-4 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm shrink-0">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={handleWhatsAppContact}
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-emerald-500/40 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 text-xs font-bold transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4 text-emerald-600" />
+                  <span>Falar com o Comercial</span>
+                </button>
+
+                <button
+                  type="submit"
+                  className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold shadow-md transition-all hover:scale-102 ${
+                    selectedPlan === 'premium'
+                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 shadow-amber-500/20 font-black'
+                      : 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-600/20'
+                  }`}
+                >
+                  {selectedPlan !== 'free' ? (
+                    <>
+                      <Lock className="w-4 h-4" />
+                      <span>
+                        {selectedPlan === 'premium'
+                          ? 'Pagar R$ 59/mês no Mercado Pago (Sem sair)'
+                          : 'Pagar R$ 29/mês no Mercado Pago (Sem sair)'}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>{matchedBusiness ? 'Ativar Cadastro Gratuito' : 'Concluir Cadastro Gratuito'}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
+        </form>
 
         {/* Modal de Checkout Mercado Pago sem sair do site */}
         <MercadoPagoModal
