@@ -242,7 +242,7 @@ function MainAppContent() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8f9fa] dark:bg-[#0b1320] text-slate-800 dark:text-slate-100 transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-[#f8f9fa] dark:bg-[#0b1320] text-slate-800 dark:text-slate-100 transition-colors duration-200 overflow-x-hidden">
       {/* Toast Notification */}
       <Toast />
 

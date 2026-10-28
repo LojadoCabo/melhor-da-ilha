@@ -35,9 +35,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-100/80 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 text-xs font-semibold mb-4 shadow-xs">
-          <Compass className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
-          <span>GUIA LOCAL OFICIAL · {totalCount} NEGÓCIOS NA ILHA E RMS</span>
+        <div className="inline-flex items-center gap-1.5 xs:gap-2 px-2.5 xs:px-3.5 py-1.5 rounded-full bg-teal-100/80 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 text-[10px] xs:text-xs font-bold xs:font-semibold mb-4 shadow-xs max-w-full">
+          <Compass className="w-3 h-3 xs:w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
+          <span className="truncate">GUIA LOCAL OFICIAL · {totalCount} NEGÓCIOS NA ILHA E RMS</span>
         </div>
 
         {/* Headline */}

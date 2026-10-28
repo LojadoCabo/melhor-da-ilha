@@ -77,17 +77,17 @@ export const Header: React.FC<HeaderProps> = ({
         <button
           type="button"
           onClick={onGoHome}
-          className="flex items-center gap-2 sm:gap-3 text-left group focus:outline-none shrink-0 cursor-pointer select-none py-1"
+          className="flex items-center gap-2 sm:gap-3 text-left group focus:outline-none min-w-0 cursor-pointer select-none py-1"
           aria-label="Ir para a página inicial do Melhor da Ilha"
         >
           <div className="w-9 h-9 sm:w-11 sm:h-11 shrink-0 aspect-square rounded-xl sm:rounded-2xl bg-gradient-to-tr from-teal-700 via-teal-600 to-emerald-500 text-white flex items-center justify-center shadow-md shadow-teal-700/20 group-hover:scale-105 transition-transform">
             <Compass className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse" />
           </div>
           <div className="flex flex-col justify-center min-w-0">
-            <span className="block font-black text-[15px] sm:text-xl tracking-tight text-slate-900 dark:text-white leading-none whitespace-nowrap">
+            <span className="block font-black text-[13px] xs:text-[15px] sm:text-xl tracking-tight text-slate-900 dark:text-white leading-none truncate sm:whitespace-nowrap">
               MELHOR DA ILHA
             </span>
-            <span className="block text-[9px] sm:text-[11px] font-semibold text-teal-700 dark:text-teal-400 tracking-wider uppercase mt-1 leading-none whitespace-nowrap">
+            <span className="block text-[8px] xs:text-[9px] sm:text-[11px] font-semibold text-teal-700 dark:text-teal-400 tracking-wider uppercase mt-1 leading-none truncate sm:whitespace-nowrap">
               Guia Ilha de Itaparica & RMS
             </span>
           </div>
