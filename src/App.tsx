@@ -275,6 +275,7 @@ function MainAppContent() {
           searchQuery={filters.query}
           onSearchChange={q => handleFilterChange({ query: q })}
           onQuickSearch={handleQuickSearch}
+          totalCount={businesses.length}
         />
 
         {/* Directory Content Area */}

@@ -5,12 +5,14 @@ interface HeroSectionProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onQuickSearch: (query: string) => void;
+  totalCount: number;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   searchQuery,
   onSearchChange,
-  onQuickSearch
+  onQuickSearch,
+  totalCount
 }) => {
   const quickSearches = [
     'Motos & Peças',
@@ -35,7 +37,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-teal-100/80 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 text-xs font-semibold mb-4 shadow-xs">
           <Compass className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
-          <span>GUIA LOCAL OFICIAL · ILHA DE ITAPARICA E RMS</span>
+          <span>GUIA LOCAL OFICIAL · {totalCount} NEGÓCIOS NA ILHA E RMS</span>
         </div>
 
         {/* Headline */}
