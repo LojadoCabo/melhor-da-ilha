@@ -109,10 +109,23 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
   const phoneUrl = `tel:${business.phone.replace(/\D/g, '')}`;
   const mapsSearchUrl = business.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${business.name} ${business.address} ${business.cityName}`)}`;
 
+  // Lock background scroll while modal is open
+  React.useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-md overflow-y-auto">
+    <div
+      className="fixed inset-0 z-50 overflow-y-auto overflow-x-hidden bg-black/75 backdrop-blur-sm p-2 sm:p-4 flex items-center justify-center"
+      onClick={onClose}
+    >
       <div
-        className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden my-auto max-h-[92vh] flex flex-col transition-all duration-200"
+        onClick={e => e.stopPropagation()}
+        className="relative w-full max-w-[calc(100vw-1rem)] sm:max-w-2xl bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden my-auto mx-auto max-h-[92vh] flex flex-col transition-all duration-200 text-left"
         role="dialog"
         aria-modal="true"
         aria-labelledby="business-modal-name"
@@ -196,8 +209,8 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
           </div>
 
           {/* Information Section */}
-          <div className="p-6 space-y-6">
-            <div className="flex items-start gap-4">
+          <div className="p-4 sm:p-6 space-y-5 sm:space-y-6">
+            <div className="flex items-start gap-3 sm:gap-4">
               {/* Logo / Monogram Avatar */}
               {business.logoUrl ? (
                 <img

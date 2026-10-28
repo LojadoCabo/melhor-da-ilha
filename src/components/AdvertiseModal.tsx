@@ -290,9 +290,9 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/70 backdrop-blur-md overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-2 sm:p-4 bg-black/70 backdrop-blur-md overflow-y-auto overflow-x-hidden">
       <div
-        className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto max-h-[92vh] flex flex-col overflow-y-auto transition-all duration-200"
+        className="relative w-full max-w-[calc(100vw-1rem)] mx-auto max-w-2xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto max-h-[92vh] flex flex-col overflow-y-auto overflow-x-hidden transition-all duration-200"
         role="dialog"
         aria-modal="true"
         aria-labelledby="advertise-modal-title"

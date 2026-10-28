@@ -187,6 +187,13 @@ function MainAppContent() {
   const categoryCounts = useMemo(() => getCategoryCounts(businesses), [businesses]);
   const cityCounts = useMemo(() => getCityCounts(businesses), [businesses]);
 
+  const [visibleCount, setVisibleCount] = useState(24);
+
+  // Reset pagination to 24 when filters change
+  React.useEffect(() => {
+    setVisibleCount(24);
+  }, [filters, showFavoritesOnly]);
+
   // Compute filtered list
   const filteredList = useMemo(() => {
     let list = businesses;
@@ -198,6 +205,10 @@ function MainAppContent() {
     const filtered = filterBusinesses(list, filters);
     return sortBusinesses(filtered, filters.sortBy);
   }, [businesses, filters, showFavoritesOnly, favorites]);
+
+  const displayedBusinesses = useMemo(() => {
+    return filteredList.slice(0, visibleCount);
+  }, [filteredList, visibleCount]);
 
   // Handle mobile bottom nav clicks
   const handleSelectMobileTab = (tab: 'home' | 'categories' | 'cities' | 'favorites' | 'advertise') => {
@@ -347,17 +358,34 @@ function MainAppContent() {
 
           {/* Business Listings Grid */}
           {filteredList.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredList.map(business => (
-                <BusinessCard
-                  key={business.id}
-                  business={business}
-                  onSelect={biz => setSelectedBusiness(biz)}
-                  onShare={biz => setSharingBusiness(biz)}
-                  onOpenMiniSite={biz => handleOpenMiniSite(biz)}
-                />
-              ))}
-            </div>
+            <>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {displayedBusinesses.map(business => (
+                  <BusinessCard
+                    key={business.id}
+                    business={business}
+                    onSelect={biz => setSelectedBusiness(biz)}
+                    onShare={biz => setSharingBusiness(biz)}
+                    onOpenMiniSite={biz => handleOpenMiniSite(biz)}
+                  />
+                ))}
+              </div>
+
+              {visibleCount < filteredList.length && (
+                <div className="pt-8 pb-4 text-center space-y-3">
+                  <p className="text-xs text-slate-500 font-medium">
+                    Exibindo {displayedBusinesses.length} de {filteredList.length} estabelecimentos
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => setVisibleCount(prev => prev + 24)}
+                    className="inline-flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-teal-600 hover:bg-teal-500 text-white font-extrabold text-sm shadow-lg shadow-teal-700/20 hover:scale-102 transition-all cursor-pointer"
+                  >
+                    <span>Carregar Mais Empresas (+24)</span>
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
             /* Empty State */
             <div className="py-16 text-center space-y-4 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/80 dark:border-slate-800 p-8 shadow-xs">

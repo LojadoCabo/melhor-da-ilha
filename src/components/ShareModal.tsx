@@ -67,9 +67,9 @@ export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClos
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm">
       <div
-        className="relative w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 transition-all duration-200"
+        className="relative w-full max-w-[calc(100vw-1rem)] mx-auto max-w-md bg-white dark:bg-slate-900 rounded-2xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 transition-all duration-200"
         role="dialog"
         aria-modal="true"
         aria-labelledby="share-modal-title"

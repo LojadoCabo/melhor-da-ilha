@@ -370,6 +370,46 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido com estas chaves:
 // ========================================================
 // DOWNLOAD: Arquivo Zip compilado para HostGator
 // ========================================================
+app.get(['/baixar', '/download'], (_req: Request, res: Response) => {
+  res.send(`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Download — dist-hostgator.zip | MELHOR DA ILHA</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 24px; padding: 36px; max-width: 520px; width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+    .icon { font-size: 48px; margin-bottom: 16px; }
+    h1 { font-size: 24px; font-weight: 800; margin: 0 0 12px; color: #fff; }
+    p { font-size: 14px; color: #94a3b8; line-height: 1.6; margin: 0 0 24px; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; text-decoration: none; padding: 16px 28px; border-radius: 16px; font-weight: 700; font-size: 15px; box-shadow: 0 10px 25px -5px rgba(20,184,166,0.4); transition: transform 0.2s; }
+    .btn:hover { transform: scale(1.02); }
+    .meta { margin-top: 24px; padding-top: 18px; border-top: 1px solid #334155; font-size: 12px; color: #64748b; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">📦</div>
+    <h1>Pacote HostGator Compilado</h1>
+    <p>O arquivo <strong>dist-hostgator.zip</strong> contém todos os arquivos estáticos minificados, imagens e o arquivo <strong>.htaccess</strong> configurado para a HostGator.</p>
+    <a href="/dist-hostgator.zip" download="dist-hostgator.zip" class="btn">
+      📥 Baixar dist-hostgator.zip (27,9 MB)
+    </a>
+    <div class="meta">
+      Após baixar, envie e extraia o arquivo diretamente na pasta do seu domínio no cPanel da HostGator.
+    </div>
+  </div>
+  <script>
+    // Inicia download automaticamente após 500ms
+    setTimeout(() => {
+      window.location.href = '/dist-hostgator.zip';
+    }, 500);
+  </script>
+</body>
+</html>`);
+});
+
 app.get(['/download/dist-hostgator.zip', '/dist-hostgator.zip'], (_req: Request, res: Response) => {
   const filePath = path.resolve(__dirname, 'dist-hostgator.zip');
   if (fs.existsSync(filePath)) {

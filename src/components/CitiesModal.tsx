@@ -36,9 +36,9 @@ export const CitiesModal: React.FC<CitiesModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto overflow-x-hidden">
       <div
-        className="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto max-h-[90vh] flex flex-col transition-all duration-200"
+        className="relative w-full max-w-[calc(100vw-1rem)] mx-auto max-w-2xl bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-200 dark:border-slate-800 my-auto max-h-[90vh] flex flex-col transition-all duration-200"
         role="dialog"
         aria-modal="true"
         aria-labelledby="cities-modal-title"
@@ -115,7 +115,7 @@ export const CitiesModal: React.FC<CitiesModalProps> = ({
           </div>
         </div>
 
-        <div className="space-y-3 overflow-y-auto pr-1 flex-1">
+        <div className="space-y-3 overflow-y-auto overflow-x-hidden pr-1 flex-1">
           {filteredCities.map(city => {
             const count = cityCounts[city.id] || 0;
             return (
