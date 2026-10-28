@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home1/comot852/public_html
+    - export DEPLOYPATH=/home1/comot852/melhordailha.online
     - /bin/cp -R dist/* $DEPLOYPATH/
     - /bin/cp dist/.htaccess $DEPLOYPATH/ 2>/dev/null || true
     - /bin/cp public/.htaccess $DEPLOYPATH/ 2>/dev/null || true
