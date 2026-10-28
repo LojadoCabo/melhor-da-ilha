@@ -3,14 +3,30 @@ name: Deploy HostGator via FTP
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   web-deploy:
-    name: Deploy
+    name: Build & Deploy
     runs-on: ubuntu-latest
     steps:
     - name: Get latest code
       uses: actions/checkout@v4
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Build Project
+      run: npm run build
+
+    - name: Ensure .htaccess in dist
+      run: cp public/.htaccess dist/.htaccess 2>/dev/null || true
 
     - name: Sync files to HostGator
       uses: SamKirkland/FTP-Deploy-Action@v4.3.5
@@ -19,4 +35,5 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: dist/
-        server-dir: public_html/melhordailha.online/public_html/
+        server-dir: ${{ secrets.FTP_SERVER_DIR || 'public_html/melhordailha.online/public_html/' }}
+        protocol: ftp

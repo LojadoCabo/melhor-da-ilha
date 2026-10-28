@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Business } from '../types';
 import { useFavorites } from '../context/FavoritesContext';
+import { getCategoryCoverImage } from '../utils/categoryImages';
 
 interface BusinessCardProps {
   business: Business;
@@ -62,7 +63,7 @@ export const BusinessCard: React.FC<BusinessCardProps> = ({
         onClick={() => onSelect(business)}
       >
         <img
-          src={business.coverImage}
+          src={business.coverImage || getCategoryCoverImage(business.categoryId, business.name)}
           alt={business.name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"

@@ -2,6 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { BUSINESSES } from '../src/data/businesses.ts';
 import { CITIES } from '../src/data/cities.ts';
+import { getCategoryCoverImage } from '../src/utils/categoryImages.ts';
+import { mergeWithStoredBusinesses } from '../src/utils/customBusinessesStorage.ts';
 
 test('Catálogo contém exatamente 2.000 estabelecimentos', () => {
   assert.equal(BUSINESSES.length, 2000, `Esperado 2000 estabelecimentos, encontrado: ${BUSINESSES.length}`);
@@ -27,4 +29,26 @@ test('Silveira Motos não é pagante premium indevido', () => {
   if (silveira) {
     assert.notEqual(silveira.isRmsPremium, true, 'Silveira Motos não deve ser pagante premium');
   }
+});
+
+test('getCategoryCoverImage retorna imagem contextual específica para cada categoria', () => {
+  const foodImg = getCategoryCoverImage('alimentacao-e-bebidas');
+  const autoImg = getCategoryCoverImage('automoveis-motos-bicicletas');
+  const healthImg = getCategoryCoverImage('saude-e-bem-estar');
+  const constImg = getCategoryCoverImage('construcao-e-reformas');
+
+  assert.ok(foodImg.startsWith('http'), 'Deve retornar URL válida');
+  assert.ok(autoImg.startsWith('http'), 'Deve retornar URL válida');
+  assert.notEqual(foodImg, autoImg, 'Alimentação e Automotivo devem ter capas diferentes');
+  assert.notEqual(foodImg, healthImg, 'Alimentação e Saúde devem ter capas diferentes');
+  assert.notEqual(healthImg, constImg, 'Saúde e Construção devem ter capas diferentes');
+});
+
+test('getCategoryCoverImage detecta palavras-chave de hotel/pousada e náutica', () => {
+  const pousadaImg = getCategoryCoverImage('lojas-e-comercio', 'Pousada Mar e Sol');
+  const nauticaImg = getCategoryCoverImage('lojas-e-comercio', 'Lancha Náutica Cacha-Pregos');
+
+  assert.ok(pousadaImg.startsWith('http'));
+  assert.ok(nauticaImg.startsWith('http'));
+  assert.notEqual(pousadaImg, nauticaImg);
 });

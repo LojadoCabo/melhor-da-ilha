@@ -13,7 +13,10 @@ import {
   Search,
   CreditCard,
   Lock,
-  QrCode
+  QrCode,
+  MapPin,
+  Loader2,
+  Camera
 } from 'lucide-react';
 import { CATEGORIES } from '../data/categories';
 import { CITIES } from '../data/cities';
@@ -21,6 +24,8 @@ import { BUSINESSES as fallbackBusinesses } from '../data/businesses';
 import { Business } from '../types';
 import { useFavorites } from '../context/FavoritesContext';
 import { MercadoPagoModal } from './MercadoPagoModal';
+import { getCategoryCoverImage } from '../utils/categoryImages';
+import { saveCustomBusiness } from '../utils/customBusinessesStorage';
 
 interface AdvertiseModalProps {
   isOpen: boolean;
@@ -59,6 +64,68 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
     description: '',
     services: ''
   });
+
+  // Smart CEP State & ViaCEP auto-fill
+  const [cep, setCep] = useState('');
+  const [cepLoading, setCepLoading] = useState(false);
+  const [cepError, setCepError] = useState('');
+  const [cepSuccess, setCepSuccess] = useState(false);
+  const [logradouro, setLogradouro] = useState('');
+  const [numero, setNumero] = useState('');
+  const [referencia, setReferencia] = useState('');
+  const [showManualAddress, setShowManualAddress] = useState(false);
+
+  // Dynamic Contextual Cover Image
+  const [customCoverImage, setCustomCoverImage] = useState('');
+  const [showCustomImageInput, setShowCustomImageInput] = useState(false);
+
+  const contextualCoverImage = useMemo(() => {
+    return getCategoryCoverImage(formData.category, formData.name);
+  }, [formData.category, formData.name]);
+
+  const handleCepChange = async (val: string) => {
+    const raw = val.replace(/\D/g, '').slice(0, 8);
+    const masked = raw.length > 5 ? `${raw.slice(0, 5)}-${raw.slice(5)}` : raw;
+    setCep(masked);
+    setCepError('');
+    setCepSuccess(false);
+
+    if (raw.length === 8) {
+      setCepLoading(true);
+      try {
+        const res = await fetch(`https://viacep.com.br/ws/${raw}/json/`);
+        const data = await res.json();
+        if (data.erro) {
+          setCepError('CEP não encontrado pelo ViaCEP. Preencha os campos abaixo.');
+          setCepSuccess(false);
+          setShowManualAddress(true);
+        } else {
+          setLogradouro(data.logradouro || '');
+          const detectedBairro = data.bairro || '';
+          const detectedCity = data.localidade || '';
+
+          // Match city with CITIES array
+          const matchedCity = CITIES.find(
+            c => c.name.toLowerCase() === detectedCity.toLowerCase()
+          );
+
+          setFormData(prev => ({
+            ...prev,
+            city: matchedCity ? matchedCity.name : (detectedCity || prev.city),
+            neighborhood: detectedBairro || prev.neighborhood
+          }));
+
+          setCepSuccess(true);
+        }
+      } catch (err) {
+        console.warn('ViaCEP fetch error:', err);
+        setCepError('Não foi possível consultar o CEP automaticamente.');
+        setShowManualAddress(true);
+      } finally {
+        setCepLoading(false);
+      }
+    }
+  };
 
   // Intelligent matching to detect if the establishment is already registered
   const matchedBusiness = useMemo(() => {
@@ -212,18 +279,31 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
     const selectedCatObj = CATEGORIES.find(c => c.name === formData.category) || CATEGORIES[0];
     const isRmsPremium = selectedPlan === 'premium';
 
+    // Construção do endereço inteligente a partir do CEP, número e referência
+    const addressParts = [
+      logradouro ? logradouro : '',
+      numero ? `Nº ${numero}` : '',
+      referencia ? `(Ref: ${referencia})` : '',
+      formData.neighborhood,
+      `${formData.city} - BA`,
+      cep ? `CEP: ${cep}` : ''
+    ].filter(Boolean);
+
+    const fullFormattedAddress = addressParts.join(', ') || `${formData.neighborhood}, ${formData.city} - BA`;
+    const finalCoverImage = customCoverImage.trim() || contextualCoverImage;
+
     const newBiz: Business = {
       id: `custom-${Date.now()}`,
       name: formData.name.trim(),
       slug: formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-      tagline: formData.services.slice(0, 80) || 'Negócio local na Ilha de Itaparica e RMS',
-      description: formData.description.trim() || 'Cadastrado no guia oficial MELHOR DA ILHA.',
+      tagline: formData.services.slice(0, 80) || `Atendimento de referência em ${formData.category}`,
+      description: formData.description.trim() || `Cadastrado no guia oficial MELHOR DA ILHA em ${formData.city} (${formData.neighborhood}).`,
       categoryId: selectedCatObj.id,
       categoryName: selectedCatObj.name,
       cityId: selectedCityObj.id,
       cityName: selectedCityObj.name,
       neighborhood: formData.neighborhood.trim() || 'Centro',
-      address: `${formData.neighborhood}, ${formData.city} - BA`,
+      address: fullFormattedAddress,
       phone: formData.phone || formData.whatsapp,
       whatsapp: formData.whatsapp.replace(/\D/g, ''),
       instagram: formData.instagram.trim() || undefined,
@@ -240,9 +320,11 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
       hasDelivery: true,
       isOpenNow: true,
       openingHoursText: 'Segunda a Sábado: Horário Comercial',
-      coverImage: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=700&q=80',
+      coverImage: finalCoverImage,
       badgeText: isRmsPremium ? 'CLIENTE PREMIUM ⭐' : (selectedPlan === 'destaque' ? 'Destaque Ilha' : undefined)
     };
+
+    saveCustomBusiness(newBiz);
 
     setCreatedBiz(newBiz);
 
@@ -529,35 +611,203 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    Município *
+              {/* 1. CEP Inteligente com Auto-Preenchimento ViaCEP */}
+              <div className="p-3.5 rounded-2xl bg-teal-50/60 dark:bg-teal-950/20 border border-teal-200/80 dark:border-teal-900/60 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-teal-950 dark:text-teal-200 flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                    <span>Localização Inteligente por CEP *</span>
                   </label>
-                  <select
-                    value={formData.city}
-                    onChange={e => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 font-medium"
-                  >
-                    {CITIES.map(c => (
-                      <option key={c.id} value={c.name}>
-                        {c.name} ({c.region})
-                      </option>
-                    ))}
-                  </select>
+                  <span className="text-[10px] text-teal-700 dark:text-teal-400 font-bold bg-teal-100/70 dark:bg-teal-900/50 px-2 py-0.5 rounded-full">
+                    Auto-preenchimento ViaCEP
+                  </span>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
-                    Bairro ou Localidade
-                  </label>
+                <div className="relative">
                   <input
                     type="text"
-                    placeholder="Ex: Mar Grande, Ponta de Areia, Pituba, Centro..."
-                    value={formData.neighborhood}
-                    onChange={e => setFormData({ ...formData, neighborhood: e.target.value })}
-                    className="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    required
+                    maxLength={9}
+                    placeholder="Digite o CEP (ex: 44470-000 ou 41830-490)"
+                    value={cep}
+                    onChange={e => handleCepChange(e.target.value)}
+                    className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-white dark:bg-slate-800 border border-teal-300 dark:border-teal-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 font-mono tracking-wide placeholder:font-sans placeholder:tracking-normal"
                   />
+                  <div className="absolute right-3 top-2.5 flex items-center gap-1.5 text-xs">
+                    {cepLoading && (
+                      <span className="inline-flex items-center gap-1 text-teal-600 dark:text-teal-400 text-[11px] font-semibold animate-pulse">
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        Consultando...
+                      </span>
+                    )}
+                    {cepSuccess && (
+                      <span className="inline-flex items-center gap-1 text-emerald-600 dark:text-emerald-400 text-[11px] font-bold">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                        Identificado!
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {cepError && (
+                  <p className="text-[11px] text-rose-500 dark:text-rose-400 font-medium">
+                    {cepError}
+                  </p>
+                )}
+
+                {/* Resumo do Endereço Localizado */}
+                {cepSuccess && (
+                  <div className="p-2.5 rounded-xl bg-emerald-50/90 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-xs text-emerald-900 dark:text-emerald-200 flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <div className="flex-1 leading-snug">
+                      <span className="font-bold">Endereço identificado: </span>
+                      <span>
+                        {logradouro ? `${logradouro}, ` : ''}
+                        {formData.neighborhood} — {formData.city} (BA)
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Campos simplificados: Número do Imóvel + Ponto de Referência */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Número do Imóvel *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ex: 120, S/N, Loja 02, Box 15"
+                      value={numero}
+                      onChange={e => setNumero(e.target.value)}
+                      className="w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Ponto de Referência
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Ex: Em frente à praça, Ferry Boat, Ao lado do mercado"
+                      value={referencia}
+                      onChange={e => setReferencia(e.target.value)}
+                      className="w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Opção para alternar campos manuais de Município e Bairro se desejar */}
+                <div className="pt-0.5">
+                  <button
+                    type="button"
+                    onClick={() => setShowManualAddress(!showManualAddress)}
+                    className="text-[11px] font-semibold text-teal-700 dark:text-teal-400 hover:underline inline-flex items-center gap-1"
+                  >
+                    <span>{showManualAddress ? '▾ Ocultar edição manual de Município e Bairro' : '▸ Ajustar Município ou Bairro manualmente'}</span>
+                  </button>
+
+                  {showManualAddress && (
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mt-2 pt-2 border-t border-teal-200/60 dark:border-teal-800/40">
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">
+                          Logradouro / Rua
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Rua, Avenida, Travessa..."
+                          value={logradouro}
+                          onChange={e => setLogradouro(e.target.value)}
+                          className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">
+                          Município
+                        </label>
+                        <select
+                          value={formData.city}
+                          onChange={e => setFormData({ ...formData, city: e.target.value })}
+                          className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100"
+                        >
+                          {CITIES.map(c => (
+                            <option key={c.id} value={c.name}>
+                              {c.name} ({c.region})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-600 dark:text-slate-400 mb-1">
+                          Bairro
+                        </label>
+                        <input
+                          type="text"
+                          placeholder="Bairro"
+                          value={formData.neighborhood}
+                          onChange={e => setFormData({ ...formData, neighborhood: e.target.value })}
+                          className="w-full px-2.5 py-1.5 text-xs rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 2. Imagem Contextualizada por Segmento de Atividade */}
+              <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                    <Camera className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                    <span>Capa do Estabelecimento (Automática por Segmento)</span>
+                  </label>
+                  <span className="text-[10px] font-semibold text-teal-600 dark:text-teal-400 bg-teal-50 dark:bg-teal-950/60 px-2 py-0.5 rounded-full border border-teal-200 dark:border-teal-800">
+                    HD Unsplash
+                  </span>
+                </div>
+
+                {/* Banner de Preview da Capa Contextual */}
+                <div className="relative h-28 sm:h-32 w-full rounded-xl overflow-hidden shadow-inner border border-slate-200/80 dark:border-slate-700">
+                  <img
+                    src={customCoverImage.trim() || contextualCoverImage}
+                    alt={`Capa sugerida para ${formData.category}`}
+                    className="w-full h-full object-cover transition-all duration-300"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-black/20 to-transparent flex items-end p-2.5">
+                    <span className="text-[11px] font-bold text-white drop-shadow-md">
+                      {customCoverImage.trim()
+                        ? '📸 Foto personalizada configurada'
+                        : `📸 Foto representativa de: ${formData.category}`}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="pt-0.5">
+                  <button
+                    type="button"
+                    onClick={() => setShowCustomImageInput(!showCustomImageInput)}
+                    className="text-[11px] font-semibold text-teal-600 dark:text-teal-400 hover:underline"
+                  >
+                    {showCustomImageInput ? '▾ Usar foto contextual automática' : '▸ Prefiro enviar link de foto própria (opcional)'}
+                  </button>
+
+                  {showCustomImageInput && (
+                    <div className="mt-2">
+                      <input
+                        type="url"
+                        placeholder="https://exemplo.com/minha-foto.jpg"
+                        value={customCoverImage}
+                        onChange={e => setCustomCoverImage(e.target.value)}
+                        className="w-full px-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                      />
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1">
+                        Cole o link público de uma imagem de fachada, ambiente ou produto da sua empresa. Se deixar em branco, o sistema usará a foto de alta qualidade selecionada para seu segmento.
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
 

@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { Business } from '../types';
 import { useFavorites } from '../context/FavoritesContext';
+import { getCategoryCoverImage } from '../utils/categoryImages';
 
 interface BusinessModalProps {
   business: Business | null;
@@ -160,7 +161,7 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
           {/* Cover image banner */}
           <div className="relative h-60 sm:h-72 w-full bg-slate-900 overflow-hidden">
             <img
-              src={business.coverImage}
+              src={business.coverImage || getCategoryCoverImage(business.categoryId, business.name)}
               alt={business.name}
               className="w-full h-full object-cover"
               loading="eager"

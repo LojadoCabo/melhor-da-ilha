@@ -9,8 +9,8 @@ import { AuthProvider } from './context/AuthContext';
 import { FavoritesProvider, useFavorites } from './context/FavoritesContext';
 import { BUSINESSES as initialBusinesses } from './data/businesses';
 import { CITIES } from './data/cities';
-import { Business, FilterState } from './types';
 import { filterBusinesses, sortBusinesses, getCategoryCounts, getCityCounts } from './utils/filter';
+import { mergeWithStoredBusinesses, saveCustomBusiness } from './utils/customBusinessesStorage';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { CategoryChips } from './components/CategoryChips';
@@ -55,7 +55,7 @@ const defaultFilters: FilterState = {
 };
 
 function MainAppContent() {
-  const [businesses, setBusinesses] = useState<Business[]>(initialBusinesses);
+  const [businesses, setBusinesses] = useState<Business[]>(() => mergeWithStoredBusinesses(initialBusinesses));
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(null);
   const [sharingBusiness, setSharingBusiness] = useState<Business | null>(null);
@@ -138,7 +138,8 @@ function MainAppContent() {
 
   // Handle business addition from Advertise modal
   const handleBusinessAdded = (newBiz: Business) => {
-    setBusinesses(prev => [newBiz, ...prev]);
+    saveCustomBusiness(newBiz);
+    setBusinesses(prev => [newBiz, ...prev.filter(b => b.id !== newBiz.id)]);
 
     if (newBiz.isRmsPremium) {
       setFilters(prev => ({

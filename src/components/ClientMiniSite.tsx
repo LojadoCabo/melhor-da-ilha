@@ -29,6 +29,7 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import { Business } from '../types';
+import { getCategoryCoverImage } from '../utils/categoryImages';
 
 interface ClientMiniSiteProps {
   business: Business;
@@ -194,7 +195,7 @@ export const ClientMiniSite: React.FC<ClientMiniSiteProps> = ({
         <div className="relative rounded-3xl overflow-hidden bg-slate-900 text-white shadow-2xl border border-slate-200 dark:border-slate-800">
           <div className="relative h-72 sm:h-96 w-full overflow-hidden">
             <img
-              src={business.coverImage}
+              src={business.coverImage || getCategoryCoverImage(business.categoryId, business.name)}
               alt={business.name}
               className={`w-full h-full object-cover transition-all duration-700 ${
                 isAiEnhanced
