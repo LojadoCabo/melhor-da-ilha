@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { GoogleGenAI } from '@google/genai';
 
@@ -365,6 +366,20 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido com estas chaves:
 });
 
 
+
+// ========================================================
+// DOWNLOAD: Arquivo Zip compilado para HostGator
+// ========================================================
+app.get(['/download/dist-hostgator.zip', '/dist-hostgator.zip'], (_req: Request, res: Response) => {
+  const filePath = path.resolve(__dirname, 'dist-hostgator.zip');
+  if (fs.existsSync(filePath)) {
+    res.setHeader('Content-Disposition', 'attachment; filename="dist-hostgator.zip"');
+    res.setHeader('Content-Type', 'application/zip');
+    res.sendFile(filePath);
+  } else {
+    res.status(404).send('Arquivo zip não encontrado. Execute npm run build.');
+  }
+});
 
 // Configure Vite middleware in development or static serving in production
 async function startServer() {
