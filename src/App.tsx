@@ -73,22 +73,40 @@ function MainAppContent() {
 
   const { favorites, showToast } = useFavorites();
 
-  // URL path listener for /meu-site or ?biz=
+  // Dynamic Route Listener for /perfil/:slug, /p/:slug, /meu-site, or direct /:slug
   React.useEffect(() => {
     const checkPath = () => {
-      const pathname = window.location.pathname;
+      const pathname = window.location.pathname.replace(/\/+$/, '');
       const hash = window.location.hash;
       const search = window.location.search;
-      if (pathname === '/meu-site' || hash.includes('/meu-site') || search.includes('meu-site')) {
+
+      let targetSlug = '';
+
+      if (pathname.startsWith('/perfil/')) {
+        targetSlug = decodeURIComponent(pathname.replace('/perfil/', ''));
+      } else if (pathname.startsWith('/p/')) {
+        targetSlug = decodeURIComponent(pathname.replace('/p/', ''));
+      } else if (pathname === '/meu-site' || hash.includes('/meu-site') || search.includes('meu-site')) {
         const urlParams = new URLSearchParams(window.location.search);
-        const bizSlug = urlParams.get('biz');
+        targetSlug = urlParams.get('biz') || '';
+      } else if (pathname && pathname !== '/' && pathname !== '/index.html') {
+        const potentialSlug = decodeURIComponent(pathname.slice(1));
+        if (businesses.some(b => b.slug === potentialSlug || b.id === potentialSlug)) {
+          targetSlug = potentialSlug;
+        }
+      }
+
+      if (targetSlug || pathname.startsWith('/perfil/') || pathname === '/meu-site') {
         const match =
-          businesses.find(b => b.slug === bizSlug || b.id === bizSlug) ||
+          businesses.find(b => b.slug === targetSlug || b.id === targetSlug) ||
           businesses.find(b => b.isRmsPremium) ||
           businesses[0];
         setMiniSiteBusiness(match || businesses[0]);
         setIsMiniSiteOpen(true);
+      } else if (pathname === '' || pathname === '/' || pathname === '/index.html') {
+        setIsMiniSiteOpen(false);
       }
+
       if (search.includes('anuncio') || search.includes('anunciar') || search.includes('cadastro') || search.includes('plano')) {
         setIsAdvertiseOpen(true);
       }
@@ -106,7 +124,8 @@ function MainAppContent() {
     const target = biz || businesses.find(b => b.isRmsPremium) || businesses[0];
     setMiniSiteBusiness(target);
     setIsMiniSiteOpen(true);
-    window.history.pushState({}, '', `/meu-site?biz=${target.slug || target.id}`);
+    const targetSlug = target.slug || target.id;
+    window.history.pushState({}, '', `/perfil/${targetSlug}`);
   };
 
   const handleCloseMiniSite = () => {
@@ -235,6 +254,7 @@ function MainAppContent() {
           const el = document.getElementById('depoimentos-usuarios');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
+        onOpenMiniSite={() => handleOpenMiniSite()}
       />
 
       <main className="flex-1">

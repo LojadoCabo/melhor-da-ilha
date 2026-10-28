@@ -10,13 +10,17 @@ import {
   Sparkles,
   ArrowRight,
   ExternalLink,
-  Search
+  Search,
+  CreditCard,
+  Lock,
+  QrCode
 } from 'lucide-react';
 import { CATEGORIES } from '../data/categories';
 import { CITIES } from '../data/cities';
 import { BUSINESSES as fallbackBusinesses } from '../data/businesses';
 import { Business } from '../types';
 import { useFavorites } from '../context/FavoritesContext';
+import { MercadoPagoModal } from './MercadoPagoModal';
 
 interface AdvertiseModalProps {
   isOpen: boolean;
@@ -38,6 +42,11 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
   const [selectedPlan, setSelectedPlan] = useState<'free' | 'destaque' | 'premium'>('premium');
   const [createdBiz, setCreatedBiz] = useState<any>(null);
   const [dismissMatch, setDismissMatch] = useState(false);
+  const [isMpModalOpen, setIsMpModalOpen] = useState(false);
+  const [mpModalData, setMpModalData] = useState<{
+    business: Partial<Business>;
+    planType: 'destaque' | 'premium';
+  } | null>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -108,10 +117,9 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
   if (!isOpen) return null;
 
   // Handle claiming / upgrading an existing business profile
-  const handleUpgradeExisting = (plan: 'destaque' | 'premium') => {
+  const handleUpgradeExisting = (plan: 'destaque' | 'premium', openCheckout = true) => {
     if (!matchedBusiness) return;
     const isPremium = plan === 'premium';
-    const planName = isPremium ? 'RMS Premium (R$ 59/mês)' : 'Destaque Ilha (R$ 29/mês)';
 
     const updatedBiz: Business = {
       ...matchedBusiness,
@@ -125,18 +133,66 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
     setCreatedBiz(updatedBiz);
     setSelectedPlan(plan);
 
+    if (openCheckout) {
+      setMpModalData({
+        business: updatedBiz,
+        planType: plan
+      });
+      setIsMpModalOpen(true);
+      return;
+    }
+
     if (onBusinessAdded) {
       onBusinessAdded(updatedBiz);
     }
 
-    // Direct WhatsApp invitation message
-    const msg = encodeURIComponent(
-      `Olá equipe MELHOR DA ILHA! Meu estabelecimento "${matchedBusiness.name}" em ${matchedBusiness.cityName} já faz parte do time no guia e vim pelo anúncio para assinar o plano ${planName}. Como posso finalizar a ativação?`
-    );
-    window.open(`https://wa.me/5571999545085?text=${msg}`, '_blank');
-
     setSubmitted(true);
     showToast(`🎉 Parabéns! ${matchedBusiness.name} agora é ${isPremium ? 'CLIENTE PREMIUM' : 'Destaque'}!`);
+  };
+
+  // Callback ao aprovar o pagamento no Mercado Pago sem sair do site
+  const handlePaymentSuccess = (plan: 'destaque' | 'premium', paidBusiness?: Partial<Business>) => {
+    const isPremium = plan === 'premium';
+    const base = (paidBusiness || createdBiz || matchedBusiness || {}) as Partial<Business>;
+
+    const finalBiz: Business = {
+      ...(base as Business),
+      isRmsPremium: isPremium,
+      isFeatured: true,
+      planType: plan,
+      badgeText: isPremium ? 'CLIENTE PREMIUM ⭐' : 'Destaque Ilha',
+      registeredAt: Date.now()
+    };
+
+    setCreatedBiz(finalBiz);
+    setSelectedPlan(plan);
+
+    if (onBusinessAdded) {
+      onBusinessAdded(finalBiz);
+    }
+
+    // Persist paid subscription to Firestore
+    try {
+      const inqId = `adv-paid-${Date.now()}`;
+      import('../lib/firebase').then(({ db, doc, setDoc }) => {
+        setDoc(doc(db, 'inquiries', inqId), {
+          businessName: finalBiz.name || formData.name,
+          email: formData.whatsapp || 'cliente@melhordailha.online',
+          phone: formData.whatsapp || formData.phone,
+          planType: plan,
+          status: 'paid_active',
+          city: finalBiz.cityName || formData.city,
+          paymentProvider: 'mercadopago_transparent',
+          createdAt: new Date().toISOString()
+        }).catch(err => console.warn('Payment record Firestore write error:', err));
+      });
+    } catch (e) {
+      console.warn(e);
+    }
+
+    setIsMpModalOpen(false);
+    setSubmitted(true);
+    showToast(`🎉 Pagamento aprovado com sucesso! ${finalBiz.name} agora é ${isPremium ? 'CLIENTE PREMIUM ⭐' : 'Destaque'}!`);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -148,7 +204,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
 
     // If an existing business is matched, guide user to upgrade
     if (matchedBusiness) {
-      handleUpgradeExisting(selectedPlan === 'free' ? 'destaque' : selectedPlan);
+      handleUpgradeExisting(selectedPlan === 'free' ? 'destaque' : selectedPlan, true);
       return;
     }
 
@@ -212,8 +268,18 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
       console.warn(e);
     }
 
+    // Se escolheu plano pago, abre checkout do Mercado Pago sem sair do site
+    if (selectedPlan !== 'free') {
+      setMpModalData({
+        business: newBiz,
+        planType: selectedPlan
+      });
+      setIsMpModalOpen(true);
+      return;
+    }
+
     setSubmitted(true);
-    showToast('Cadastro recebido! Seu negócio foi adicionado com sucesso.');
+    showToast('Cadastro gratuito concluído com sucesso!');
   };
 
   const handleWhatsAppContact = () => {
@@ -301,10 +367,11 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                       </div>
                       <button
                         type="button"
-                        onClick={() => handleUpgradeExisting('destaque')}
+                        onClick={() => handleUpgradeExisting('destaque', true)}
                         className="mt-2.5 w-full py-2 px-3 rounded-lg bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-colors shadow-sm"
                       >
-                        <span>Assinar Plano R$ 29/mês</span>
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>Pagar R$ 29/mês (Mercado Pago)</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -327,10 +394,11 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                       </div>
                       <button
                         type="button"
-                        onClick={() => handleUpgradeExisting('premium')}
+                        onClick={() => handleUpgradeExisting('premium', true)}
                         className="mt-2.5 w-full py-2 px-3 rounded-lg bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 font-black text-xs flex items-center justify-center gap-1.5 transition-all shadow-md"
                       >
-                        <span>Assinar Plano R$ 59/mês</span>
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>Pagar R$ 59/mês (Mercado Pago)</span>
                         <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     </div>
@@ -563,10 +631,27 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
 
                 <button
                   type="submit"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-md shadow-teal-600/20 transition-all hover:scale-102"
+                  className={`w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold shadow-md transition-all hover:scale-102 ${
+                    selectedPlan === 'premium'
+                      ? 'bg-gradient-to-r from-amber-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-slate-950 shadow-amber-500/20 font-black'
+                      : 'bg-teal-600 hover:bg-teal-500 text-white shadow-teal-600/20'
+                  }`}
                 >
-                  <Send className="w-4 h-4" />
-                  <span>{matchedBusiness ? 'Ativar Plano no Meu Negócio' : 'Concluir Cadastro'}</span>
+                  {selectedPlan !== 'free' ? (
+                    <>
+                      <Lock className="w-4 h-4" />
+                      <span>
+                        {selectedPlan === 'premium'
+                          ? 'Pagar R$ 59/mês no Mercado Pago (Sem sair)'
+                          : 'Pagar R$ 29/mês no Mercado Pago (Sem sair)'}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      <span>{matchedBusiness ? 'Ativar Cadastro Gratuito' : 'Concluir Cadastro Gratuito'}</span>
+                    </>
+                  )}
                 </button>
               </div>
             </form>
@@ -641,14 +726,20 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
 
                 {/* Open in new tab CTA */}
                 <div className="space-y-2">
-                  <a
-                    href={`/meu-site?biz=${createdBiz?.slug || 'novo-cliente'}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      if (onOpenMiniSite && createdBiz) {
+                        onOpenMiniSite(createdBiz);
+                      } else {
+                        window.location.href = `/perfil/${createdBiz?.slug || 'novo-cliente'}`;
+                      }
+                    }}
                     className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-teal-900/30 flex items-center justify-center gap-2 transition-all hover:scale-101 text-center"
                   >
-                    <span>Abrir Mini-Site em Nova Guia ↗ (melhordailha.online/meu-site)</span>
-                  </a>
+                    <span>Abrir Mini-Site Oficial ↗ (melhordailha.online/perfil/{createdBiz?.slug || 'seu-negocio'})</span>
+                  </button>
                   <p className="text-[11px] text-center text-slate-500 dark:text-slate-400">
                     O link do seu mini-site está ativo e pode ser divulgado no seu Instagram, cartões e WhatsApp!
                   </p>
@@ -681,6 +772,15 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
             </div>
           </div>
         )}
+
+        {/* Modal de Checkout Mercado Pago sem sair do site */}
+        <MercadoPagoModal
+          isOpen={isMpModalOpen}
+          onClose={() => setIsMpModalOpen(false)}
+          business={mpModalData?.business || createdBiz || { name: formData.name, cityName: formData.city }}
+          planType={mpModalData?.planType || (selectedPlan === 'free' ? 'destaque' : selectedPlan)}
+          onPaymentSuccess={handlePaymentSuccess}
+        />
       </div>
     </div>
   );

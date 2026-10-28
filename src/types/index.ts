@@ -54,6 +54,10 @@ export interface Business {
   isRmsPremium?: boolean;
   planType?: 'free' | 'destaque' | 'premium';
   registeredAt?: number;
+  galleryImages?: string[];
+  aiEnhanced?: boolean;
+  aiPitch?: string;
+  miniSiteSlug?: string;
 }
 
 export interface FilterState {

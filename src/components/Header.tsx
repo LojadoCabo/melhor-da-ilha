@@ -29,6 +29,7 @@ interface HeaderProps {
   onOpenContact: () => void;
   onGoHome: () => void;
   onOpenTestimonials?: () => void;
+  onOpenMiniSite?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -38,7 +39,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenFavorites,
   onOpenContact,
   onGoHome,
-  onOpenTestimonials
+  onOpenTestimonials,
+  onOpenMiniSite
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { favorites } = useFavorites();
@@ -124,8 +126,16 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-
-
+          {onOpenMiniSite && (
+            <button
+              type="button"
+              onClick={onOpenMiniSite}
+              className="px-3 py-2 rounded-xl text-sm font-bold text-amber-600 dark:text-amber-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors flex items-center gap-1.5"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>Mini-Sites RMS</span>
+            </button>
+          )}
 
           <button
             type="button"
@@ -325,6 +335,19 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <MessageSquareHeart className="w-4 h-4 text-teal-600" />
               <span>Depoimentos de Usuários</span>
+            </button>
+          )}
+          {onOpenMiniSite && (
+            <button
+              type="button"
+              onClick={() => {
+                onOpenMiniSite();
+                setMobileMenuOpen(false);
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30"
+            >
+              <Sparkles className="w-4 h-4 text-amber-500" />
+              <span>Mini-Sites RMS Premium</span>
             </button>
           )}
           <button

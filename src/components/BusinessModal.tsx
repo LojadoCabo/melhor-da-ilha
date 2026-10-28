@@ -375,15 +375,15 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
             {business.isRmsPremium && (
               <div className="p-3.5 rounded-2xl bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950/40 dark:to-yellow-950/30 border border-amber-300 dark:border-amber-700/60 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold">
+                  <div className="w-8 h-8 rounded-xl bg-amber-400 text-slate-950 flex items-center justify-center font-bold shrink-0">
                     <Star className="w-4 h-4 fill-slate-950" />
                   </div>
-                  <div>
+                  <div className="truncate">
                     <div className="text-xs font-bold text-amber-900 dark:text-amber-200">
-                      Mini-Site Oficial no Ar (Bônus Premium)
+                      Mini-Site Exclusivo no Ar (RMS Premium ⭐)
                     </div>
-                    <div className="text-[11px] font-mono text-teal-700 dark:text-teal-400">
-                      melhordailha.online/meu-site
+                    <div className="text-[11px] font-mono text-teal-700 dark:text-teal-400 truncate">
+                      melhordailha.online/perfil/{business.slug || business.id}
                     </div>
                   </div>
                 </div>
@@ -393,9 +393,9 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
                     onClose();
                     if (onOpenMiniSite) onOpenMiniSite(business);
                   }}
-                  className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-sm transition-colors text-center"
+                  className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-sm transition-colors text-center shrink-0"
                 >
-                  Abrir Página do Cliente →
+                  Abrir Mini-Site Oficial →
                 </button>
               </div>
             )}
