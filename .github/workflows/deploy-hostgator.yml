@@ -1,49 +1,22 @@
-name: Deploy para HostGator
+name: Deploy HostGator via FTP
 
 on:
   push:
-    branches:
-      - main
-      - master
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
-  build-and-deploy:
+  web-deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-    name: Compilar e Enviar para HostGator
     steps:
-      - name: 📥 Clonar Repositório
-        uses: actions/checkout@v4
+    - name: Get latest code
+      uses: actions/checkout@v4
 
-      - name: ⚙️ Configurar Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: 📦 Instalar Dependências
-        run: npm install
-
-      - name: 🚀 Gerar Build de Produção (Vite)
-        run: npm run build
-
-      - name: 📄 Garantir .htaccess na pasta dist
-        run: |
-          if [ -f "dist/.htaccess" ]; then
-            echo ".htaccess já existe na dist"
-          elif [ -f "public/.htaccess" ]; then
-            cp public/.htaccess dist/.htaccess
-            echo ".htaccess copiado de public para dist"
-          fi
-          ls -la dist/
-
-      - name: 📤 Enviar Arquivos Compilados para a HostGator (FTP)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR || 'public_html/' }}
-          local-dir: ./dist/
-          protocol: ftp
-          timeout: 60000
+    - name: Sync files to HostGator
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: dist/
+        server-dir: public_html/melhordailha.online/public_html/
