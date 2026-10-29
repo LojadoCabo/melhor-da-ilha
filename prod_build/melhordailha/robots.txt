@@ -1,0 +1,10 @@
+# Robots.txt for MELHOR DA ILHA
+# https://melhordailha.online
+
+User-agent: *
+Allow: /
+Allow: /meu-site
+Allow: /api/health
+
+# Sitemaps
+Sitemap: https://melhordailha.online/sitemap.xml
