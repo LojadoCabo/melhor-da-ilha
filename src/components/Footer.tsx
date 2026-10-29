@@ -225,9 +225,14 @@ export const Footer: React.FC<FooterProps> = ({
         <div className="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} MELHOR DA ILHA. Todos os direitos reservados. Telefones: (71) 99117-1830 · (71) 99954-5085 · (71) 98382-1218.</p>
           <div className="flex items-center gap-4">
+          <div className="flex flex-col gap-1">
             <span className="flex items-center gap-1">
               Feito com <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> para a Ilha de Itaparica e toda a RMS
             </span>
+            <span className="text-[10px] text-slate-600">
+              Desenvolvido por Filo Criações · <a href="/site.zip" download className="text-slate-400 hover:text-white underline cursor-pointer" title="Download Backup">Backup</a>
+            </span>
+          </div>
             <button
               onClick={scrollToTop}
               className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
