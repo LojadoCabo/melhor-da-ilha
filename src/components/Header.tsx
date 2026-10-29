@@ -51,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
   const handleLogin = async () => {
     try {
       setAuthBusy(true);
-      await signInWithPopup(auth, googleProvider);
+      await loginWithGoogle();
     } catch (err) {
       console.error(err);
     } finally {

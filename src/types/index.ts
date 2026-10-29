@@ -38,6 +38,7 @@ export interface Business {
   websiteStatus?: 'active' | 'outdated' | 'none';
   websiteStatusText?: string;
   googleMapsUrl?: string;
+  location?: { lat: number; lng: number };
   rating: number;
   reviewCount: number;
   priceLevel: '$' | '$$' | '$$$' | '$$$$';

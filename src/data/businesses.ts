@@ -38,6 +38,7 @@ import { CATALOG_EXPANSION_BATCH35 } from './catalogExpansionBatch35';
 import { CATALOG_EXPANSION_BATCH36 } from './catalogExpansionBatch36';
 import { CATALOG_EXPANSION_BATCH37 } from './catalogExpansionBatch37';
 import { CATALOG_EXPANSION_BATCH38 } from './catalogExpansionBatch38';
+import { BROTAS_EXPANSION_BATCH39 } from './brotasBusinessesBatch39';
 
 export const BUSINESSES: Business[] = [
   // ==========================================
@@ -2887,5 +2888,6 @@ export const BUSINESSES: Business[] = [
   ...CATALOG_EXPANSION_BATCH35,
   ...CATALOG_EXPANSION_BATCH36,
   ...CATALOG_EXPANSION_BATCH37,
-  ...CATALOG_EXPANSION_BATCH38
+  ...CATALOG_EXPANSION_BATCH38,
+  ...BROTAS_EXPANSION_BATCH39
 ];

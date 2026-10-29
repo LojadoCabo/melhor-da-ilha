@@ -193,9 +193,9 @@ export const RMS_EXTRA_BATCH5: Business[] = [
     coverImage: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=700&q=80'
   },
   {
-    id: 'restaurante-manguezal-itaparica',
+    id: 'restaurante-petiscaria-manguezal-itaparica',
     name: 'Restaurante & Petiscaria Manguezal',
-    slug: 'restaurante-manguezal-itaparica',
+    slug: 'restaurante-petiscaria-manguezal-itaparica',
     tagline: 'Ensopado de caranguejo, lambreta e moquecas na Ponta de Areia',
     description: 'Ambiente rústico cercado pela natureza na Ponta de Areia em Itaparica com cerveja gelada e moquecas preparadas no tacho de barro tradicional.',
     categoryId: 'alimentacao-e-bebidas',

@@ -71,7 +71,7 @@ const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(
     <RootErrorBoundary>
-      <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} internalUsageAttributionIds={['gmp_mcp_codeassist_v1_aistudio']}>
+      <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''}>
         <App />
       </APIProvider>
     </RootErrorBoundary>
