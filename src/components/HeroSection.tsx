@@ -37,7 +37,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Badge */}
         <div className="inline-flex items-center gap-1.5 xs:gap-2 px-2.5 xs:px-3.5 py-1.5 rounded-full bg-teal-100/80 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 text-[10px] xs:text-xs font-bold xs:font-semibold mb-4 shadow-xs max-w-full">
           <Compass className="w-3 h-3 xs:w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />
-          <span className="truncate">GUIA LOCAL OFICIAL · {totalCount} NEGÓCIOS NA ILHA E RMS</span>
+          <span className="truncate">GUIA LOCAL OFICIAL · {totalCount} NEGÓCIOS NA RMS</span>
         </div>
 
         {/* Headline */}
@@ -50,7 +50,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
 
         {/* Subtitle */}
         <p className="max-w-3xl mx-auto text-base sm:text-lg text-slate-600 dark:text-slate-300 font-normal leading-relaxed mb-8">
-          Encontre com facilidade empresas, prestadores de serviços, oficinas, restaurantes e saúde em todos os 13 municípios da <strong>Região Metropolitana de Salvador</strong> e <strong>Ilha de Itaparica</strong>: Simões Filho, Madre de Deus, São Francisco do Conde, Dias d'Ávila, Camaçari, Lauro de Freitas, Candeias, São Sebastião do Passé, Mata de São João, Pojuca, Salvador, Vera Cruz e Itaparica.
+          Encontre com facilidade empresas, prestadores de serviços, oficinas, restaurantes e saúde em toda a <strong>Região Metropolitana de Salvador</strong>. O guia completo para facilitar o seu dia a dia na RMS.
         </p>
 
         {/* Search Input Box */}

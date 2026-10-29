@@ -48,7 +48,7 @@ export const Footer: React.FC<FooterProps> = ({
                   MELHOR DA ILHA
                 </span>
                 <span className="block text-[11px] font-semibold text-teal-400 tracking-wider uppercase">
-                  Guia Local Ilha & Região Metropolitana
+                  Guia Local da RMS
                 </span>
               </div>
             </div>
