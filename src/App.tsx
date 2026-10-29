@@ -7,6 +7,7 @@ import React, { useState, useMemo } from 'react';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import { FavoritesProvider, useFavorites } from './context/FavoritesContext';
+import { Business, FilterState } from './types';
 import { BUSINESSES as initialBusinesses } from './data/businesses';
 import { CITIES } from './data/cities';
 import { filterBusinesses, sortBusinesses, getCategoryCounts, getCityCounts } from './utils/filter';

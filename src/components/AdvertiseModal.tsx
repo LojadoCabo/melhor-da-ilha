@@ -552,7 +552,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
               </div>
 
               {/* Form Body Content */}
-              <form onSubmit={handleSubmit} className="space-y-4 pb-4">
+              <div className="space-y-4 pb-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
@@ -841,124 +841,137 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                 />
               </div>
 
+              <div>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
+                  Descrição ou Apresentação
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="Conte sobre sua história, horário de funcionamento e diferenciais..."
+                  value={formData.description}
+                  onChange={e => setFormData({ ...formData, description: e.target.value })}
+                  className="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                />
               </div>
-            </>
-          ) : (
-          <div className="py-4 text-center space-y-4">
-            <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-8 h-8" />
             </div>
+          </>
+        ) : (
+            <div className="py-4 text-center space-y-4">
+              <div className="w-14 h-14 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto">
+                <CheckCircle2 className="w-8 h-8" />
+              </div>
 
-            <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-              {selectedPlan === 'premium' ? '🎉 Mini-Site Ativo & Perfil no Topo!' : 'Parabéns! Cadastro Ativado com Sucesso!'}
-            </h3>
+              <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+                {selectedPlan === 'premium' ? '🎉 Mini-Site Ativo & Perfil no Topo!' : 'Parabéns! Cadastro Ativado com Sucesso!'}
+              </h3>
 
-            {selectedPlan === 'premium' ? (
-              <div className="space-y-4 text-left">
-                {/* Simulated Browser Bar */}
-                <div className="rounded-2xl overflow-hidden border border-slate-700 bg-slate-950 text-white shadow-xl">
-                  <div className="px-3 py-2 bg-slate-900 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-                      <span className="ml-2 text-slate-400">melhordailha.online/meu-site</span>
+              {selectedPlan === 'premium' ? (
+                <div className="space-y-4 text-left">
+                  {/* Simulated Browser Bar */}
+                  <div className="rounded-2xl overflow-hidden border border-slate-700 bg-slate-950 text-white shadow-xl">
+                    <div className="px-3 py-2 bg-slate-900 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+                        <span className="ml-2 text-slate-400">melhordailha.online/meu-site</span>
+                      </div>
+                      <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[10px] font-black uppercase">
+                        ⭐ CLIENTE PREMIUM
+                      </span>
                     </div>
-                    <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[10px] font-black uppercase">
-                      ⭐ CLIENTE PREMIUM
-                    </span>
+
+                    {/* Mini-site Preview Card */}
+                    <div className="p-4 sm:p-5 bg-gradient-to-b from-slate-900 to-slate-950 space-y-3">
+                      <div className="flex items-center justify-between gap-3">
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span className="px-2 py-0.5 rounded-md bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 font-black text-[10px]">
+                              CLIENTE PREMIUM ⭐
+                            </span>
+                            <span className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
+                              <ShieldCheck className="w-3.5 h-3.5" /> Verificado
+                            </span>
+                          </div>
+                          <h4 className="text-lg sm:text-xl font-extrabold text-white mt-1">
+                            {createdBiz?.name || formData.name}
+                          </h4>
+                          <p className="text-xs text-slate-300">
+                            {createdBiz?.neighborhood || formData.neighborhood}, {createdBiz?.cityName || formData.city} · {createdBiz?.categoryName || formData.category}
+                          </p>
+                        </div>
+
+                        <div className="text-right">
+                          <div className="text-amber-400 font-black text-sm flex items-center gap-1 justify-end">
+                            <Star className="w-4 h-4 fill-amber-400" /> 5.0
+                          </div>
+                          <span className="text-[10px] text-slate-400">Página Oficial</span>
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-slate-300 italic bg-slate-800/50 p-2.5 rounded-xl border border-slate-700/50">
+                        "{createdBiz?.description || formData.description || 'Atendimento de alta qualidade na Ilha de Itaparica e RMS.'}"
+                      </p>
+
+                      <div className="flex flex-wrap gap-1.5 pt-1">
+                        {(createdBiz?.services || (formData.services ? formData.services.split(',') : ['Atendimento no WhatsApp', 'Orçamento Rápido'])).map((s: string, idx: number) => (
+                          <span key={idx} className="px-2 py-0.5 rounded-md bg-teal-950/80 border border-teal-800 text-[10px] text-teal-300 font-medium">
+                            ✓ {s.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Mini-site Preview Card */}
-                  <div className="p-4 sm:p-5 bg-gradient-to-b from-slate-900 to-slate-950 space-y-3">
-                    <div className="flex items-center justify-between gap-3">
-                      <div>
-                        <div className="flex items-center gap-1.5">
-                          <span className="px-2 py-0.5 rounded-md bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 font-black text-[10px]">
-                            CLIENTE PREMIUM ⭐
-                          </span>
-                          <span className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
-                            <ShieldCheck className="w-3.5 h-3.5" /> Verificado
-                          </span>
-                        </div>
-                        <h4 className="text-lg sm:text-xl font-extrabold text-white mt-1">
-                          {createdBiz?.name || formData.name}
-                        </h4>
-                        <p className="text-xs text-slate-300">
-                          {createdBiz?.neighborhood || formData.neighborhood}, {createdBiz?.cityName || formData.city} · {createdBiz?.categoryName || formData.category}
-                        </p>
-                      </div>
-
-                      <div className="text-right">
-                        <div className="text-amber-400 font-black text-sm flex items-center gap-1 justify-end">
-                          <Star className="w-4 h-4 fill-amber-400" /> 5.0
-                        </div>
-                        <span className="text-[10px] text-slate-400">Página Oficial</span>
-                      </div>
-                    </div>
-
-                    <p className="text-xs text-slate-300 italic bg-slate-800/50 p-2.5 rounded-xl border border-slate-700/50">
-                      "{createdBiz?.description || formData.description || 'Atendimento de alta qualidade na Ilha de Itaparica e RMS.'}"
+                  {/* Open in new tab CTA */}
+                  <div className="space-y-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        if (onOpenMiniSite && createdBiz) {
+                          onOpenMiniSite(createdBiz);
+                        } else {
+                          window.location.href = `/perfil/${createdBiz?.slug || 'novo-cliente'}`;
+                        }
+                      }}
+                      className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-teal-900/30 flex items-center justify-center gap-2 transition-all hover:scale-101 text-center"
+                    >
+                      <span>Abrir Mini-Site Oficial ↗ (melhordailha.online/perfil/{createdBiz?.slug || 'seu-negocio'})</span>
+                    </button>
+                    <p className="text-[11px] text-center text-slate-500 dark:text-slate-400">
+                      O link do seu mini-site está ativo e pode ser divulgado no seu Instagram, cartões e WhatsApp!
                     </p>
-
-                    <div className="flex flex-wrap gap-1.5 pt-1">
-                      {(createdBiz?.services || (formData.services ? formData.services.split(',') : ['Atendimento no WhatsApp', 'Orçamento Rápido'])).map((s: string, idx: number) => (
-                        <span key={idx} className="px-2 py-0.5 rounded-md bg-teal-950/80 border border-teal-800 text-[10px] text-teal-300 font-medium">
-                          ✓ {s.trim()}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 </div>
+              ) : (
+                <p className="max-w-md mx-auto text-sm text-slate-600 dark:text-slate-300">
+                  O seu negócio <strong>{createdBiz?.name || formData.name}</strong> foi atualizado com sucesso no Guia Melhor da Ilha no plano {selectedPlan === 'destaque' ? 'Destaque Ilha (R$ 29/mês)' : 'Gratuito'}.
+                </p>
+              )}
 
-                {/* Open in new tab CTA */}
-                <div className="space-y-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onClose();
-                      if (onOpenMiniSite && createdBiz) {
-                        onOpenMiniSite(createdBiz);
-                      } else {
-                        window.location.href = `/perfil/${createdBiz?.slug || 'novo-cliente'}`;
-                      }
-                    }}
-                    className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-teal-900/30 flex items-center justify-center gap-2 transition-all hover:scale-101 text-center"
-                  >
-                    <span>Abrir Mini-Site Oficial ↗ (melhordailha.online/perfil/{createdBiz?.slug || 'seu-negocio'})</span>
-                  </button>
-                  <p className="text-[11px] text-center text-slate-500 dark:text-slate-400">
-                    O link do seu mini-site está ativo e pode ser divulgado no seu Instagram, cartões e WhatsApp!
-                  </p>
-                </div>
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSubmitted(false);
+                    onClose();
+                  }}
+                  className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs shadow-md"
+                >
+                  Ver no Topo do Guia ⭐
+                </button>
+                <button
+                  type="button"
+                  onClick={handleWhatsAppContact}
+                  className="w-full sm:w-auto px-6 py-2.5 rounded-xl border border-emerald-500/50 text-emerald-700 dark:text-emerald-300 font-bold text-xs hover:bg-emerald-50 dark:hover:bg-emerald-950/30"
+                >
+                  Falar com a Central no WhatsApp
+                </button>
               </div>
-            ) : (
-              <p className="max-w-md mx-auto text-sm text-slate-600 dark:text-slate-300">
-                O seu negócio <strong>{createdBiz?.name || formData.name}</strong> foi atualizado com sucesso no Guia Melhor da Ilha no plano {selectedPlan === 'destaque' ? 'Destaque Ilha (R$ 29/mês)' : 'Gratuito'}.
-              </p>
-            )}
-
-            <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  setSubmitted(false);
-                  onClose();
-                }}
-                className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-teal-600 text-white font-bold text-xs shadow-md"
-              >
-                Ver no Topo do Guia ⭐
-              </button>
-              <button
-                type="button"
-                onClick={handleWhatsAppContact}
-                className="w-full sm:w-auto px-6 py-2.5 rounded-xl border border-emerald-500/50 text-emerald-700 dark:text-emerald-300 font-bold text-xs hover:bg-emerald-50 dark:hover:bg-emerald-950/30"
-              >
-                Falar com a Central no WhatsApp
-              </button>
             </div>
-          </div>
-          </div>
+          )}
+        </div>
 
           {!submitted && (
             <div className="p-4 sm:p-6 border-t border-slate-100 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm shrink-0">
