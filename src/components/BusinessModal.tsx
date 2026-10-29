@@ -84,14 +84,18 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Lock background scroll while modal is open
+  // Lock background scroll only when modal is actively open
   React.useEffect(() => {
+    if (!isOpen) {
+      document.body.style.overflow = '';
+      return;
+    }
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
-      document.body.style.overflow = originalOverflow;
+      document.body.style.overflow = originalOverflow || '';
     };
-  }, []);
+  }, [isOpen]);
 
   if (!isOpen || !business) return null;
 
@@ -171,7 +175,7 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
         </div>
 
         {/* Modal Scrollable Body */}
-        <div className="overflow-y-auto flex-1">
+        <div className="overflow-y-auto flex-1 overscroll-contain" style={{ WebkitOverflowScrolling: 'touch' }}>
           {/* Cover image banner */}
           <div className="relative h-60 sm:h-72 w-full bg-slate-900 overflow-hidden">
             <img

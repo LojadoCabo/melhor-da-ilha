@@ -3,28 +3,39 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
+  html {
+    overflow-y: auto;
+    scroll-behavior: smooth;
+  }
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
-/* Custom subtle scrollbar */
+/* Custom visible scrollbar across browsers */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.45) transparent;
+}
+
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(0, 0, 0, 0.03);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(150, 150, 150, 0.3);
+  background: rgba(100, 116, 139, 0.45);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(150, 150, 150, 0.5);
+  background: rgba(13, 148, 136, 0.8);
 }
 
 /* Hide scrollbar for clean horizontal pill lists */
