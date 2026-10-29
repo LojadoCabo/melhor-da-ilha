@@ -26,6 +26,7 @@ import { ContactModal } from './components/ContactModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { ClientMiniSite } from './components/ClientMiniSite';
+import { MapView } from './components/MapView';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 import {
@@ -278,6 +279,11 @@ function MainAppContent() {
           onQuickSearch={handleQuickSearch}
           totalCount={businesses.length}
         />
+
+        {/* Map View */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <MapView businesses={filteredList} onMarkerClick={setSelectedBusiness} />
+        </div>
 
         {/* Directory Content Area */}
         <section id="directory-results" className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">

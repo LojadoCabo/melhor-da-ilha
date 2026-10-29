@@ -65,11 +65,15 @@ class RootErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState
   }
 }
 
+import { APIProvider } from '@vis.gl/react-google-maps';
+
 const rootElement = document.getElementById('root');
 if (rootElement) {
   createRoot(rootElement).render(
     <RootErrorBoundary>
-      <App />
+      <APIProvider apiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY} internalUsageAttributionIds={['gmp_mcp_codeassist_v1_aistudio']}>
+        <App />
+      </APIProvider>
     </RootErrorBoundary>
   );
 }

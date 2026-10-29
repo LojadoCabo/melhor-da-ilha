@@ -19,6 +19,9 @@ import {
 import { Business } from '../types';
 import { useFavorites } from '../context/FavoritesContext';
 import { getCategoryCoverImage } from '../utils/categoryImages';
+import { db, auth } from '../lib/firebase';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp } from 'firebase/firestore';
+import { useAuth } from '../context/AuthContext';
 
 interface BusinessModalProps {
   business: Business | null;
@@ -44,26 +47,31 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
   onOpenMiniSite
 }) => {
   const { isFavorite, toggleFavorite, showToast } = useFavorites();
+  const { user } = useAuth();
   const [userRating, setUserRating] = useState<number>(5);
   const [reviewerName, setReviewerName] = useState('');
   const [reviewComment, setReviewComment] = useState('');
-  const [reviews, setReviews] = useState<UserReview[]>([
-    {
-      id: 'rev-1',
-      author: 'Carlos Alberto M.',
-      rating: 5,
-      date: 'Há 2 dias',
-      comment: 'Excelente atendimento e rapidez! Sempre conto com o serviço aqui na Ilha.'
-    },
-    {
-      id: 'rev-2',
-      author: 'Mariana Silveira',
-      rating: 5,
-      date: 'Há 1 semana',
-      comment: 'Super recomendo, profissionais honestos e preço justo. Fiquei muito satisfeita.'
-    }
-  ]);
+  const [reviews, setReviews] = useState<UserReview[]>([]);
   const [showReviewSuccess, setShowReviewSuccess] = useState(false);
+
+  React.useEffect(() => {
+    if (!business) return;
+    const q = query(
+      collection(db, 'businesses', business.id, 'reviews'),
+      orderBy('createdAt', 'desc')
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedReviews = snapshot.docs.map(doc => ({
+        id: doc.id,
+        author: doc.data().userName,
+        rating: doc.data().rating,
+        date: 'Recent', // Simplified date formatting for now
+        comment: doc.data().comment
+      }));
+      setReviews(fetchedReviews);
+    });
+    return () => unsubscribe();
+  }, [business]);
 
   React.useEffect(() => {
     if (!isOpen) return;
@@ -76,31 +84,45 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  // Lock background scroll while modal is open
+  React.useEffect(() => {
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, []);
+
   if (!isOpen || !business) return null;
 
   const favorited = isFavorite(business.id);
 
-  const handleReviewSubmit = (e: React.FormEvent) => {
+  const handleReviewSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!reviewerName.trim() || !reviewComment.trim()) {
       showToast('Por favor, preencha seu nome e comentário.');
       return;
     }
 
-    const newReview: UserReview = {
-      id: `rev-${Date.now()}`,
-      author: reviewerName.trim(),
-      rating: userRating,
-      date: 'Agora mesmo',
-      comment: reviewComment.trim()
-    };
-
-    setReviews([newReview, ...reviews]);
-    setReviewerName('');
-    setReviewComment('');
-    setShowReviewSuccess(true);
-    showToast('Avaliação enviada com sucesso! Obrigado pelo feedback.');
-    setTimeout(() => setShowReviewSuccess(false), 4000);
+    try {
+      await addDoc(collection(db, 'businesses', business.id, 'reviews'), {
+        businessId: business.id,
+        userId: user?.uid || 'anonymous',
+        userName: reviewerName.trim(),
+        userAvatar: user?.photoURL || '',
+        rating: userRating,
+        comment: reviewComment.trim(),
+        createdAt: serverTimestamp()
+      });
+      setReviewerName('');
+      setReviewComment('');
+      setShowReviewSuccess(true);
+      showToast('Avaliação enviada com sucesso! Obrigado pelo feedback.');
+      setTimeout(() => setShowReviewSuccess(false), 4000);
+    } catch (error) {
+      console.error('Error adding review: ', error);
+      showToast('Erro ao enviar avaliação. Tente novamente.');
+    }
   };
 
   const whatsappMessage = encodeURIComponent(
@@ -110,14 +132,6 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
   const phoneUrl = `tel:${business.phone.replace(/\D/g, '')}`;
   const mapsSearchUrl = business.googleMapsUrl || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${business.name} ${business.address} ${business.cityName}`)}`;
 
-  // Lock background scroll while modal is open
-  React.useEffect(() => {
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = originalOverflow;
-    };
-  }, []);
 
   return (
     <div
