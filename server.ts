@@ -368,7 +368,7 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido com estas chaves:
 
 
 // ========================================================
-// DOWNLOAD: Arquivo Zip compilado para HostGator
+// DOWNLOAD: Arquivo Zip compilado para HostGator (Node.js)
 // ========================================================
 app.get(['/baixar', '/download'], (_req: Request, res: Response) => {
   res.send(`<!DOCTYPE html>
@@ -376,49 +376,67 @@ app.get(['/baixar', '/download'], (_req: Request, res: Response) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download — dist-hostgator.zip | MELHOR DA ILHA</title>
+  <title>Download — Pacote Node.js HostGator | MELHOR DA ILHA</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
-    .card { background: #1e293b; border: 1px solid #334155; border-radius: 24px; padding: 36px; max-width: 520px; width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 24px; padding: 36px; max-width: 560px; width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
     .icon { font-size: 48px; margin-bottom: 16px; }
     h1 { font-size: 24px; font-weight: 800; margin: 0 0 12px; color: #fff; }
     p { font-size: 14px; color: #94a3b8; line-height: 1.6; margin: 0 0 24px; }
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; text-decoration: none; padding: 16px 28px; border-radius: 16px; font-weight: 700; font-size: 15px; box-shadow: 0 10px 25px -5px rgba(20,184,166,0.4); transition: transform 0.2s; }
     .btn:hover { transform: scale(1.02); }
-    .meta { margin-top: 24px; padding-top: 18px; border-top: 1px solid #334155; font-size: 12px; color: #64748b; }
+    .instructions { margin-top: 24px; padding: 18px; border-radius: 16px; background: #0b1320; text-align: left; font-size: 13px; color: #cbd5e1; border: 1px solid #334155; }
+    .instructions h3 { margin: 0 0 10px 0; font-size: 14px; color: #38bdf8; }
+    .instructions ol { margin: 0; padding-left: 20px; line-height: 1.8; }
+    .instructions code { background: #1e293b; padding: 2px 6px; border-radius: 6px; color: #f59e0b; font-family: monospace; }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="icon">📦</div>
-    <h1>Pacote HostGator Compilado</h1>
-    <p>O arquivo <strong>dist-hostgator.zip</strong> contém todos os arquivos estáticos minificados, imagens e o arquivo <strong>.htaccess</strong> configurado para a HostGator.</p>
-    <a href="/dist-hostgator.zip" download="dist-hostgator.zip" class="btn">
-      📥 Baixar dist-hostgator.zip (27,9 MB)
+    <div class="icon">🚀</div>
+    <h1>Pacote HostGator (Node.js)</h1>
+    <p>O arquivo <strong>site.zip</strong> contém a compilação completa do frontend (<code>dist/</code>), o backend Node.js (<code>server.js</code>), e o <code>package.json</code> pronto para rodar no cPanel.</p>
+    <a href="/site.zip" download="melhor-da-ilha-nodejs.zip" class="btn">
+      📥 Baixar melhor-da-ilha-nodejs.zip
     </a>
-    <div class="meta">
-      Após baixar, envie e extraia o arquivo diretamente na pasta do seu domínio no cPanel da HostGator.
+    
+    <div class="instructions">
+      <h3>Passo a passo no cPanel HostGator:</h3>
+      <ol>
+        <li>No cPanel, acesse <strong>"Setup Node.js App"</strong> (Configurar Aplicativo Node.js).</li>
+        <li>Clique em <strong>"Create Application"</strong>:
+          <br>• Node.js version: <strong>18.x</strong>, <strong>20.x</strong> ou superior.
+          <br>• Application mode: <strong>Production</strong>.
+          <br>• Application startup file: <code>server.js</code>.
+        </li>
+        <li>Envie o arquivo <strong>site.zip</strong> para a pasta do aplicativo e extraia.</li>
+        <li>No painel do Node.js, clique em <strong>"Run NPM Install"</strong>.</li>
+        <li>Em <strong>Environment variables</strong>, adicione:
+          <br>• <code>NODE_ENV</code> = <code>production</code>
+        </li>
+        <li>Clique em <strong>"Restart"</strong> e acesse seu domínio!</li>
+      </ol>
     </div>
   </div>
-  <script>
-    // Inicia download automaticamente após 500ms
-    setTimeout(() => {
-      window.location.href = '/dist-hostgator.zip';
-    }, 500);
-  </script>
 </body>
 </html>`);
 });
 
-app.get(['/download/dist-hostgator.zip', '/dist-hostgator.zip'], (_req: Request, res: Response) => {
-  const filePath = path.resolve(__dirname, 'dist-hostgator.zip');
-  if (fs.existsSync(filePath)) {
-    res.setHeader('Content-Disposition', 'attachment; filename="dist-hostgator.zip"');
-    res.setHeader('Content-Type', 'application/zip');
-    res.sendFile(filePath);
-  } else {
-    res.status(404).send('Arquivo zip não encontrado. Execute npm run build.');
+app.get(['/download/site.zip', '/site.zip', '/dist-hostgator.zip'], (_req: Request, res: Response) => {
+  const possiblePaths = [
+    path.resolve(__dirname, 'site.zip'),
+    path.resolve(__dirname, 'public/site.zip'),
+    path.resolve(__dirname, '.aistudio/artifacts/brain/e2f81f72-258c-40c8-998c-2f1e55e57380/site.zip'),
+    path.resolve(__dirname, 'dist-hostgator.zip')
+  ];
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      res.setHeader('Content-Disposition', 'attachment; filename="melhor-da-ilha-nodejs.zip"');
+      res.setHeader('Content-Type', 'application/zip');
+      return res.sendFile(p);
+    }
   }
+  res.status(404).send('Arquivo zip não encontrado.');
 });
 
 // Configure Vite middleware in development or static serving in production

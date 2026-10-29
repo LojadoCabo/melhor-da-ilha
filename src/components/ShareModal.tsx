@@ -11,20 +11,35 @@ interface ShareModalProps {
 
 export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClose }) => {
   const [copied, setCopied] = useState(false);
+  const [copiedMiniSite, setCopiedMiniSite] = useState(false);
   const { showToast } = useFavorites();
 
   if (!isOpen || !business) return null;
 
-  const currentUrl = typeof window !== 'undefined' ? window.location.href : 'https://melhordailha.com.br';
-  const shareTitle = `${business.name} - ${business.tagline} | MELHOR DA ILHA`;
-  const shareText = `Confira ${business.name} (${business.categoryName}) em ${business.cityName} no guia MELHOR DA ILHA: ${currentUrl}`;
+  const origin = typeof window !== 'undefined' && window.location.origin
+    ? window.location.origin
+    : 'https://melhordailha.online';
 
-  const copyToClipboard = async () => {
+  // Usar slug amigável ou o ID do estabelecimento
+  const businessIdentifier = business.slug || business.id;
+  // Link direto com o parâmetro ?business= para abrir o modal imediatamente
+  const shareUrl = `${origin}/?business=${encodeURIComponent(businessIdentifier)}`;
+  const miniSiteUrl = `${origin}/perfil/${encodeURIComponent(businessIdentifier)}`;
+
+  const shareTitle = `${business.name} - ${business.tagline} | MELHOR DA ILHA`;
+  const shareText = `Confira ${business.name} (${business.categoryName}) em ${business.cityName} no guia MELHOR DA ILHA:\n${shareUrl}`;
+
+  const copyToClipboard = async (urlToCopy: string = shareUrl, isMiniSite: boolean = false) => {
     try {
-      await navigator.clipboard.writeText(currentUrl);
-      setCopied(true);
-      showToast('Link copiado para a área de transferência! 📋');
-      setTimeout(() => setCopied(false), 2500);
+      await navigator.clipboard.writeText(urlToCopy);
+      if (isMiniSite) {
+        setCopiedMiniSite(true);
+        setTimeout(() => setCopiedMiniSite(false), 2500);
+      } else {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2500);
+      }
+      showToast('Link copiado! Ao abrir, vai direto para este estabelecimento 📋');
     } catch {
       showToast('Não foi possível copiar o link.');
     }
@@ -36,13 +51,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClos
         await navigator.share({
           title: shareTitle,
           text: shareText,
-          url: currentUrl
+          url: shareUrl
         });
       } catch {
         // user cancelled
       }
     } else {
-      copyToClipboard();
+      copyToClipboard(shareUrl);
     }
   };
 
@@ -52,17 +67,17 @@ export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClos
   };
 
   const shareFacebook = () => {
-    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+    const url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const shareTwitter = () => {
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(currentUrl)}`;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTitle)}&url=${encodeURIComponent(shareUrl)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   const shareTelegram = () => {
-    const url = `https://t.me/share/url?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareTitle)}`;
+    const url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 
@@ -147,20 +162,56 @@ export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClos
           </button>
         </div>
 
-        <div className="flex items-center gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
-          <input
-            type="text"
-            readOnly
-            value={currentUrl}
-            className="flex-1 px-3 py-2 text-xs bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-600 dark:text-slate-300 focus:outline-none"
-          />
-          <button
-            onClick={copyToClipboard}
-            className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 dark:bg-teal-600 hover:bg-slate-800 dark:hover:bg-teal-500 text-white rounded-lg text-xs font-semibold transition-colors"
-          >
-            {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Copy className="w-4 h-4" />}
-            <span>{copied ? 'Copiado!' : 'Copiar'}</span>
-          </button>
+        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-3">
+          <div>
+            <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">
+              Link Direto do Estabelecimento
+            </label>
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                readOnly
+                value={shareUrl}
+                className="flex-1 px-3 py-2 text-xs bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 font-mono focus:outline-none select-all"
+              />
+              <button
+                type="button"
+                onClick={() => copyToClipboard(shareUrl, false)}
+                className="flex items-center gap-1.5 px-3.5 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-bold transition-all shadow-sm shrink-0"
+              >
+                {copied ? <Check className="w-4 h-4 text-emerald-200" /> : <Copy className="w-4 h-4" />}
+                <span>{copied ? 'Copiado!' : 'Copiar'}</span>
+              </button>
+            </div>
+            <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mt-1 flex items-center gap-1">
+              <span>✓</span>
+              <span>Abre diretamente este anúncio quando acessado fora do site.</span>
+            </p>
+          </div>
+
+          {(business.isRmsPremium || business.slug) && (
+            <div className="pt-2 border-t border-dashed border-slate-200 dark:border-slate-800">
+              <label className="block text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-1">
+                Link do Mini-Site Exclusivo
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  readOnly
+                  value={miniSiteUrl}
+                  className="flex-1 px-3 py-2 text-xs bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/60 rounded-lg text-amber-900 dark:text-amber-200 font-mono focus:outline-none select-all"
+                />
+                <button
+                  type="button"
+                  onClick={() => copyToClipboard(miniSiteUrl, true)}
+                  className="flex items-center gap-1.5 px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold transition-all shadow-sm shrink-0"
+                >
+                  {copiedMiniSite ? <Check className="w-4 h-4 text-emerald-950" /> : <Copy className="w-4 h-4" />}
+                  <span>{copiedMiniSite ? 'Copiado!' : 'Copiar'}</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {typeof navigator !== 'undefined' && 'share' in navigator && (
@@ -168,7 +219,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClos
             onClick={handleNativeShare}
             className="w-full mt-3 py-2 text-xs text-teal-600 dark:text-teal-400 font-medium hover:underline text-center"
           >
-            Ou use as opções nativas do seu aparelho
+            Ou toque aqui para usar as opções nativas do seu celular
           </button>
         )}
       </div>

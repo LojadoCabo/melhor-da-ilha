@@ -75,7 +75,7 @@ function MainAppContent() {
 
   const { favorites, showToast } = useFavorites();
 
-  // Dynamic Route Listener for /perfil/:slug, /p/:slug, /meu-site, or direct /:slug
+  // Dynamic Route Listener for /perfil/:slug, /p/:slug, /meu-site, direct /:slug, or query ?business=:id
   React.useEffect(() => {
     const checkPath = () => {
       const pathname = window.location.pathname.replace(/\/+$/, '');
@@ -109,6 +109,31 @@ function MainAppContent() {
         setIsMiniSiteOpen(false);
       }
 
+      // Suporte a deep link para abrir o modal do estabelecimento (?business=id, ?empresa=id, ?b=id)
+      const urlParams = new URLSearchParams(window.location.search);
+      const businessQuery = urlParams.get('business') || urlParams.get('empresa') || urlParams.get('b') || urlParams.get('id');
+
+      if (businessQuery) {
+        const queryLower = decodeURIComponent(businessQuery).trim().toLowerCase();
+        const matchedBiz = businesses.find(
+          b => b.id.toLowerCase() === queryLower || (b.slug && b.slug.toLowerCase() === queryLower)
+        );
+        if (matchedBiz) {
+          setSelectedBusiness(matchedBiz);
+        }
+      } else if (hash) {
+        const cleanHash = hash.replace(/^#\/?/, '');
+        const hashParams = new URLSearchParams(cleanHash.includes('?') ? cleanHash.split('?')[1] : cleanHash);
+        const hashBiz = hashParams.get('business') || hashParams.get('b');
+        if (hashBiz) {
+          const val = decodeURIComponent(hashBiz).trim().toLowerCase();
+          const matchedBiz = businesses.find(
+            b => b.id.toLowerCase() === val || (b.slug && b.slug.toLowerCase() === val)
+          );
+          if (matchedBiz) setSelectedBusiness(matchedBiz);
+        }
+      }
+
       if (search.includes('anuncio') || search.includes('anunciar') || search.includes('cadastro') || search.includes('plano')) {
         setIsAdvertiseOpen(true);
       }
@@ -121,6 +146,26 @@ function MainAppContent() {
       window.removeEventListener('hashchange', checkPath);
     };
   }, [businesses]);
+
+  const handleSelectBusiness = (biz: Business | null) => {
+    setSelectedBusiness(biz);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      if (biz) {
+        url.searchParams.set('business', biz.slug || biz.id);
+        window.history.replaceState({}, '', url.toString());
+      } else {
+        if (url.searchParams.has('business') || url.searchParams.has('b') || url.searchParams.has('empresa') || url.searchParams.has('id')) {
+          url.searchParams.delete('business');
+          url.searchParams.delete('b');
+          url.searchParams.delete('empresa');
+          url.searchParams.delete('id');
+          const newSearch = url.searchParams.toString();
+          window.history.replaceState({}, '', url.pathname + (newSearch ? `?${newSearch}` : '') + url.hash);
+        }
+      }
+    }
+  };
 
   const handleOpenMiniSite = (biz?: Business) => {
     const target = biz || businesses.find(b => b.isRmsPremium) || businesses[0];
@@ -282,7 +327,7 @@ function MainAppContent() {
 
         {/* Map View */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <MapView businesses={filteredList} onMarkerClick={setSelectedBusiness} />
+          <MapView businesses={filteredList} onMarkerClick={handleSelectBusiness} />
         </div>
 
         {/* Directory Content Area */}
@@ -373,7 +418,7 @@ function MainAppContent() {
                   <BusinessCard
                     key={business.id}
                     business={business}
-                    onSelect={biz => setSelectedBusiness(biz)}
+                    onSelect={biz => handleSelectBusiness(biz)}
                     onShare={biz => setSharingBusiness(biz)}
                     onOpenMiniSite={biz => handleOpenMiniSite(biz)}
                   />
@@ -475,7 +520,7 @@ function MainAppContent() {
             onSelectBusiness={businessId => {
               const matched = businesses.find(b => b.id === businessId || b.name.toLowerCase().includes(businessId.toLowerCase()));
               if (matched) {
-                setSelectedBusiness(matched);
+                handleSelectBusiness(matched);
               }
             }}
             onOpenContact={() => setIsContactOpen(true)}
@@ -513,7 +558,7 @@ function MainAppContent() {
       <BusinessModal
         business={selectedBusiness}
         isOpen={Boolean(selectedBusiness)}
-        onClose={() => setSelectedBusiness(null)}
+        onClose={() => handleSelectBusiness(null)}
         onShare={biz => setSharingBusiness(biz)}
         onOpenMiniSite={biz => handleOpenMiniSite(biz)}
       />

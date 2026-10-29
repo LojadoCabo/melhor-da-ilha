@@ -1,42 +1,18 @@
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-
 // server.ts
-var import_express = __toESM(require("express"), 1);
-var import_dotenv = __toESM(require("dotenv"), 1);
-var import_path = __toESM(require("path"), 1);
-var import_fs = __toESM(require("fs"), 1);
-var import_url = require("url");
-var import_genai = require("@google/genai");
-var import_meta = {};
-import_dotenv.default.config();
-var __filename = (0, import_url.fileURLToPath)(import_meta.url);
-var __dirname = import_path.default.dirname(__filename);
-var app = (0, import_express.default)();
+import express from "express";
+import dotenv from "dotenv";
+import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
+import { GoogleGenAI } from "@google/genai";
+dotenv.config();
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = path.dirname(__filename);
+var app = express();
 var PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3e3;
 var isProd = process.env.NODE_ENV === "production";
-app.use(import_express.default.json({ limit: "10mb" }));
-var ai = new import_genai.GoogleGenAI({
+app.use(express.json({ limit: "10mb" }));
+var ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
   httpOptions: {
     headers: {
@@ -324,48 +300,66 @@ app.get(["/baixar", "/download"], (_req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download \u2014 dist-hostgator.zip | MELHOR DA ILHA</title>
+  <title>Download \u2014 Pacote Node.js HostGator | MELHOR DA ILHA</title>
   <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; }
-    .card { background: #1e293b; border: 1px solid #334155; border-radius: 24px; padding: 36px; max-width: 520px; width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 24px; padding: 36px; max-width: 560px; width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
     .icon { font-size: 48px; margin-bottom: 16px; }
     h1 { font-size: 24px; font-weight: 800; margin: 0 0 12px; color: #fff; }
     p { font-size: 14px; color: #94a3b8; line-height: 1.6; margin: 0 0 24px; }
     .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; text-decoration: none; padding: 16px 28px; border-radius: 16px; font-weight: 700; font-size: 15px; box-shadow: 0 10px 25px -5px rgba(20,184,166,0.4); transition: transform 0.2s; }
     .btn:hover { transform: scale(1.02); }
-    .meta { margin-top: 24px; padding-top: 18px; border-top: 1px solid #334155; font-size: 12px; color: #64748b; }
+    .instructions { margin-top: 24px; padding: 18px; border-radius: 16px; background: #0b1320; text-align: left; font-size: 13px; color: #cbd5e1; border: 1px solid #334155; }
+    .instructions h3 { margin: 0 0 10px 0; font-size: 14px; color: #38bdf8; }
+    .instructions ol { margin: 0; padding-left: 20px; line-height: 1.8; }
+    .instructions code { background: #1e293b; padding: 2px 6px; border-radius: 6px; color: #f59e0b; font-family: monospace; }
   </style>
 </head>
 <body>
   <div class="card">
-    <div class="icon">\u{1F4E6}</div>
-    <h1>Pacote HostGator Compilado</h1>
-    <p>O arquivo <strong>dist-hostgator.zip</strong> cont\xE9m todos os arquivos est\xE1ticos minificados, imagens e o arquivo <strong>.htaccess</strong> configurado para a HostGator.</p>
-    <a href="/dist-hostgator.zip" download="dist-hostgator.zip" class="btn">
-      \u{1F4E5} Baixar dist-hostgator.zip (27,9 MB)
+    <div class="icon">\u{1F680}</div>
+    <h1>Pacote HostGator (Node.js)</h1>
+    <p>O arquivo <strong>site.zip</strong> cont\xE9m a compila\xE7\xE3o completa do frontend (<code>dist/</code>), o backend Node.js (<code>server.js</code>), e o <code>package.json</code> pronto para rodar no cPanel.</p>
+    <a href="/site.zip" download="melhor-da-ilha-nodejs.zip" class="btn">
+      \u{1F4E5} Baixar melhor-da-ilha-nodejs.zip
     </a>
-    <div class="meta">
-      Ap\xF3s baixar, envie e extraia o arquivo diretamente na pasta do seu dom\xEDnio no cPanel da HostGator.
+    
+    <div class="instructions">
+      <h3>Passo a passo no cPanel HostGator:</h3>
+      <ol>
+        <li>No cPanel, acesse <strong>"Setup Node.js App"</strong> (Configurar Aplicativo Node.js).</li>
+        <li>Clique em <strong>"Create Application"</strong>:
+          <br>\u2022 Node.js version: <strong>18.x</strong>, <strong>20.x</strong> ou superior.
+          <br>\u2022 Application mode: <strong>Production</strong>.
+          <br>\u2022 Application startup file: <code>server.js</code>.
+        </li>
+        <li>Envie o arquivo <strong>site.zip</strong> para a pasta do aplicativo e extraia.</li>
+        <li>No painel do Node.js, clique em <strong>"Run NPM Install"</strong>.</li>
+        <li>Em <strong>Environment variables</strong>, adicione:
+          <br>\u2022 <code>NODE_ENV</code> = <code>production</code>
+        </li>
+        <li>Clique em <strong>"Restart"</strong> e acesse seu dom\xEDnio!</li>
+      </ol>
     </div>
   </div>
-  <script>
-    // Inicia download automaticamente ap\xF3s 500ms
-    setTimeout(() => {
-      window.location.href = '/dist-hostgator.zip';
-    }, 500);
-  </script>
 </body>
 </html>`);
 });
-app.get(["/download/dist-hostgator.zip", "/dist-hostgator.zip"], (_req, res) => {
-  const filePath = import_path.default.resolve(__dirname, "dist-hostgator.zip");
-  if (import_fs.default.existsSync(filePath)) {
-    res.setHeader("Content-Disposition", 'attachment; filename="dist-hostgator.zip"');
-    res.setHeader("Content-Type", "application/zip");
-    res.sendFile(filePath);
-  } else {
-    res.status(404).send("Arquivo zip n\xE3o encontrado. Execute npm run build.");
+app.get(["/download/site.zip", "/site.zip", "/dist-hostgator.zip"], (_req, res) => {
+  const possiblePaths = [
+    path.resolve(__dirname, "site.zip"),
+    path.resolve(__dirname, "public/site.zip"),
+    path.resolve(__dirname, ".aistudio/artifacts/brain/e2f81f72-258c-40c8-998c-2f1e55e57380/site.zip"),
+    path.resolve(__dirname, "dist-hostgator.zip")
+  ];
+  for (const p of possiblePaths) {
+    if (fs.existsSync(p)) {
+      res.setHeader("Content-Disposition", 'attachment; filename="melhor-da-ilha-nodejs.zip"');
+      res.setHeader("Content-Type", "application/zip");
+      return res.sendFile(p);
+    }
   }
+  res.status(404).send("Arquivo zip n\xE3o encontrado.");
 });
 async function startServer() {
   if (!isProd) {
@@ -376,10 +370,10 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    const distPath = import_path.default.resolve(__dirname, "dist");
-    app.use(import_express.default.static(distPath));
+    const distPath = path.resolve(__dirname, "dist");
+    app.use(express.static(distPath));
     app.get("*", (_req, res) => {
-      res.sendFile(import_path.default.join(distPath, "index.html"));
+      res.sendFile(path.join(distPath, "index.html"));
     });
   }
   app.listen(PORT, "0.0.0.0", () => {

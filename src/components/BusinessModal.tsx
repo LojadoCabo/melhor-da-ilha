@@ -14,7 +14,10 @@ import {
   Heart,
   Share2,
   CheckCircle2,
-  Send
+  Send,
+  Link2,
+  Copy,
+  Check
 } from 'lucide-react';
 import { Business } from '../types';
 import { useFavorites } from '../context/FavoritesContext';
@@ -53,6 +56,37 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
   const [reviewComment, setReviewComment] = useState('');
   const [reviews, setReviews] = useState<UserReview[]>([]);
   const [showReviewSuccess, setShowReviewSuccess] = useState(false);
+  const [copiedDirect, setCopiedDirect] = useState(false);
+
+  // Sync the browser address bar with ?business=[id_or_slug] while modal is open
+  React.useEffect(() => {
+    if (!isOpen || !business) return;
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      const identifier = business.slug || business.id;
+      if (url.searchParams.get('business') !== identifier) {
+        url.searchParams.set('business', identifier);
+        window.history.replaceState({}, '', url.toString());
+      }
+    }
+  }, [isOpen, business]);
+
+  const handleCopyDirectLink = async () => {
+    if (!business) return;
+    const origin = typeof window !== 'undefined' && window.location.origin
+      ? window.location.origin
+      : 'https://melhordailha.online';
+    const identifier = business.slug || business.id;
+    const directUrl = `${origin}/?business=${encodeURIComponent(identifier)}`;
+    try {
+      await navigator.clipboard.writeText(directUrl);
+      setCopiedDirect(true);
+      showToast('Link direto copiado! Ao abrir, vai direto para este anúncio 📋');
+      setTimeout(() => setCopiedDirect(false), 2500);
+    } catch {
+      showToast('Não foi possível copiar o link.');
+    }
+  };
 
   React.useEffect(() => {
     if (!business) return;
@@ -339,6 +373,45 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
                   <span>Ligar {business.phone}</span>
                 </a>
               )}
+            </div>
+
+            {/* Direct Link Share & Copy Section */}
+            <div className="p-3 sm:p-3.5 rounded-2xl bg-teal-50/70 dark:bg-slate-800/80 border border-teal-200/70 dark:border-slate-700/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+              <div className="flex items-center gap-2 min-w-0">
+                <div className="w-8 h-8 rounded-xl bg-teal-600/10 dark:bg-teal-400/10 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0">
+                  <Link2 className="w-4 h-4" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5 flex-wrap">
+                    <span>Link Direto</span>
+                    <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-100 dark:bg-teal-900/60 text-teal-800 dark:text-teal-300">
+                      ?business={business.slug || business.id}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
+                    Abre diretamente este anúncio quando compartilhado
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  type="button"
+                  onClick={handleCopyDirectLink}
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-white dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 text-xs font-bold shadow-xs transition-all"
+                >
+                  {copiedDirect ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{copiedDirect ? 'Copiado!' : 'Copiar Link'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onShare(business)}
+                  className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-xs transition-all"
+                >
+                  <Share2 className="w-3.5 h-3.5" />
+                  <span>Redes</span>
+                </button>
+              </div>
             </div>
 
             {/* Description */}
