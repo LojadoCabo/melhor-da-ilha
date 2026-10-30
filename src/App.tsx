@@ -57,10 +57,15 @@ const defaultFilters: FilterState = {
   sortBy: 'featured'
 };
 
+
 function MainAppContent() {
   const [businesses, setBusinesses] = useState<Business[]>(() => mergeWithStoredBusinesses(initialBusinesses));
-  const [filters, setFilters] = useState<FilterState>(defaultFilters);
+  const directoryResultsRef = React.useRef<HTMLDivElement>(null);
+  const scrollToResults = () => {
+    directoryResultsRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
   const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(null);
+  const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [sharingBusiness, setSharingBusiness] = useState<Business | null>(null);
 
   // Modals
@@ -112,28 +117,14 @@ function MainAppContent() {
         setIsMiniSiteOpen(false);
       }
 
-      // Suporte a deep link para abrir o modal do estabelecimento (?business=id, ?empresa=id, ?b=id)
-      const urlParams = new URLSearchParams(window.location.search);
-      const businessQuery = urlParams.get('business') || urlParams.get('empresa') || urlParams.get('b') || urlParams.get('id');
-
-      if (businessQuery) {
-        const queryLower = decodeURIComponent(businessQuery).trim().toLowerCase();
+      // Suporte a deep link para abrir o modal do estabelecimento (/:slug)
+      if (pathname && pathname !== '/' && pathname !== '/index.html' && !pathname.startsWith('/meu-site')) {
+        const potentialSlug = decodeURIComponent(pathname.slice(1));
         const matchedBiz = businesses.find(
-          b => b.id.toLowerCase() === queryLower || (b.slug && b.slug.toLowerCase() === queryLower)
+          b => b.id.toLowerCase() === potentialSlug.toLowerCase() || (b.slug && b.slug.toLowerCase() === potentialSlug.toLowerCase())
         );
         if (matchedBiz) {
           setSelectedBusiness(matchedBiz);
-        }
-      } else if (hash) {
-        const cleanHash = hash.replace(/^#\/?/, '');
-        const hashParams = new URLSearchParams(cleanHash.includes('?') ? cleanHash.split('?')[1] : cleanHash);
-        const hashBiz = hashParams.get('business') || hashParams.get('b');
-        if (hashBiz) {
-          const val = decodeURIComponent(hashBiz).trim().toLowerCase();
-          const matchedBiz = businesses.find(
-            b => b.id.toLowerCase() === val || (b.slug && b.slug.toLowerCase() === val)
-          );
-          if (matchedBiz) setSelectedBusiness(matchedBiz);
         }
       }
 
@@ -153,19 +144,10 @@ function MainAppContent() {
   const handleSelectBusiness = (biz: Business | null) => {
     setSelectedBusiness(biz);
     if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href);
       if (biz) {
-        url.searchParams.set('business', biz.slug || biz.id);
-        window.history.replaceState({}, '', url.toString());
+        window.history.pushState({}, '', `/${biz.slug || biz.id}`);
       } else {
-        if (url.searchParams.has('business') || url.searchParams.has('b') || url.searchParams.has('empresa') || url.searchParams.has('id')) {
-          url.searchParams.delete('business');
-          url.searchParams.delete('b');
-          url.searchParams.delete('empresa');
-          url.searchParams.delete('id');
-          const newSearch = url.searchParams.toString();
-          window.history.replaceState({}, '', url.pathname + (newSearch ? `?${newSearch}` : '') + url.hash);
-        }
+        window.history.pushState({}, '', '/');
       }
     }
   };
@@ -205,12 +187,7 @@ function MainAppContent() {
       showToast(`Negócio ${newBiz.name} cadastrado com sucesso!`);
     }
 
-    setTimeout(() => {
-      const resultsEl = document.getElementById('directory-results');
-      if (resultsEl) {
-        resultsEl.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 250);
+    setTimeout(scrollToResults, 250);
   };
 
   // Filter updates
@@ -227,11 +204,7 @@ function MainAppContent() {
   const handleQuickSearch = (term: string) => {
     setFilters(prev => ({ ...prev, query: term }));
     setShowFavoritesOnly(false);
-    // Smooth scroll down to results
-    const resultsEl = document.getElementById('directory-results');
-    if (resultsEl) {
-      resultsEl.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToResults();
   };
 
   // Compute category and city counts for badges
@@ -344,7 +317,7 @@ function MainAppContent() {
         </div>
 
         {/* Directory Content Area */}
-        <section id="directory-results" className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
+        <section ref={directoryResultsRef} id="directory-results" className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
           {/* Favorites Header Banner if Favorites tab active */}
           {showFavoritesOnly && (
             <div className="flex items-center justify-between p-4 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50">
