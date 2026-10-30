@@ -23,6 +23,7 @@ import { CategoriesModal } from './components/CategoriesModal';
 import { CitiesModal } from './components/CitiesModal';
 import { AdvertiseModal } from './components/AdvertiseModal';
 import { ContactModal } from './components/ContactModal';
+import { GoogleWorkspaceModal } from './components/GoogleWorkspaceModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { ClientMiniSite } from './components/ClientMiniSite';
@@ -68,6 +69,8 @@ function MainAppContent() {
   const [isCitiesOpen, setIsCitiesOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
+  const [workspaceSelectedBiz, setWorkspaceSelectedBiz] = useState<Business | null>(null);
 
   // Dedicated Client Mini-Site View (/meu-site)
   const [miniSiteBusiness, setMiniSiteBusiness] = useState<Business | null>(null);
@@ -314,6 +317,10 @@ function MainAppContent() {
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
         onOpenMiniSite={() => handleOpenMiniSite()}
+        onOpenWorkspace={() => {
+          setWorkspaceSelectedBiz(null);
+          setIsWorkspaceOpen(true);
+        }}
       />
 
       <main className="flex-1">
@@ -561,6 +568,10 @@ function MainAppContent() {
         onClose={() => handleSelectBusiness(null)}
         onShare={biz => setSharingBusiness(biz)}
         onOpenMiniSite={biz => handleOpenMiniSite(biz)}
+        onOpenWorkspaceWithBiz={biz => {
+          setWorkspaceSelectedBiz(biz);
+          setIsWorkspaceOpen(true);
+        }}
       />
 
       {/* Social Share Modal */}
@@ -612,7 +623,18 @@ function MainAppContent() {
         onClose={() => setIsContactOpen(false)}
       />
 
-
+      {/* Google Workspace Modal (Sheets, Calendar, Docs) */}
+      <GoogleWorkspaceModal
+        isOpen={isWorkspaceOpen}
+        onClose={() => {
+          setIsWorkspaceOpen(false);
+          setWorkspaceSelectedBiz(null);
+        }}
+        businesses={businesses}
+        currentFilteredBusinesses={filteredList}
+        preselectedBusiness={workspaceSelectedBiz}
+        onShowToast={showToast}
+      />
     </div>
   );
 }

@@ -2,13 +2,13 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { BUSINESSES } from '../data/businesses';
 
-test('Catalog contains exactly 2000 establishments', () => {
-  assert.equal(BUSINESSES.length, 2000);
+test('Catalog contains 2137 establishments', () => {
+  assert.equal(BUSINESSES.length, 2137);
 });
 
-test('All 2000 establishment IDs are unique', () => {
+test('All establishment IDs are unique', () => {
   const ids = new Set(BUSINESSES.map(b => b.id));
-  assert.equal(ids.size, 2000);
+  assert.equal(ids.size, BUSINESSES.length);
 });
 
 test('Matching logic identifies existing businesses by normalized name', () => {

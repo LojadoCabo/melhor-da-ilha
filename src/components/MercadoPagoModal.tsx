@@ -20,6 +20,8 @@ import {
 } from 'lucide-react';
 import { Business } from '../types';
 
+import { fetchApiJson, ApiFetchError } from '../utils/api';
+
 declare global {
   interface Window {
     MercadoPago?: any;
@@ -53,6 +55,7 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
   const [paymentStatus, setPaymentStatus] = useState<'pending' | 'approved' | 'rejected'>('pending');
   const [pollingActive, setPollingActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isHtmlError, setIsHtmlError] = useState(false);
   const [showTechGuide, setShowTechGuide] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(600); // 10 min
 
@@ -62,7 +65,7 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
 
   // Carrega Pix ao abrir ou alternar para a aba pix
   useEffect(() => {
-    if (isOpen && activeTab === 'pix' && !pixData) {
+    if (isOpen && activeTab === 'pix' && !pixData && !errorMessage) {
       generatePixPayment();
     }
   }, [isOpen, activeTab]);
@@ -82,34 +85,55 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
 
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`/api/mercadopago/payment-status/${pixData.paymentId}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.status === 'approved') {
-            setPaymentStatus('approved');
-            setPollingActive(false);
-            if (onPaymentSuccess) {
-              onPaymentSuccess(planType, business);
-            }
+        const data = await fetchApiJson<{ status: string }>(
+          `/api/mercadopago/payment-status/${encodeURIComponent(pixData.paymentId)}`
+        );
+        if (data && data.status === 'approved') {
+          setPaymentStatus('approved');
+          setPollingActive(false);
+          if (onPaymentSuccess) {
+            onPaymentSuccess(planType, business);
           }
         }
       } catch (err) {
-        console.warn('Erro ao consultar status:', err);
+        // Polling silencioso para não poluir UI se houver oscilação de rede
+        console.warn('[MercadoPago Polling]:', err);
       }
     }, 4000);
 
     return () => clearInterval(interval);
   }, [isOpen, pixData, paymentStatus, pollingActive]);
 
+  // Fallback para simulação local caso o backend não esteja respondendo (ex: host puramente estático)
+  const activateLocalPixSimulation = () => {
+    const mockId = `pix_sim_${Date.now()}`;
+    const mockQrCode = `00020101021226840014br.gov.bcb.pix2562qrcodes-pix.mercadopago.com/v2/mock-${mockId}5204000053039865405${planPrice.toFixed(2)}5802BR5920MELHOR DA ILHA GUIA6009SALVADOR62070503***6304E8A2`;
+    setPixData({
+      paymentId: mockId,
+      qrCode: mockQrCode,
+      qrCodeBase64: `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(mockQrCode)}`,
+      isSimulated: true
+    });
+    setErrorMessage(null);
+    setIsHtmlError(false);
+    setPollingActive(true);
+  };
+
   // Gera o Pix através do endpoint backend
   const generatePixPayment = async () => {
     try {
       setLoading(true);
       setErrorMessage(null);
+      setIsHtmlError(false);
 
-      const res = await fetch('/api/mercadopago/create-pix', {
+      const data = await fetchApiJson<{
+        paymentId: string | number;
+        qrCode: string;
+        qrCodeBase64: string;
+        isSimulated?: boolean;
+        error?: string;
+      }>('/api/mercadopago/create-pix', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           amount: planPrice,
           businessName: business.name || 'Comércio Local',
@@ -119,9 +143,8 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
         })
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Falha ao gerar cobrança Pix');
+      if (!data || !data.qrCode) {
+        throw new Error(data?.error || 'A resposta do Mercado Pago não continha o QR Code.');
       }
 
       setPixData({
@@ -132,7 +155,9 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
       });
       setPollingActive(true);
     } catch (err: any) {
-      console.error(err);
+      console.error('[MercadoPago Pix Error]:', err);
+      const isHtml = Boolean(err.isHtmlResponse);
+      setIsHtmlError(isHtml);
       setErrorMessage(err.message || 'Erro ao conectar ao Mercado Pago');
     } finally {
       setLoading(false);
@@ -144,11 +169,15 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
     try {
       setLoading(true);
       setErrorMessage(null);
+      setIsHtmlError(false);
 
       // 1. Cria a preferência no servidor backend
-      const res = await fetch('/api/mercadopago/create-preference', {
+      const data = await fetchApiJson<{
+        preferenceId: string;
+        isSimulated?: boolean;
+        error?: string;
+      }>('/api/mercadopago/create-preference', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           title: `Assinatura ${planTitle} - ${business.name || 'Comércio'}`,
           price: planPrice,
@@ -157,9 +186,8 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
         })
       });
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Falha ao iniciar checkout no Mercado Pago');
+      if (!data || !data.preferenceId) {
+        throw new Error(data?.error || 'Não foi possível gerar a preferência de pagamento no Mercado Pago.');
       }
 
       // 2. Inicializa o SDK v2 do Mercado Pago em modo Lightbox (Modal sobre o site)
@@ -183,7 +211,8 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
         }, 1200);
       }
     } catch (err: any) {
-      console.error(err);
+      console.error('[MercadoPago Card Error]:', err);
+      setIsHtmlError(Boolean(err.isHtmlResponse));
       setErrorMessage(err.message || 'Erro ao carregar checkout');
     } finally {
       setLoading(false);
@@ -384,11 +413,56 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
               </button>
             </div>
 
-            {/* Mensagem de Erro */}
+            {/* Mensagem de Erro com Diagnóstico e Recuperação Rápida */}
             {errorMessage && (
-              <div className="mb-4 p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs flex items-start gap-2">
-                <Info className="w-4 h-4 shrink-0 mt-0.5" />
-                <div className="flex-1 leading-relaxed">{errorMessage}</div>
+              <div className="mb-4 p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 text-xs space-y-2.5">
+                <div className="flex items-start gap-2">
+                  <Info className="w-4 h-4 shrink-0 text-rose-600 dark:text-rose-400 mt-0.5" />
+                  <div className="flex-1 leading-relaxed font-medium">
+                    {errorMessage}
+                  </div>
+                </div>
+
+                {isHtmlError && (
+                  <div className="p-2.5 rounded-xl bg-white/70 dark:bg-slate-900/60 border border-rose-200 dark:border-rose-900/50 text-[11px] text-slate-700 dark:text-slate-300 leading-normal space-y-1">
+                    <p className="font-bold text-rose-700 dark:text-rose-400">
+                      🛠️ Diagnóstico do Servidor / Apache HostGator:
+                    </p>
+                    <p>
+                      O frontend tentou chamar a API, mas recebeu a página inicial (HTML) porque o Apache ou servidor estático não encontrou o endpoint Node.js ativo.
+                    </p>
+                    <ul className="list-disc pl-4 space-y-0.5 text-slate-600 dark:text-slate-400">
+                      <li>Certifique-se de que no cPanel HostGator a aplicação Node.js está criada e com status <strong>Running</strong> executando <code>server.js</code>.</li>
+                      <li>O arquivo <code>.htaccess</code> já inclui a regra para não redirecionar requisições <code>/api/*</code> para <code>index.html</code>.</li>
+                    </ul>
+                  </div>
+                )}
+
+                <div className="flex items-center gap-2 pt-1 flex-wrap">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (activeTab === 'pix') {
+                        generatePixPayment();
+                      } else {
+                        handleOpenCheckoutModal();
+                      }
+                    }}
+                    className="py-1.5 px-3 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-xs"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    Tentar Novamente
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={activateLocalPixSimulation}
+                    className="py-1.5 px-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-xs"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                    Ativar Pix de Demonstração
+                  </button>
+                </div>
               </div>
             )}
 

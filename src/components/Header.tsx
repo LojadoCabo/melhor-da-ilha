@@ -30,6 +30,7 @@ interface HeaderProps {
   onGoHome: () => void;
   onOpenTestimonials?: () => void;
   onOpenMiniSite?: () => void;
+  onOpenWorkspace?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -40,7 +41,8 @@ export const Header: React.FC<HeaderProps> = ({
   onOpenContact,
   onGoHome,
   onOpenTestimonials,
-  onOpenMiniSite
+  onOpenMiniSite,
+  onOpenWorkspace
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { favorites } = useFavorites();
@@ -137,6 +139,18 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
+          {onOpenWorkspace && (
+            <button
+              type="button"
+              onClick={onOpenWorkspace}
+              className="px-3 py-2 rounded-xl text-sm font-bold text-teal-700 dark:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-950/40 transition-colors flex items-center gap-1.5"
+              title="Google Sheets, Google Calendar e Google Docs"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Workspace</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={onOpenAdvertise}
@@ -225,6 +239,16 @@ export const Header: React.FC<HeaderProps> = ({
                   <Heart className="w-3.5 h-3.5 text-rose-500" />
                   <span>Favoritos na Nuvem</span>
                 </button>
+                {onOpenWorkspace && (
+                  <button
+                    type="button"
+                    onClick={onOpenWorkspace}
+                    className="w-full text-left px-3 py-2 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors flex items-center gap-2 mt-1"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>Google Workspace</span>
+                  </button>
+                )}
                 <button
                   type="button"
                   onClick={handleLogout}
@@ -348,6 +372,19 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <Sparkles className="w-4 h-4 text-amber-500" />
               <span>Mini-Sites RMS Premium</span>
+            </button>
+          )}
+          {onOpenWorkspace && (
+            <button
+              type="button"
+              onClick={() => {
+                onOpenWorkspace();
+                setMobileMenuOpen(false);
+              }}
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-teal-700 dark:text-teal-300 bg-teal-50/70 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50"
+            >
+              <Sparkles className="w-4 h-4 text-emerald-500" />
+              <span>Google Workspace (Sheets, Agenda, Docs)</span>
             </button>
           )}
           <button

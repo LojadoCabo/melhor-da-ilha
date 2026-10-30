@@ -361,6 +361,14 @@ app.get(["/download/site.zip", "/site.zip", "/dist-hostgator.zip"], (_req, res) 
   }
   res.status(404).send("Arquivo zip n\xE3o encontrado.");
 });
+app.all("/api/*", (req, res) => {
+  res.status(404).json({
+    error: `Endpoint '${req.path}' n\xE3o encontrado no servidor`,
+    method: req.method,
+    path: req.path,
+    message: "Verifique a URL e o m\xE9todo da requisi\xE7\xE3o. Rotas de API retornam exclusivamente JSON."
+  });
+});
 async function startServer() {
   if (!isProd) {
     const { createServer: createViteServer } = await import("vite");

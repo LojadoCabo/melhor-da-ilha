@@ -16,6 +16,14 @@ const isProd = process.env.NODE_ENV === 'production';
 
 app.use(express.json({ limit: '10mb' }));
 
+// Tratador de erro para JSON mal formatado
+app.use((err: any, req: Request, res: Response, next: any) => {
+  if (err instanceof SyntaxError && (err as any).status === 400 && 'body' in err) {
+    return res.status(400).json({ error: 'JSON mal formatado', details: err.message });
+  }
+  next();
+});
+
 // Server-side Gemini AI client initialization with mandatory telemetry header
 const ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
@@ -437,6 +445,16 @@ app.get(['/download/site.zip', '/site.zip', '/dist-hostgator.zip'], (_req: Reque
     }
   }
   res.status(404).send('Arquivo zip não encontrado.');
+});
+
+// Resposta 404 em JSON para todas as rotas /api não mapeadas (impede que o SPA middleware retorne index.html como HTML)
+app.all('/api/*', (req: Request, res: Response) => {
+  res.status(404).json({
+    error: `Endpoint '${req.path}' não encontrado no servidor`,
+    method: req.method,
+    path: req.path,
+    message: 'Verifique a URL e o método da requisição. Rotas de API retornam exclusivamente JSON.',
+  });
 });
 
 // Configure Vite middleware in development or static serving in production

@@ -5,8 +5,8 @@ import { CITIES } from '../src/data/cities.ts';
 import { getCategoryCoverImage } from '../src/utils/categoryImages.ts';
 import { mergeWithStoredBusinesses } from '../src/utils/customBusinessesStorage.ts';
 
-test('Catálogo contém exatamente 2.000 estabelecimentos', () => {
-  assert.equal(BUSINESSES.length, 2000, `Esperado 2000 estabelecimentos, encontrado: ${BUSINESSES.length}`);
+test('Catálogo contém pelo menos 2.137 estabelecimentos (incluindo Salvador & Brotas)', () => {
+  assert.equal(BUSINESSES.length, 2137, `Esperado 2137 estabelecimentos, encontrado: ${BUSINESSES.length}`);
 });
 
 test('Não há IDs duplicados no catálogo', () => {

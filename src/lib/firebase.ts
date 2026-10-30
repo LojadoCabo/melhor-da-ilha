@@ -8,14 +8,39 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
-googleProvider.addScope('https://mail.google.com/');
-googleProvider.addScope('https://www.googleapis.com/auth/contacts');
 
-export const db = firebaseConfig.firestoreDatabaseId
-  ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+// Google Workspace Scopes
+export const WORKSPACE_SCOPES = [
+  'https://www.googleapis.com/auth/spreadsheets',
+  'https://www.googleapis.com/auth/spreadsheets.readonly',
+  'https://www.googleapis.com/auth/calendar',
+  'https://www.googleapis.com/auth/calendar.events',
+  'https://www.googleapis.com/auth/calendar.readonly',
+  'https://www.googleapis.com/auth/documents',
+  'https://www.googleapis.com/auth/documents.readonly',
+  'https://www.googleapis.com/auth/drive.file'
+];
+
+WORKSPACE_SCOPES.forEach(scope => {
+  googleProvider.addScope(scope);
+});
+
+// In-memory access token caching (Do NOT store in localStorage or sessionStorage)
+let cachedAccessToken: string | null = null;
+
+export const setCachedAccessToken = (token: string | null) => {
+  cachedAccessToken = token;
+};
+
+export const getCachedAccessToken = (): string | null => {
+  return cachedAccessToken;
+};
+
+export const db = (firebaseConfig as any).firestoreDatabaseId
+  ? getFirestore(app, (firebaseConfig as any).firestoreDatabaseId)
   : getFirestore(app);
 
-// Validation check as required by Firebase Integration Skill
+// Validation check as required by Firebase Integration Skill (browser runtime only)
 async function testConnection() {
   try {
     await getDocFromServer(doc(db, 'test', 'connection'));
@@ -26,7 +51,9 @@ async function testConnection() {
   }
 }
 
-testConnection();
+if (typeof window !== 'undefined') {
+  testConnection();
+}
 
 export {
   signInWithPopup,

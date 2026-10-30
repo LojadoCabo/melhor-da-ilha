@@ -29,6 +29,7 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import { Business } from '../types';
+import { fetchApiJson } from '../utils/api';
 import { getCategoryCoverImage } from '../utils/categoryImages';
 
 interface ClientMiniSiteProps {
@@ -101,9 +102,11 @@ export const ClientMiniSite: React.FC<ClientMiniSiteProps> = ({
   const handleGenerateAiEnhancement = async () => {
     try {
       setIsGeneratingAi(true);
-      const res = await fetch('/api/ai/enhance-profile', {
+      const data = await fetchApiJson<{
+        enhancedPitch?: string;
+        keyHighlights?: string[];
+      }>('/api/ai/enhance-profile', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: business.name,
           category: business.categoryName,
@@ -112,8 +115,7 @@ export const ClientMiniSite: React.FC<ClientMiniSiteProps> = ({
           services: business.services.join(', ')
         })
       });
-      if (res.ok) {
-        const data = await res.json();
+      if (data) {
         if (data.enhancedPitch) setAiPitch(data.enhancedPitch);
         if (data.keyHighlights) setAiHighlights(data.keyHighlights);
       }
