@@ -29,7 +29,6 @@ import { MobileBottomNav } from './components/MobileBottomNav';
 import { updateBusiness } from './services/businessService';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { ClientMiniSite } from './components/ClientMiniSite';
-import { MapView } from './components/MapView';
 import { Footer } from './components/Footer';
 import { Toast } from './components/Toast';
 import {
@@ -329,10 +328,6 @@ function MainAppContent() {
           totalCount={businesses.length}
         />
 
-        {/* Map View */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
-          <MapView businesses={filteredList} onMarkerClick={handleSelectBusiness} />
-        </div>
 
         {/* Directory Content Area */}
         <section ref={directoryResultsRef} id="directory-results" className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">

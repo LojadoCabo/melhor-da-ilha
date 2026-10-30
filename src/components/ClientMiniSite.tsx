@@ -680,14 +680,14 @@ export const ClientMiniSite: React.FC<ClientMiniSiteProps> = ({
 
             {/* Selos Topo do Banner */}
             <div className="absolute top-4 left-4 right-4 flex items-center justify-between flex-wrap gap-2">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-black bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 text-slate-950 shadow-xl border border-amber-200 ring-2 ring-amber-400/50">
-                  <Star className="w-4 h-4 fill-slate-950 text-slate-950" />
-                  CLIENTE PREMIUM ⭐
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 text-slate-950 shadow-lg border border-amber-200">
+                  <Star className="w-3 h-3 fill-slate-950 text-slate-950" />
+                  PREMIUM ⭐
                 </span>
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-teal-600/90 text-white backdrop-blur-md shadow-md flex items-center gap-1">
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                  Google Business Sincronizado
+                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-teal-600/90 text-white backdrop-blur-md shadow-md flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3" />
+                  Sincronizado
                 </span>
               </div>
 
@@ -720,7 +720,7 @@ export const ClientMiniSite: React.FC<ClientMiniSiteProps> = ({
                     </span>
                   </div>
 
-                  <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-md">
+                  <h1 className="text-xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-md leading-tight">
                     {editForm.name}
                   </h1>
 
@@ -730,13 +730,13 @@ export const ClientMiniSite: React.FC<ClientMiniSiteProps> = ({
                 </div>
 
                 {/* Avaliações do Google Maps */}
-                <div className="flex sm:flex-col items-center sm:items-end gap-2 bg-slate-950/85 backdrop-blur-md p-3.5 rounded-2xl border border-slate-700/80 shrink-0 shadow-lg">
-                  <div className="flex items-center gap-1 text-amber-400 font-black text-xl">
-                    <Star className="w-5 h-5 fill-amber-400" />
+                <div className="flex sm:flex-col items-center sm:items-end gap-1.5 bg-slate-950/85 backdrop-blur-md p-2.5 rounded-2xl border border-slate-700/80 shrink-0 shadow-lg">
+                  <div className="flex items-center gap-1 text-amber-400 font-black text-lg">
+                    <Star className="w-4 h-4 fill-amber-400" />
                     <span>{business.rating.toFixed(1)}</span>
                   </div>
-                  <div className="text-[11px] text-slate-300 font-medium">
-                    {business.reviewCount} avaliações Google Maps
+                  <div className="text-[10px] text-slate-300 font-medium">
+                    {business.reviewCount} avaliações
                   </div>
                   <span className="text-[9px] text-emerald-400 font-black uppercase tracking-wider">
                     Perfil Verificado
