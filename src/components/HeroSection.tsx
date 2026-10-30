@@ -79,6 +79,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             )}
             <button
               type="button"
+              onClick={() => onQuickSearch(searchQuery)}
               className="hidden sm:inline-flex items-center gap-1.5 px-5 py-2.5 bg-teal-600 hover:bg-teal-500 text-white rounded-xl text-sm font-bold shadow-md shadow-teal-600/25 transition-all shrink-0"
             >
               <span>Buscar</span>
