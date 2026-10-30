@@ -32,6 +32,21 @@ export const EditBusinessModal: React.FC<EditBusinessModalProps> = ({ business, 
     );
   }
 
+  // Owner check
+  const isOwner = user.email === business.email || user.email === 'filocriacoes@gmail.com'; // Admin bypass
+
+  if (!isOwner) {
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-xl w-full max-w-sm text-center">
+          <h2 className="text-xl font-bold mb-4 dark:text-white">Acesso Negado</h2>
+          <p className="mb-6 dark:text-slate-300">Este e-mail ({user.email}) não está vinculado como proprietário deste negócio. Entre em contato com o suporte se isso for um erro.</p>
+          <button onClick={onClose} className="w-full px-4 py-2 bg-teal-600 text-white rounded-lg font-bold">Fechar</button>
+        </div>
+      </div>
+    );
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -51,8 +66,31 @@ export const EditBusinessModal: React.FC<EditBusinessModalProps> = ({ business, 
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1 dark:text-slate-300">WhatsApp de Contato</label>
+              <input
+                type="text"
+                value={formData.whatsapp || ''}
+                onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
+                placeholder="Ex: 71999999999"
+                className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1 dark:text-slate-300">Instagram (@usuario)</label>
+              <input
+                type="text"
+                value={formData.instagram || ''}
+                onChange={(e) => setFormData({ ...formData, instagram: e.target.value })}
+                placeholder="Ex: @minhaempresa"
+                className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+              />
+            </div>
+          </div>
+
           <div>
-            <label className="block text-sm font-medium mb-1 dark:text-slate-300">Slogan</label>
+            <label className="block text-sm font-medium mb-1 dark:text-slate-300">Slogan / Frase Curta</label>
             <input
               type="text"
               value={formData.tagline || ''}
@@ -60,20 +98,39 @@ export const EditBusinessModal: React.FC<EditBusinessModalProps> = ({ business, 
               className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-white"
             />
           </div>
+
           <div>
-            <label className="block text-sm font-medium mb-1 dark:text-slate-300">Descrição</label>
+            <label className="block text-sm font-medium mb-1 dark:text-slate-300">Descrição Completa</label>
             <textarea
               value={formData.description || ''}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-white h-24"
+              rows={4}
+              className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-white"
             />
           </div>
-          
-          <div className="pt-4">
+
+          <div>
+            <label className="block text-sm font-medium mb-1 dark:text-slate-300">Link do Google Maps</label>
+            <input
+              type="text"
+              value={formData.googleMapsUrl || ''}
+              onChange={(e) => setFormData({ ...formData, googleMapsUrl: e.target.value })}
+              className="w-full px-3 py-2 border rounded-lg dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+            />
+          </div>
+
+          <div className="pt-4 flex gap-3">
+             <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl font-bold transition-colors"
+            >
+              Cancelar
+            </button>
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center gap-2 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold transition-colors"
+              className="flex-[2] flex items-center justify-center gap-2 py-3 bg-teal-600 hover:bg-teal-500 text-white rounded-xl font-bold transition-colors"
             >
               {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
               {isLoading ? 'Salvando...' : 'Salvar Alterações'}

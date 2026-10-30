@@ -19,7 +19,8 @@ import {
   Copy,
   Check,
   Calendar,
-  Sparkles
+  Sparkles,
+  Settings
 } from 'lucide-react';
 import { Business } from '../types';
 import { useFavorites } from '../context/FavoritesContext';
@@ -35,6 +36,7 @@ interface BusinessModalProps {
   onShare: (business: Business) => void;
   onOpenMiniSite?: (business: Business) => void;
   onOpenWorkspaceWithBiz?: (business: Business) => void;
+  onEdit?: (business: Business) => void;
 }
 
 interface UserReview {
@@ -51,7 +53,8 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
   onClose,
   onShare,
   onOpenMiniSite,
-  onOpenWorkspaceWithBiz
+  onOpenWorkspaceWithBiz,
+  onEdit
 }) => {
   const { isFavorite, toggleFavorite, showToast } = useFavorites();
   const { user } = useAuth();
@@ -195,6 +198,13 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
             className="p-2.5 rounded-full bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-200 shadow-md backdrop-blur-sm hover:scale-105 transition-all"
           >
             <Heart className={`w-5 h-5 ${favorited ? 'fill-rose-500 text-rose-500' : ''}`} />
+          </button>
+          <button
+            onClick={() => onEdit?.(business)}
+            aria-label="Editar este negócio"
+            className="p-2.5 rounded-full bg-white/90 dark:bg-slate-900/90 text-teal-600 dark:text-teal-400 shadow-md backdrop-blur-sm hover:scale-105 transition-all"
+          >
+            <Settings className="w-5 h-5" />
           </button>
           <button
             onClick={() => onShare(business)}

@@ -24,7 +24,9 @@ import { CitiesModal } from './components/CitiesModal';
 import { AdvertiseModal } from './components/AdvertiseModal';
 import { ContactModal } from './components/ContactModal';
 import { GoogleWorkspaceModal } from './components/GoogleWorkspaceModal';
+import { EditBusinessModal } from './components/EditBusinessModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
+import { updateBusiness } from './services/businessService';
 import { TestimonialsSection } from './components/TestimonialsSection';
 import { ClientMiniSite } from './components/ClientMiniSite';
 import { MapView } from './components/MapView';
@@ -65,6 +67,7 @@ function MainAppContent() {
     directoryResultsRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
   const [selectedBusiness, setSelectedBusiness] = useState<Business | null>(null);
+  const [editingBusiness, setEditingBusiness] = useState<Business | null>(null);
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [sharingBusiness, setSharingBusiness] = useState<Business | null>(null);
 
@@ -163,6 +166,21 @@ function MainAppContent() {
   const handleCloseMiniSite = () => {
     setIsMiniSiteOpen(false);
     window.history.pushState({}, '', '/');
+  };
+
+  const handleSaveBusiness = async (updates: Partial<Business>) => {
+    if (!editingBusiness) return;
+    try {
+      await updateBusiness(editingBusiness.id, updates);
+      const updatedBiz = { ...editingBusiness, ...updates } as Business;
+      setBusinesses(prev => prev.map(b => b.id === editingBusiness.id ? updatedBiz : b));
+      if (selectedBusiness?.id === editingBusiness.id) {
+        setSelectedBusiness(updatedBiz);
+      }
+      showToast(`✅ Alterações em ${editingBusiness.name} salvas com sucesso!`);
+    } catch (error) {
+      showToast('❌ Erro ao salvar alterações. Tente novamente.');
+    }
   };
 
   // Mobile Bottom Navigation
@@ -546,6 +564,7 @@ function MainAppContent() {
         isOpen={Boolean(selectedBusiness)}
         onClose={() => handleSelectBusiness(null)}
         onShare={biz => setSharingBusiness(biz)}
+        onEdit={biz => setEditingBusiness(biz)}
         onOpenMiniSite={biz => handleOpenMiniSite(biz)}
         onOpenWorkspaceWithBiz={biz => {
           setWorkspaceSelectedBiz(biz);
@@ -559,6 +578,15 @@ function MainAppContent() {
         isOpen={Boolean(sharingBusiness)}
         onClose={() => setSharingBusiness(null)}
       />
+ 
+      {/* Edit Business Modal */}
+      {editingBusiness && (
+        <EditBusinessModal
+          business={editingBusiness}
+          onClose={() => setEditingBusiness(null)}
+          onSave={handleSaveBusiness}
+        />
+      )}
 
       {/* Categories Explorer Modal */}
       <CategoriesModal
