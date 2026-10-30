@@ -24,7 +24,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClos
   const businessIdentifier = business.slug || business.id;
   // Link direto com o parâmetro ?business= para abrir o modal imediatamente
   const shareUrl = `${origin}/?business=${encodeURIComponent(businessIdentifier)}`;
-  const miniSiteUrl = `${origin}/perfil/${encodeURIComponent(businessIdentifier)}`;
 
   const shareTitle = `${business.name} - ${business.tagline} | MELHOR DA ILHA`;
   const shareText = `Confira ${business.name} (${business.categoryName}) em ${business.cityName} no guia MELHOR DA ILHA:\n${shareUrl}`;
