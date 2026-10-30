@@ -236,20 +236,6 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           )}
 
-          {onOpenWorkspace && (
-            <button
-              type="button"
-              onClick={() => {
-                onOpenWorkspace();
-                setMobileMenuOpen(false);
-              }}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-teal-700 dark:text-teal-300 bg-teal-50/70 dark:bg-teal-950/40"
-            >
-              <Sparkles className="w-4 h-4 text-emerald-500" />
-              <span>Google Workspace</span>
-            </button>
-          )}
-
           <button
             type="button"
             onClick={() => {

@@ -9,21 +9,8 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-// Google Workspace Scopes
-export const WORKSPACE_SCOPES = [
-  'https://www.googleapis.com/auth/spreadsheets',
-  'https://www.googleapis.com/auth/spreadsheets.readonly',
-  'https://www.googleapis.com/auth/calendar',
-  'https://www.googleapis.com/auth/calendar.events',
-  'https://www.googleapis.com/auth/calendar.readonly',
-  'https://www.googleapis.com/auth/documents',
-  'https://www.googleapis.com/auth/documents.readonly',
-  'https://www.googleapis.com/auth/drive.file'
-];
-
-WORKSPACE_SCOPES.forEach(scope => {
-  googleProvider.addScope(scope);
-});
+// Google Workspace Scopes (kept only as reference, not attached to default auth provider)
+export const WORKSPACE_SCOPES: string[] = [];
 
 // In-memory access token caching (Do NOT store in localStorage or sessionStorage)
 let cachedAccessToken: string | null = null;

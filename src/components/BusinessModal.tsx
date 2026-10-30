@@ -418,33 +418,6 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
               </div>
             </div>
 
-            {/* Google Workspace Actions for this business */}
-            {onOpenWorkspaceWithBiz && (
-              <div className="p-3.5 rounded-2xl bg-gradient-to-r from-blue-50/70 via-emerald-50/50 to-amber-50/70 dark:from-slate-800/80 dark:via-slate-800/70 dark:to-slate-800/80 border border-slate-200/90 dark:border-slate-700/80 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-                    <Sparkles className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <div className="text-xs font-bold text-slate-800 dark:text-slate-100">
-                      Google Workspace (Sheets, Agenda & Docs)
-                    </div>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                      Agendar visita no Google Calendar ou gerar dossiê no Docs
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => onOpenWorkspaceWithBiz(business)}
-                  className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs shadow-xs transition-all shrink-0 cursor-pointer"
-                >
-                  <Calendar className="w-3.5 h-3.5" />
-                  <span>Ações Workspace</span>
-                </button>
-              </div>
-            )}
-
             {/* Description */}
             <div className="space-y-2">
               <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -519,7 +492,7 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
                       Mini-Site Exclusivo no Ar (RMS Premium ⭐)
                     </div>
                     <div className="text-[11px] font-mono text-teal-700 dark:text-teal-400 truncate">
-                      melhordailha.online/perfil/{business.slug || business.id}
+                      melhordailha.online/{business.slug || business.id}
                     </div>
                   </div>
                 </div>
