@@ -189,29 +189,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClos
             </p>
           </div>
 
-          {(business.isRmsPremium || business.slug) && (
-            <div className="pt-2 border-t border-dashed border-slate-200 dark:border-slate-800">
-              <label className="block text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 mb-1">
-                Link do Mini-Site Exclusivo
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  readOnly
-                  value={miniSiteUrl}
-                  className="flex-1 px-3 py-2 text-xs bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/60 rounded-lg text-amber-900 dark:text-amber-200 font-mono focus:outline-none select-all"
-                />
-                <button
-                  type="button"
-                  onClick={() => copyToClipboard(miniSiteUrl, true)}
-                  className="flex items-center gap-1.5 px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-lg text-xs font-bold transition-all shadow-sm shrink-0"
-                >
-                  {copiedMiniSite ? <Check className="w-4 h-4 text-emerald-950" /> : <Copy className="w-4 h-4" />}
-                  <span>{copiedMiniSite ? 'Copiado!' : 'Copiar'}</span>
-                </button>
-              </div>
-            </div>
-          )}
+
+          {/* Link removido a pedido do usuário */}
         </div>
 
         {typeof navigator !== 'undefined' && 'share' in navigator && (
