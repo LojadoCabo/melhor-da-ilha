@@ -500,7 +500,7 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
                   type="button"
                   onClick={() => {
                     onClose();
-                    if (onOpenMiniSite) onOpenMiniSite(business);
+                    // Removida chamada para onOpenMiniSite para evitar redirecionamento incorreto
                   }}
                   className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs font-bold shadow-sm transition-colors text-center shrink-0"
                 >

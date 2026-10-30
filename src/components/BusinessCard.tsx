@@ -205,28 +205,8 @@ export const BusinessCard: React.FC<BusinessCardProps> = ({
           </div>
 
           {/* RMS Premium Mini-Site Bonus Link */}
-          {business.isRmsPremium && (
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (onOpenMiniSite) {
-                  onOpenMiniSite(business);
-                } else {
-                  window.location.href = `/meu-site?biz=${business.slug || business.id}`;
-                }
-              }}
-              className="w-full mb-3 py-2 px-3 rounded-xl bg-gradient-to-r from-amber-50 to-yellow-50 dark:from-amber-950/40 dark:to-yellow-950/30 border border-amber-300 dark:border-amber-700/60 hover:border-amber-500 flex items-center justify-between text-xs font-bold text-amber-900 dark:text-amber-200 transition-all shadow-xs group/site"
-            >
-              <div className="flex items-center gap-1.5 truncate">
-                <Globe className="w-4 h-4 text-teal-600 dark:text-teal-400 group-hover/site:rotate-12 transition-transform" />
-                <span className="font-mono text-[11px] truncate">melhordailha.online/meu-site</span>
-              </div>
-              <span className="text-[10px] text-teal-700 dark:text-teal-300 font-black uppercase tracking-wider shrink-0 bg-white/80 dark:bg-slate-900/80 px-2 py-0.5 rounded-md">
-                Ver Site →
-              </span>
-            </button>
-          )}
+          {/* Link removido a pedido do usuário */}
+
 
           {/* Quick tags */}
           <div className="flex flex-wrap gap-1.5 mb-4">
