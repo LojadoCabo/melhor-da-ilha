@@ -135,10 +135,10 @@ export const BusinessCard: React.FC<BusinessCardProps> = ({
       </div>
 
       {/* Card Body */}
-      <div className="p-4 flex-1 flex flex-col justify-between">
+      <div className="p-3 md:p-4 flex-1 flex flex-col justify-between">
         <div className="cursor-pointer" onClick={() => onSelect(business)}>
           {/* Header Row with Logo Thumbnail & Title */}
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex items-center gap-2 md:gap-3 mb-2">
             {/* Logo / Monogram Avatar */}
             {business.logoUrl ? (
               <img
@@ -155,7 +155,7 @@ export const BusinessCard: React.FC<BusinessCardProps> = ({
 
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1">
-                <h3 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors truncate">
+                <h3 className="font-bold text-sm md:text-base text-slate-900 dark:text-white group-hover:text-teal-600 dark:group-hover:text-teal-400 transition-colors truncate">
                   {business.name}
                 </h3>
                 {business.isVerified && (

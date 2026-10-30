@@ -300,6 +300,46 @@ Retorne EXCLUSIVAMENTE um objeto JSON v\xE1lido com estas chaves:
     });
   }
 });
+app.post("/api/minisite/provision", async (req, res) => {
+  try {
+    const biz = req.body?.business || req.body || {};
+    const name = biz.name || "Empresa Parceira";
+    const rawSlug = String(biz.slug || name).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "cliente-premium";
+    const category = biz.categoryName || "Com\xE9rcio e Servi\xE7os";
+    const city = biz.cityName || "Ilha de Itaparica e RMS";
+    let aiPitch = `${name} \xE9 refer\xEAncia em ${category} em ${city}. Atendimento \xE1gil, proced\xEAncia comprovada e satisfa\xE7\xE3o garantida para voc\xEA e sua fam\xEDlia.`;
+    let aiHighlights = [
+      "Dados oficiais sincronizados com Google Maps e Google Business",
+      "Atendimento direto e priorit\xE1rio via WhatsApp e Redes Sociais",
+      "Galeria de fotos com ilumina\xE7\xE3o e nitidez real\xE7adas por IA (Gemini)",
+      "Garantia de proced\xEAncia e excel\xEAncia comprovada na regi\xE3o"
+    ];
+    if (process.env.GEMINI_API_KEY) {
+      try {
+        const prompt = `Crie uma apresenta\xE7\xE3o comercial curta (2 a 3 frases) e 4 diferenciais para a p\xE1gina exclusiva da empresa "${name}" (${category}) em ${city}. Retorne JSON: {"enhancedPitch": "...", "keyHighlights": ["...", "...", "...", "..."]}`;
+        const response = await ai.models.generateContent({
+          model: "gemini-2.5-flash",
+          contents: prompt,
+          config: { responseMimeType: "application/json" }
+        });
+        const parsed = JSON.parse(response.text || "{}");
+        if (parsed.enhancedPitch) aiPitch = parsed.enhancedPitch;
+        if (Array.isArray(parsed.keyHighlights)) aiHighlights = parsed.keyHighlights;
+      } catch (e) {
+        console.warn("Gemini provision fallback:", e);
+      }
+    }
+    res.json({
+      status: "provisioned",
+      slug: rawSlug,
+      folderUrl: `https://melhordailha.online/${rawSlug}`,
+      aiPitch,
+      aiHighlights
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 app.get(["/baixar", "/download"], (_req, res) => {
   res.send(`<!DOCTYPE html>
 <html lang="pt-BR">
