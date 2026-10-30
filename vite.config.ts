@@ -4,9 +4,17 @@ import path from 'path';
 import {defineConfig} from 'vite';
 
 export default defineConfig(() => {
+  const mpPublicKey =
+    process.env.MERCADO_PAGO_PUBLIC_KEY && process.env.MERCADO_PAGO_PUBLIC_KEY.startsWith('APP_USR-')
+      ? process.env.MERCADO_PAGO_PUBLIC_KEY
+      : process.env.VITE_MERCADO_PAGO_PUBLIC_KEY || process.env.MERCADO_PAGO_PUBLIC_KEY || '';
+
   return {
     base: '/',
     plugins: [react(), tailwindcss()],
+    define: {
+      'import.meta.env.VITE_MERCADO_PAGO_PUBLIC_KEY': JSON.stringify(mpPublicKey),
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),

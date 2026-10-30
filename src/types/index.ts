@@ -32,6 +32,8 @@ export interface Business {
   address: string;
   phone: string;
   whatsapp: string;
+  email?: string;
+  ownerWhatsapp?: string;
   instagram?: string;
   facebook?: string;
   website?: string;
@@ -58,6 +60,7 @@ export interface Business {
   galleryImages?: string[];
   aiEnhanced?: boolean;
   aiPitch?: string;
+  aiHighlights?: string[];
   miniSiteSlug?: string;
 }
 

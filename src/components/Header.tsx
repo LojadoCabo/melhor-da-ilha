@@ -11,15 +11,11 @@ import {
   Layers,
   MapPin,
   Sparkles,
-  MessageSquareHeart,
-  LogIn,
-  LogOut,
-  User as UserIcon,
-  Loader2
+  MessageSquareHeart
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useFavorites } from '../context/FavoritesContext';
-import { useAuth } from '../context/AuthContext';
+import { Business } from '../types';
 
 interface HeaderProps {
   onOpenAdvertise: () => void;
@@ -29,8 +25,9 @@ interface HeaderProps {
   onOpenContact: () => void;
   onGoHome: () => void;
   onOpenTestimonials?: () => void;
-  onOpenMiniSite?: () => void;
+  onOpenMiniSite?: (biz?: Business) => void;
   onOpenWorkspace?: () => void;
+  businesses?: Business[];
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -46,75 +43,46 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { favorites } = useFavorites();
-  const { user, loading, loginWithGoogle, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [authBusy, setAuthBusy] = useState(false);
-
-  const handleLogin = async () => {
-    try {
-      setAuthBusy(true);
-      await loginWithGoogle();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setAuthBusy(false);
-    }
-  };
-
-  const handleLogout = async () => {
-    try {
-      setAuthBusy(true);
-      await logout();
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setAuthBusy(false);
-    }
-  };
 
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 transition-colors">
-      <div className="max-w-7xl mx-auto px-2.5 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-1.5 sm:gap-3">
-        {/* Brand / Logo - Optimized for Mobile & Desktop */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-4">
+        {/* Zone 1: Brand Wordmark */}
         <button
           type="button"
           onClick={onGoHome}
-          className="flex items-center gap-1.5 sm:gap-3 text-left group focus:outline-none min-w-0 cursor-pointer select-none py-1"
+          className="flex items-center gap-2.5 text-left group focus:outline-none shrink-0 cursor-pointer select-none py-1"
           aria-label="Ir para a página inicial do Melhor da Ilha"
         >
-          <div className="w-8.5 h-8.5 sm:w-11 sm:h-11 shrink-0 aspect-square rounded-xl sm:rounded-2xl bg-gradient-to-tr from-teal-700 via-teal-600 to-emerald-500 text-white flex items-center justify-center shadow-md shadow-teal-700/20 group-hover:scale-105 transition-transform">
-            <Compass className="w-4.5 h-4.5 sm:w-6 sm:h-6 animate-pulse" />
+          <div className="w-9 h-9 sm:w-10 sm:h-10 shrink-0 rounded-xl bg-gradient-to-tr from-teal-700 via-teal-600 to-emerald-500 text-white flex items-center justify-center shadow-sm">
+            <Compass className="w-5 h-5" />
           </div>
-          <div className="flex flex-col justify-center min-w-0">
-            <span className="block font-black text-[12px] xs:text-[14px] sm:text-xl tracking-tight text-slate-900 dark:text-white leading-none truncate sm:whitespace-nowrap">
-              MELHOR DA ILHA
-            </span>
-            <span className="block text-[7px] xs:text-[8.5px] sm:text-[11px] font-semibold text-teal-700 dark:text-teal-400 tracking-wider uppercase mt-1 leading-none truncate sm:whitespace-nowrap">
-              Guia Ilha de Itaparica & RMS
-            </span>
-          </div>
+          <span className="font-black text-base sm:text-xl tracking-tight text-slate-900 dark:text-white whitespace-nowrap shrink-0">
+            MELHOR DA ILHA
+          </span>
         </button>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-2">
+        {/* Zone 2: Clean Single-Line Navigation Links (Visitors browse freely) */}
+        <nav className="hidden md:flex items-center gap-5 lg:gap-7">
           <button
             type="button"
             onClick={onGoHome}
-            className="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap shrink-0"
           >
             Explorar
           </button>
           <button
             type="button"
             onClick={onOpenCategories}
-            className="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap shrink-0"
           >
             Categorias
           </button>
           <button
             type="button"
             onClick={onOpenCities}
-            className="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap shrink-0"
           >
             Municípios
           </button>
@@ -122,169 +90,59 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               type="button"
               onClick={onOpenTestimonials}
-              className="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap shrink-0"
             >
               Depoimentos
             </button>
           )}
-
-          {onOpenMiniSite && (
-            <button
-              type="button"
-              onClick={onOpenMiniSite}
-              className="px-3 py-2 rounded-xl text-sm font-bold text-amber-600 dark:text-amber-400 hover:text-amber-500 hover:bg-amber-50 dark:hover:bg-amber-950/40 transition-colors flex items-center gap-1.5"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-              <span>Mini-Sites RMS</span>
-            </button>
-          )}
-
-          {onOpenWorkspace && (
-            <button
-              type="button"
-              onClick={onOpenWorkspace}
-              className="px-3 py-2 rounded-xl text-sm font-bold text-teal-700 dark:text-teal-300 hover:bg-teal-50 dark:hover:bg-teal-950/40 transition-colors flex items-center gap-1.5"
-              title="Google Sheets, Google Calendar e Google Docs"
-            >
-              <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
-              <span>Workspace</span>
-            </button>
-          )}
-
-          <button
-            type="button"
-            onClick={onOpenAdvertise}
-            className="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          >
-            Para Anunciar
-          </button>
           <button
             type="button"
             onClick={onOpenContact}
-            className="px-3 py-2 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="text-sm font-semibold text-slate-700 dark:text-slate-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap shrink-0"
           >
             Contato
           </button>
         </nav>
 
-        {/* Actions (Dark Mode, Favorites, Auth, Advertise CTA) */}
-        <div className="flex items-center gap-1 sm:gap-2">
+        {/* Zone 3: Right Actions (Theme, Favorites, and Single Lojista / Anunciar CTA) */}
+        <div className="flex items-center gap-2 shrink-0">
           {/* Dark Mode toggle */}
           <button
             type="button"
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro'}
-            className="p-2 sm:p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0"
           >
             {theme === 'dark' ? (
-              <Sun className="w-4.5 h-4.5 sm:w-5 h-5 text-amber-400" />
+              <Sun className="w-5 h-5 text-amber-400" />
             ) : (
-              <Moon className="w-4.5 h-4.5 sm:w-5 h-5 text-slate-700" />
+              <Moon className="w-5 h-5 text-slate-700" />
             )}
           </button>
 
-          {/* Favorites */}
+          {/* Favorites (Local or Saved, no login required) */}
           <button
             type="button"
             onClick={onOpenFavorites}
             aria-label={`Ver favoritos (${favorites.length})`}
-            className="relative p-2 sm:p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            className="relative p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors shrink-0"
           >
-            <Heart className={`w-4.5 h-4.5 sm:w-5 h-5 ${favorites.length > 0 ? 'fill-rose-500 text-rose-500' : ''}`} />
+            <Heart className={`w-5 h-5 ${favorites.length > 0 ? 'fill-rose-500 text-rose-500' : ''}`} />
             {favorites.length > 0 && (
-              <span className="absolute top-1 sm:top-1.5 right-1 sm:right-1.5 flex h-3.5 min-w-3.5 sm:h-4 sm:min-w-4 px-1 items-center justify-center rounded-full bg-rose-500 text-[8px] sm:text-[10px] font-bold text-white">
+              <span className="absolute top-1 right-1 flex h-4 min-w-4 px-1 items-center justify-center rounded-full bg-rose-500 text-[10px] font-bold text-white tabular-nums">
                 {favorites.length}
               </span>
             )}
           </button>
 
-          {/* User Authentication Status */}
-          {user ? (
-            <div className="relative group">
-              <button
-                type="button"
-                className="flex items-center gap-1.5 p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-[10px] sm:text-xs font-semibold text-slate-700 dark:text-slate-200 transition-all border border-slate-200/80 dark:border-slate-700"
-                title={`Conectado como ${user.displayName || user.email}`}
-              >
-                {user.photoURL ? (
-                  <img
-                    src={user.photoURL}
-                    alt={user.displayName || 'Avatar'}
-                    className="w-5 h-5 sm:w-6 h-6 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="w-5 h-5 sm:w-6 h-6 rounded-full bg-teal-600 text-white flex items-center justify-center text-[10px] font-bold">
-                    {(user.displayName || user.email || 'U')[0].toUpperCase()}
-                  </div>
-                )}
-                <span className="hidden lg:inline max-w-[100px] truncate">
-                  {user.displayName?.split(' ')[0] || 'Minha Conta'}
-                </span>
-              </button>
-              {/* Dropdown Menu */}
-              <div className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 p-2 hidden group-hover:block z-50">
-                <div className="px-3 py-2 border-b border-slate-100 dark:border-slate-800">
-                  <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                    {user.displayName || 'Usuário'}
-                  </p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">
-                    {user.email}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={onOpenFavorites}
-                  className="w-full text-left px-3 py-2 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors flex items-center gap-2 mt-1"
-                >
-                  <Heart className="w-3.5 h-3.5 text-rose-500" />
-                  <span>Favoritos na Nuvem</span>
-                </button>
-                {onOpenWorkspace && (
-                  <button
-                    type="button"
-                    onClick={onOpenWorkspace}
-                    className="w-full text-left px-3 py-2 text-xs text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors flex items-center gap-2 mt-1"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-emerald-500" />
-                    <span>Google Workspace</span>
-                  </button>
-                )}
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  disabled={authBusy}
-                  className="w-full text-left px-3 py-2 text-xs text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-xl transition-colors flex items-center gap-2 mt-1"
-                >
-                  <LogOut className="w-3.5 h-3.5" />
-                  <span>Sair da Conta</span>
-                </button>
-              </div>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={handleLogin}
-              disabled={loading || authBusy}
-              aria-label="Entrar com Google"
-              className="inline-flex items-center gap-1 px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 text-[10px] sm:text-xs font-semibold border border-slate-200 dark:border-slate-700 transition-colors"
-            >
-              {authBusy ? (
-                <Loader2 className="w-3.5 h-3.5 sm:w-4 h-4 animate-spin text-teal-600" />
-              ) : (
-                <LogIn className="w-3.5 h-3.5 sm:w-4 h-4 text-teal-600 dark:text-teal-400" />
-              )}
-              <span className="hidden sm:inline">Entrar</span>
-            </button>
-          )}
-
-          {/* Advertise Button Desktop */}
+          {/* Primary Action for Business Owners: Anunciar / Área do Lojista */}
           <button
             type="button"
             onClick={onOpenAdvertise}
-            className="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-bold shadow-md shadow-teal-600/20 transition-all hover:scale-102"
+            className="inline-flex items-center gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-xs sm:text-sm font-bold shadow-sm transition-colors whitespace-nowrap shrink-0"
           >
-            <PlusCircle className="w-4 h-4" />
-            <span>Anunciar Negócio</span>
+            <PlusCircle className="w-4 h-4 shrink-0" />
+            <span>Anunciar / Lojista</span>
           </button>
 
           {/* Mobile hamburger menu */}
@@ -292,7 +150,7 @@ export const Header: React.FC<HeaderProps> = ({
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label={mobileMenuOpen ? 'Fechar menu' : 'Abrir menu de navegação'}
-            className="md:hidden p-2.5 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="md:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 shrink-0"
           >
             {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -301,7 +159,7 @@ export const Header: React.FC<HeaderProps> = ({
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 space-y-2 shadow-xl animate-in slide-in-from-top-2 duration-150">
+        <div className="md:hidden border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-4 space-y-2 shadow-xl">
           <button
             type="button"
             onClick={() => {
@@ -314,7 +172,6 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Explorar Início</span>
           </button>
 
-
           <button
             type="button"
             onClick={() => {
@@ -326,6 +183,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Layers className="w-4 h-4 text-teal-600" />
             <span>Todas as Categorias</span>
           </button>
+
           <button
             type="button"
             onClick={() => {
@@ -337,6 +195,7 @@ export const Header: React.FC<HeaderProps> = ({
             <MapPin className="w-4 h-4 text-rose-500" />
             <span>Municípios & Bairros</span>
           </button>
+
           <button
             type="button"
             onClick={() => {
@@ -348,6 +207,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Heart className="w-4 h-4 text-rose-500" />
             <span>Meus Favoritos ({favorites.length})</span>
           </button>
+
           {onOpenTestimonials && (
             <button
               type="button"
@@ -361,6 +221,7 @@ export const Header: React.FC<HeaderProps> = ({
               <span>Depoimentos de Usuários</span>
             </button>
           )}
+
           {onOpenMiniSite && (
             <button
               type="button"
@@ -371,9 +232,10 @@ export const Header: React.FC<HeaderProps> = ({
               className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-950/30"
             >
               <Sparkles className="w-4 h-4 text-amber-500" />
-              <span>Mini-Sites RMS Premium</span>
+              <span>Vitrine Mini-Sites RMS</span>
             </button>
           )}
+
           {onOpenWorkspace && (
             <button
               type="button"
@@ -381,12 +243,13 @@ export const Header: React.FC<HeaderProps> = ({
                 onOpenWorkspace();
                 setMobileMenuOpen(false);
               }}
-              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-teal-700 dark:text-teal-300 bg-teal-50/70 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50"
+              className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold text-teal-700 dark:text-teal-300 bg-teal-50/70 dark:bg-teal-950/40"
             >
               <Sparkles className="w-4 h-4 text-emerald-500" />
-              <span>Google Workspace (Sheets, Agenda, Docs)</span>
+              <span>Google Workspace</span>
             </button>
           )}
+
           <button
             type="button"
             onClick={() => {
@@ -399,50 +262,17 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Fale Conosco / Contato</span>
           </button>
 
-          <div className="pt-2 border-t border-slate-100 dark:border-slate-800 space-y-2">
-            {!user ? (
-              <button
-                type="button"
-                onClick={() => {
-                  handleLogin();
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100 font-semibold text-sm border border-slate-200 dark:border-slate-700"
-              >
-                <LogIn className="w-4 h-4 text-teal-600" />
-                <span>Entrar com Google</span>
-              </button>
-            ) : (
-              <div className="p-3 bg-slate-100 dark:bg-slate-800 rounded-xl flex items-center justify-between">
-                <div className="truncate">
-                  <p className="text-xs font-bold text-slate-900 dark:text-white truncate">
-                    {user.displayName || user.email}
-                  </p>
-                  <p className="text-[10px] text-teal-600 dark:text-teal-400">
-                    Sincronizado na Nuvem
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="p-1.5 text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg"
-                  title="Sair"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-
+          <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
             <button
               type="button"
               onClick={() => {
                 onOpenAdvertise();
                 setMobileMenuOpen(false);
               }}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-teal-600 text-white font-bold text-sm shadow-md"
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-teal-600 text-white font-bold text-sm shadow-sm"
             >
               <PlusCircle className="w-4 h-4" />
-              <span>Anunciar meu negócio</span>
+              <span>Anunciar Negócio / Área do Lojista</span>
             </button>
           </div>
         </div>

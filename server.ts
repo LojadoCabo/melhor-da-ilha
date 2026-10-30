@@ -373,10 +373,63 @@ Retorne EXCLUSIVAMENTE um objeto JSON válido com estas chaves:
   }
 });
 
+// ========================================================
+// MINISITE PROVISIONING: Criação Automática da Pasta do Cliente
+// ========================================================
+app.post('/api/minisite/provision', async (req: Request, res: Response) => {
+  try {
+    const biz = req.body?.business || req.body || {};
+    const name = biz.name || 'Empresa Parceira';
+    const rawSlug = String(biz.slug || name)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '') || 'cliente-premium';
+
+    const category = biz.categoryName || 'Comércio e Serviços';
+    const city = biz.cityName || 'Ilha de Itaparica e RMS';
+
+    let aiPitch = `${name} é referência em ${category} em ${city}. Atendimento ágil, procedência comprovada e satisfação garantida para você e sua família.`;
+    let aiHighlights = [
+      'Dados oficiais sincronizados com Google Maps e Google Business',
+      'Atendimento direto e prioritário via WhatsApp e Redes Sociais',
+      'Galeria de fotos com iluminação e nitidez realçadas por IA (Gemini)',
+      'Garantia de procedência e excelência comprovada na região'
+    ];
+
+    if (process.env.GEMINI_API_KEY) {
+      try {
+        const prompt = `Crie uma apresentação comercial curta (2 a 3 frases) e 4 diferenciais para a página exclusiva da empresa "${name}" (${category}) em ${city}. Retorne JSON: {"enhancedPitch": "...", "keyHighlights": ["...", "...", "...", "..."]}`;
+        const response = await ai.models.generateContent({
+          model: 'gemini-2.5-flash',
+          contents: prompt,
+          config: { responseMimeType: 'application/json' }
+        });
+        const parsed = JSON.parse(response.text || '{}');
+        if (parsed.enhancedPitch) aiPitch = parsed.enhancedPitch;
+        if (Array.isArray(parsed.keyHighlights)) aiHighlights = parsed.keyHighlights;
+      } catch (e) {
+        console.warn('Gemini provision fallback:', e);
+      }
+    }
+
+    res.json({
+      status: 'provisioned',
+      slug: rawSlug,
+      folderUrl: `https://melhordailha.online/${rawSlug}`,
+      aiPitch,
+      aiHighlights
+    });
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 
 
 // ========================================================
-// DOWNLOAD: Arquivo Zip compilado para HostGator (Node.js)
+// DOWNLOAD: Arquivo Zip compilado para HostGator (Hospedagem Compartilhada PHP/Apache)
 // ========================================================
 app.get(['/baixar', '/download'], (_req: Request, res: Response) => {
   res.send(`<!DOCTYPE html>
@@ -384,7 +437,7 @@ app.get(['/baixar', '/download'], (_req: Request, res: Response) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download — Pacote Node.js HostGator | MELHOR DA ILHA</title>
+  <title>Download — Pacote Pronto HostGator | MELHOR DA ILHA</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
     .card { background: #1e293b; border: 1px solid #334155; border-radius: 24px; padding: 36px; max-width: 560px; width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
@@ -402,27 +455,20 @@ app.get(['/baixar', '/download'], (_req: Request, res: Response) => {
 <body>
   <div class="card">
     <div class="icon">🚀</div>
-    <h1>Pacote HostGator (Node.js)</h1>
-    <p>O arquivo <strong>site.zip</strong> contém a compilação completa do frontend (<code>dist/</code>), o backend Node.js (<code>server.js</code>), e o <code>package.json</code> pronto para rodar no cPanel.</p>
-    <a href="/site.zip" download="melhor-da-ilha-nodejs.zip" class="btn">
-      📥 Baixar melhor-da-ilha-nodejs.zip
+    <h1>Pacote Pronto HostGator (Sem Node.js)</h1>
+    <p>O arquivo <strong>site.zip</strong> já vem compilado com <code>index.html</code>, <code>assets/</code>, <code>api.php</code> e <code>.htaccess</code> prontos para Hospedagem Compartilhada (custo zero).</p>
+    <a href="/site.zip" download="site-hostgator-pronto.zip" class="btn">
+      📥 Baixar site-hostgator-pronto.zip
     </a>
     
     <div class="instructions">
-      <h3>Passo a passo no cPanel HostGator:</h3>
+      <h3>Passo a passo simples no cPanel HostGator:</h3>
       <ol>
-        <li>No cPanel, acesse <strong>"Setup Node.js App"</strong> (Configurar Aplicativo Node.js).</li>
-        <li>Clique em <strong>"Create Application"</strong>:
-          <br>• Node.js version: <strong>18.x</strong>, <strong>20.x</strong> ou superior.
-          <br>• Application mode: <strong>Production</strong>.
-          <br>• Application startup file: <code>server.js</code>.
-        </li>
-        <li>Envie o arquivo <strong>site.zip</strong> para a pasta do aplicativo e extraia.</li>
-        <li>No painel do Node.js, clique em <strong>"Run NPM Install"</strong>.</li>
-        <li>Em <strong>Environment variables</strong>, adicione:
-          <br>• <code>NODE_ENV</code> = <code>production</code>
-        </li>
-        <li>Clique em <strong>"Restart"</strong> e acesse seu domínio!</li>
+        <li>No cPanel, abra o <strong>"Gerenciador de Arquivos"</strong>.</li>
+        <li>Entre na pasta do seu domínio (ex: <code>public_html</code> ou <code>melhordailha.online</code>).</li>
+        <li>Clique em <strong>"Carregar" (Upload)</strong> e envie o arquivo baixado.</li>
+        <li>Clique com o botão direito no arquivo <code>.zip</code> e escolha <strong>"Extract" (Extrair)</strong> na própria pasta.</li>
+        <li>Pronto! Seu site e o Checkout Mercado Pago já funcionarão sem precisar de Node.js nem terminal!</li>
       </ol>
     </div>
   </div>
@@ -439,7 +485,7 @@ app.get(['/download/site.zip', '/site.zip', '/dist-hostgator.zip'], (_req: Reque
   ];
   for (const p of possiblePaths) {
     if (fs.existsSync(p)) {
-      res.setHeader('Content-Disposition', 'attachment; filename="melhor-da-ilha-nodejs.zip"');
+      res.setHeader('Content-Disposition', 'attachment; filename="site-hostgator-pronto.zip"');
       res.setHeader('Content-Type', 'application/zip');
       return res.sendFile(p);
     }

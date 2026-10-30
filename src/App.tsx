@@ -175,7 +175,7 @@ function MainAppContent() {
     setMiniSiteBusiness(target);
     setIsMiniSiteOpen(true);
     const targetSlug = target.slug || target.id;
-    window.history.pushState({}, '', `/perfil/${targetSlug}`);
+    window.history.pushState({}, '', `/${targetSlug}`);
   };
 
   const handleCloseMiniSite = () => {
@@ -200,7 +200,7 @@ function MainAppContent() {
         query: ''
       }));
       setShowFavoritesOnly(false);
-      showToast(`🌟 ${newBiz.name} subiu para o TOPO com estrela CLIENTE PREMIUM ⭐!`);
+      showToast(`🌟 Minisite ${newBiz.name} ativo em melhordailha.online/${newBiz.slug}!`);
     } else {
       showToast(`Negócio ${newBiz.name} cadastrado com sucesso!`);
     }
@@ -287,6 +287,11 @@ function MainAppContent() {
         onBackToDirectory={handleCloseMiniSite}
         onSelectAnotherBusiness={biz => handleOpenMiniSite(biz)}
         allBusinesses={businesses}
+        onBusinessUpdated={updated => {
+          setMiniSiteBusiness(updated);
+          setBusinesses(prev => [updated, ...prev.filter(b => b.id !== updated.id)]);
+          showToast(`✅ Página melhordailha.online/${updated.slug} atualizada!`);
+        }}
       />
     );
   }
@@ -316,7 +321,8 @@ function MainAppContent() {
           const el = document.getElementById('depoimentos-usuarios');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
-        onOpenMiniSite={() => handleOpenMiniSite()}
+        onOpenMiniSite={biz => handleOpenMiniSite(biz)}
+        businesses={businesses}
         onOpenWorkspace={() => {
           setWorkspaceSelectedBiz(null);
           setIsWorkspaceOpen(true);

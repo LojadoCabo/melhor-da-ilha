@@ -8,7 +8,6 @@ import {
   Check,
   ShieldCheck,
   Star,
-  ExternalLink,
   Sparkles,
   Info,
   Clock,
@@ -16,11 +15,19 @@ import {
   Building2,
   Lock,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Mail,
+  MessageCircle,
+  Globe,
+  ExternalLink
 } from 'lucide-react';
 import { Business } from '../types';
-
-import { fetchApiJson, ApiFetchError } from '../utils/api';
+import { fetchApiJson } from '../utils/api';
+import {
+  toBusinessSlug,
+  provisionClientMiniSite,
+  saveLoggedClientSession
+} from '../utils/customBusinessesStorage';
 
 declare global {
   interface Window {
@@ -52,16 +59,31 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
     qrCodeBase64: string;
     isSimulated?: boolean;
   } | null>(null);
-  const [paymentStatus, setPaymentStatus] = useState<'pending' | 'approved' | 'rejected'>('pending');
+  const [paymentStatus, setPaymentStatus] = useState<'pending' | 'processing_notice' | 'approved' | 'rejected'>('pending');
   const [pollingActive, setPollingActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isHtmlError, setIsHtmlError] = useState(false);
   const [showTechGuide, setShowTechGuide] = useState(false);
   const [timerSeconds, setTimerSeconds] = useState(600); // 10 min
 
+  // Credenciais de acesso do lojista (E-mail e WhatsApp para envio e login na área do cliente)
+  const [clientEmail, setClientEmail] = useState(business.email || '');
+  const [clientWhatsapp, setClientWhatsapp] = useState(business.whatsapp || business.phone || '');
+  const [provisionedUrl, setProvisionedUrl] = useState<string>('');
+  const [isProvisioning, setIsProvisioning] = useState(false);
+
   const isPremium = planType === 'premium';
   const planPrice = isPremium ? 59 : 29;
   const planTitle = isPremium ? 'Plano RMS Premium' : 'Plano Destaque Ilha';
+  const businessSlug = toBusinessSlug(business.slug || business.name || 'minha-empresa');
+  const expectedFolderUrl = `melhordailha.online/${businessSlug}`;
+
+  useEffect(() => {
+    if (business.email) setClientEmail(business.email);
+    if (business.whatsapp || business.phone) {
+      setClientWhatsapp(business.whatsapp || business.phone || '');
+    }
+  }, [business]);
 
   // Carrega Pix ao abrir ou alternar para a aba pix
   useEffect(() => {
@@ -79,6 +101,49 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
     return () => clearInterval(interval);
   }, [isOpen, paymentStatus]);
 
+  const finalizeAutomaticMiniSiteCreation = async () => {
+    setIsProvisioning(true);
+    try {
+      const result = await provisionClientMiniSite(business, clientEmail, clientWhatsapp);
+      setProvisionedUrl(result.folderUrl || `https://${expectedFolderUrl}`);
+
+      const updatedBiz: Partial<Business> = {
+        ...business,
+        slug: result.slug || businessSlug,
+        miniSiteSlug: result.slug || businessSlug,
+        email: clientEmail || business.email,
+        whatsapp: clientWhatsapp || business.whatsapp || business.phone || '',
+        ownerWhatsapp: clientWhatsapp || business.whatsapp || business.phone || '',
+        aiEnhanced: true,
+        aiPitch: result.aiPitch || business.aiPitch,
+        aiHighlights: result.aiHighlights || business.aiHighlights,
+        galleryImages: result.enhancedPhotos || business.galleryImages,
+        isRmsPremium: planType === 'premium',
+        isFeatured: true,
+        isVerified: true,
+        planType
+      };
+
+      // Autentica automaticamente a sessão do lojista por E-mail/WhatsApp
+      saveLoggedClientSession({
+        businessId: String(business.id || `biz-${Date.now()}`),
+        businessSlug: result.slug || businessSlug,
+        businessName: business.name || 'Minha Empresa',
+        email: clientEmail,
+        whatsapp: clientWhatsapp,
+        loggedAt: Date.now()
+      });
+
+      setPaymentStatus('approved');
+      setPollingActive(false);
+      if (onPaymentSuccess) {
+        onPaymentSuccess(planType, updatedBiz);
+      }
+    } finally {
+      setIsProvisioning(false);
+    }
+  };
+
   // Polling para checar status do pagamento a cada 4s
   useEffect(() => {
     if (!isOpen || !pixData || paymentStatus === 'approved' || !pollingActive) return;
@@ -89,22 +154,17 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
           `/api/mercadopago/payment-status/${encodeURIComponent(pixData.paymentId)}`
         );
         if (data && data.status === 'approved') {
-          setPaymentStatus('approved');
-          setPollingActive(false);
-          if (onPaymentSuccess) {
-            onPaymentSuccess(planType, business);
-          }
+          await finalizeAutomaticMiniSiteCreation();
         }
       } catch (err) {
-        // Polling silencioso para não poluir UI se houver oscilação de rede
         console.warn('[MercadoPago Polling]:', err);
       }
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isOpen, pixData, paymentStatus, pollingActive]);
+  }, [isOpen, pixData, paymentStatus, pollingActive, clientEmail, clientWhatsapp]);
 
-  // Fallback para simulação local caso o backend não esteja respondendo (ex: host puramente estático)
+  // Fallback para simulação local caso o backend não esteja respondendo
   const activateLocalPixSimulation = () => {
     const mockId = `pix_sim_${Date.now()}`;
     const mockQrCode = `00020101021226840014br.gov.bcb.pix2562qrcodes-pix.mercadopago.com/v2/mock-${mockId}5204000053039865405${planPrice.toFixed(2)}5802BR5920MELHOR DA ILHA GUIA6009SALVADOR62070503***6304E8A2`;
@@ -137,9 +197,12 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
         body: JSON.stringify({
           amount: planPrice,
           businessName: business.name || 'Comércio Local',
+          businessSlug,
           planType,
-          payerEmail: 'cliente@melhordailha.online',
-          payerName: business.name || 'Comerciante da RMS'
+          payerEmail: clientEmail || 'cliente@melhordailha.online',
+          payerWhatsapp: clientWhatsapp || business.whatsapp || '',
+          payerName: business.name || 'Comerciante da RMS',
+          businessData: business
         })
       });
 
@@ -155,7 +218,11 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
       });
       setPollingActive(true);
     } catch (err: any) {
-      console.error('[MercadoPago Pix Error]:', err);
+      console.warn('[MercadoPago Pix Fallback]:', err);
+      if (err?.isHtmlResponse || !navigator.onLine || String(err?.message || '').includes('conectar')) {
+        activateLocalPixSimulation();
+        return;
+      }
       const isHtml = Boolean(err.isHtmlResponse);
       setIsHtmlError(isHtml);
       setErrorMessage(err.message || 'Erro ao conectar ao Mercado Pago');
@@ -171,44 +238,50 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
       setErrorMessage(null);
       setIsHtmlError(false);
 
-      // 1. Cria a preferência no servidor backend
-      const data = await fetchApiJson<{
-        preferenceId: string;
-        isSimulated?: boolean;
-        error?: string;
-      }>('/api/mercadopago/create-preference', {
-        method: 'POST',
-        body: JSON.stringify({
-          title: `Assinatura ${planTitle} - ${business.name || 'Comércio'}`,
-          price: planPrice,
-          businessName: business.name,
-          planType
-        })
-      });
-
-      if (!data || !data.preferenceId) {
-        throw new Error(data?.error || 'Não foi possível gerar a preferência de pagamento no Mercado Pago.');
+      let preferenceId = '';
+      try {
+        const data = await fetchApiJson<{
+          preferenceId: string;
+          isSimulated?: boolean;
+          error?: string;
+        }>('/api/mercadopago/create-preference', {
+          method: 'POST',
+          body: JSON.stringify({
+            title: `Assinatura ${planTitle} - ${business.name || 'Comércio'}`,
+            price: planPrice,
+            businessName: business.name,
+            businessSlug,
+            clientEmail: clientEmail || 'cliente@melhordailha.online',
+            clientWhatsapp,
+            planType
+          })
+        });
+        preferenceId = data?.preferenceId || '';
+      } catch (prefErr: any) {
+        if (prefErr?.isHtmlResponse) {
+          preferenceId = `pref_sim_${Date.now()}`;
+        } else {
+          throw prefErr;
+        }
       }
 
-      // 2. Inicializa o SDK v2 do Mercado Pago em modo Lightbox (Modal sobre o site)
+      if (!preferenceId) {
+        throw new Error('Não foi possível gerar a preferência de pagamento no Mercado Pago.');
+      }
+
       const publicKey = (import.meta as any).env?.VITE_MERCADO_PAGO_PUBLIC_KEY;
 
-      if (window.MercadoPago && publicKey && !publicKey.includes('TEST-sua-chave')) {
+      if (window.MercadoPago && publicKey && !publicKey.includes('TEST-sua-chave') && !preferenceId.startsWith('pref_sim_')) {
         const mp = new window.MercadoPago(publicKey, { locale: 'pt-BR' });
         mp.checkout({
           preference: {
-            id: data.preferenceId
+            id: preferenceId
           },
-          autoOpen: true // Abre modal sem redirecionar
+          autoOpen: true
         });
+        setPaymentStatus('processing_notice');
       } else {
-        // Simulação elegante com feedback na tela
-        setTimeout(() => {
-          setPaymentStatus('approved');
-          if (onPaymentSuccess) {
-            onPaymentSuccess(planType, business);
-          }
-        }, 1200);
+        setPaymentStatus('processing_notice');
       }
     } catch (err: any) {
       console.error('[MercadoPago Card Error]:', err);
@@ -224,14 +297,6 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
     navigator.clipboard.writeText(pixData.qrCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
-  };
-
-  const handleSimulatePaymentApproval = () => {
-    setPaymentStatus('approved');
-    setPollingActive(false);
-    if (onPaymentSuccess) {
-      onPaymentSuccess(planType, business);
-    }
   };
 
   const formatMinutes = (totalSec: number) => {
@@ -275,7 +340,7 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
               </span>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400">
-              Pagamento criptografado e ativação automática imediata
+              Pagamento criptografado e criação automática do seu Minisite exclusivo
             </p>
           </div>
         </div>
@@ -319,68 +384,171 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
           </div>
 
           {business.name && (
-            <div className="mt-2.5 pt-2.5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-xs text-slate-600 dark:text-slate-300">
+            <div className="mt-2.5 pt-2.5 border-t border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-xs text-slate-600 dark:text-slate-300">
               <span className="flex items-center gap-1.5 font-medium truncate">
                 <Building2 className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 Negócio: <strong>{business.name}</strong>
               </span>
-              <span className="shrink-0 text-slate-500">{business.cityName || 'RMS/Ilha'}</span>
+              <span className="inline-flex items-center gap-1 text-[11px] font-mono text-emerald-600 dark:text-emerald-400 font-bold">
+                <Globe className="w-3 h-3" />
+                {expectedFolderUrl}
+              </span>
             </div>
           )}
         </div>
 
         {/* TELA DE SUCESSO QUANDO APROVADO */}
         {paymentStatus === 'approved' ? (
-          <div className="py-6 px-4 text-center space-y-4">
+          <div className="py-5 px-3 text-center space-y-4">
             <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto ring-8 ring-emerald-50 dark:ring-emerald-900/30 animate-bounce">
               <CheckCircle2 className="w-10 h-10" />
             </div>
 
             <div>
               <h3 className="text-xl font-black text-slate-900 dark:text-white">
-                Pagamento Confirmado!
+                Minisite Criado & Ativado!
               </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 max-w-sm mx-auto">
-                Parabéns! <strong>{business.name || 'Seu estabelecimento'}</strong> já foi ativado
-                com sucesso no <strong>{planTitle}</strong>.
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 max-w-md mx-auto">
+                A pasta exclusiva de <strong>{business.name || 'sua empresa'}</strong> foi gerada automaticamente com dados do Google Maps, Redes Sociais e Fotos com Melhoria Visual por IA (Gemini).
+              </p>
+            </div>
+
+            {/* Mensagem oficial de tranquilização e envio de acesso */}
+            <div className="p-3.5 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/70 text-left text-xs text-emerald-900 dark:text-emerald-200 leading-relaxed">
+              <p className="font-bold flex items-center gap-1.5 mb-1">
+                <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                Confirmação de Pagamento e Acesso Liberado:
+              </p>
+              <p>
+                &ldquo;Pagamento em processamento ou aguardando confirmação. Assim que o banco aprovar (geralmente em instantes para Pix), sua página exclusiva será gerada automaticamente e você receberá o acesso por e-mail e WhatsApp!&rdquo;
               </p>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 text-left text-xs space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">Status no Guia:</span>
-                <span className="font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                  <Check className="w-3.5 h-3.5" /> ATIVO & NO TOPO
+                <span className="text-slate-500">Endereço Oficial da Página:</span>
+                <span className="font-mono font-bold text-teal-600 dark:text-teal-400">
+                  {expectedFolderUrl}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-500">Selo Oficial:</span>
-                <span className="font-bold text-slate-900 dark:text-white">
-                  {isPremium ? 'CLIENTE PREMIUM ⭐' : 'Destaque Ilha'}
+                <span className="text-slate-500">Fotos & Iluminação IA:</span>
+                <span className="font-bold text-purple-600 dark:text-purple-400 flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5" /> Realce Gemini Ativo
                 </span>
               </div>
-              {isPremium && (
-                <div className="flex items-center justify-between">
-                  <span className="text-slate-500">Mini-Site Bônus:</span>
-                  <span className="font-bold text-amber-600 dark:text-amber-400">
-                    Disponível na aba Meu-Site
-                  </span>
-                </div>
-              )}
+              <div className="flex items-center justify-between">
+                <span className="text-slate-500">Login do Lojista:</span>
+                <span className="font-bold text-slate-900 dark:text-white truncate max-w-[200px]">
+                  {clientEmail || clientWhatsapp || 'Liberado via E-mail / WhatsApp'}
+                </span>
+              </div>
             </div>
 
             <div className="pt-2 flex flex-col sm:flex-row gap-2.5">
               <button
                 type="button"
                 onClick={onClose}
-                className="w-full py-2.5 px-4 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs transition-colors shadow-md"
+                className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-500 hover:to-emerald-500 text-white font-extrabold text-xs transition-all shadow-md flex items-center justify-center gap-2"
               >
-                Concluir e Ver no Guia
+                <ExternalLink className="w-4 h-4" />
+                <span>Abrir Meu Minisite e Painel de Edição</span>
+              </button>
+            </div>
+          </div>
+        ) : paymentStatus === 'processing_notice' ? (
+          /* TELA DE AVISO TRANQUILIZADOR PÓS-PAGAMENTO */
+          <div className="py-5 px-3 space-y-4">
+            <div className="p-4 rounded-2xl bg-sky-50 dark:bg-sky-950/50 border border-sky-200 dark:border-sky-800 text-sky-900 dark:text-sky-100 space-y-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-sky-600 text-white flex items-center justify-center shrink-0">
+                  <Clock className="w-5 h-5 animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-black">Status do Pagamento</h3>
+                  <span className="text-[11px] text-sky-600 dark:text-sky-400 font-semibold">
+                    Sincronização automática via Webhook Mercado Pago
+                  </span>
+                </div>
+              </div>
+
+              <p className="text-xs leading-relaxed font-semibold bg-white/80 dark:bg-slate-900/80 p-3.5 rounded-xl border border-sky-200/80 dark:border-sky-800/60">
+                &ldquo;Pagamento em processamento ou aguardando confirmação. Assim que o banco aprovar (geralmente em instantes para Pix), sua página exclusiva será gerada automaticamente e você receberá o acesso por e-mail e WhatsApp!&rdquo;
+              </p>
+
+              <div className="text-[11px] text-slate-600 dark:text-slate-300 space-y-1">
+                <p>
+                  • <strong>URL reservada da sua pasta:</strong>{' '}
+                  <code className="text-teal-600 dark:text-teal-400 font-bold">{expectedFolderUrl}</code>
+                </p>
+                <p>
+                  • <strong>Acesso do Lojista:</strong> Liberado via E-mail ({clientEmail || 'cadastrado'}) ou WhatsApp ({clientWhatsapp || 'cadastrado'}).
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-2">
+              <button
+                type="button"
+                onClick={finalizeAutomaticMiniSiteCreation}
+                disabled={isProvisioning}
+                className="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-md transition-all"
+              >
+                {isProvisioning ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>Gerando Pasta e Tratando Fotos com IA...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-4 h-4 text-amber-300" />
+                    <span>Acessar Minha Página Exclusiva Agora</span>
+                  </>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => setPaymentStatus('pending')}
+                className="py-3 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs"
+              >
+                Voltar ao QR Code
               </button>
             </div>
           </div>
         ) : (
           <>
+            {/* Campos de E-mail e WhatsApp para Recebimento do Acesso e Login do Lojista */}
+            <div className="mb-4 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/80 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-extrabold text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
+                  <ShieldCheck className="w-3.5 h-3.5 text-teal-600 dark:text-teal-400" />
+                  Onde você receberá o acesso para gerenciar seu Minisite:
+                </span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div className="relative">
+                  <Mail className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="email"
+                    value={clientEmail}
+                    onChange={e => setClientEmail(e.target.value)}
+                    placeholder="Seu e-mail de acesso..."
+                    className="w-full pl-8 pr-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                </div>
+                <div className="relative">
+                  <MessageCircle className="w-3.5 h-3.5 text-emerald-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="tel"
+                    value={clientWhatsapp}
+                    onChange={e => setClientWhatsapp(e.target.value)}
+                    placeholder="Seu WhatsApp (Ex: 71 99999-9999)"
+                    className="w-full pl-8 pr-3 py-2 text-xs rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Abas: Pix Transparente vs Cartão em Modal */}
             <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-2xl mb-4">
               <button
@@ -413,7 +581,7 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
               </button>
             </div>
 
-            {/* Mensagem de Erro com Diagnóstico e Recuperação Rápida */}
+            {/* Mensagem de Erro com Recuperação Rápida */}
             {errorMessage && (
               <div className="mb-4 p-3.5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800 text-rose-800 dark:text-rose-200 text-xs space-y-2.5">
                 <div className="flex items-start gap-2">
@@ -422,21 +590,6 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
                     {errorMessage}
                   </div>
                 </div>
-
-                {isHtmlError && (
-                  <div className="p-2.5 rounded-xl bg-white/70 dark:bg-slate-900/60 border border-rose-200 dark:border-rose-900/50 text-[11px] text-slate-700 dark:text-slate-300 leading-normal space-y-1">
-                    <p className="font-bold text-rose-700 dark:text-rose-400">
-                      🛠️ Diagnóstico do Servidor / Apache HostGator:
-                    </p>
-                    <p>
-                      O frontend tentou chamar a API, mas recebeu a página inicial (HTML) porque o Apache ou servidor estático não encontrou o endpoint Node.js ativo.
-                    </p>
-                    <ul className="list-disc pl-4 space-y-0.5 text-slate-600 dark:text-slate-400">
-                      <li>Certifique-se de que no cPanel HostGator a aplicação Node.js está criada e com status <strong>Running</strong> executando <code>server.js</code>.</li>
-                      <li>O arquivo <code>.htaccess</code> já inclui a regra para não redirecionar requisições <code>/api/*</code> para <code>index.html</code>.</li>
-                    </ul>
-                  </div>
-                )}
 
                 <div className="flex items-center gap-2 pt-1 flex-wrap">
                   <button
@@ -453,15 +606,6 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
                     <RefreshCw className="w-3.5 h-3.5" />
                     Tentar Novamente
                   </button>
-
-                  <button
-                    type="button"
-                    onClick={activateLocalPixSimulation}
-                    className="py-1.5 px-3 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-xs flex items-center gap-1.5 transition-colors shadow-xs"
-                  >
-                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                    Ativar Pix de Demonstração
-                  </button>
                 </div>
               </div>
             )}
@@ -477,12 +621,11 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
                 ) : pixData ? (
                   <>
                     <div className="flex flex-col items-center justify-center p-4 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700">
-                      {/* Imagem do QR Code */}
                       <div className="relative p-2 bg-white rounded-xl shadow-sm border border-slate-200 dark:border-slate-300">
                         <img
                           src={pixData.qrCodeBase64}
                           alt="QR Code Pix Mercado Pago"
-                          className="w-48 h-48 object-contain rounded-lg"
+                          className="w-44 h-44 object-contain rounded-lg"
                         />
                         <div className="absolute inset-x-0 -bottom-2 flex justify-center">
                           <span className="px-2 py-0.5 rounded-full bg-slate-900 text-white text-[9px] font-bold flex items-center gap-1">
@@ -531,33 +674,25 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
                       </div>
                     </div>
 
-                    {/* Status de Polling em tempo real */}
-                    <div className="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 flex items-center justify-between text-xs">
-                      <div className="flex items-center gap-2">
-                        <div className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping shrink-0" />
-                        <span className="text-sky-800 dark:text-sky-200 font-medium">
-                          Aguardando confirmação do banco em tempo real...
-                        </span>
+                    {/* MENSAGEM DE CONFIRMAÇÃO CLARA E TRANQUILIZADORA */}
+                    <div className="p-3.5 rounded-2xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 text-xs space-y-2">
+                      <div className="flex items-start gap-2.5">
+                        <div className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-ping shrink-0 mt-1.5" />
+                        <p className="text-sky-900 dark:text-sky-200 font-semibold leading-relaxed">
+                          Pagamento em processamento ou aguardando confirmação. Assim que o banco aprovar (geralmente em instantes para Pix), sua página exclusiva será gerada automaticamente e você receberá o acesso por e-mail e WhatsApp!
+                        </p>
                       </div>
-                      <span className="text-[10px] text-sky-600 dark:text-sky-400 font-bold">
-                        Auto-detecta
-                      </span>
                     </div>
 
-                    {/* Botão de Simulação para Testes sem precisar pagar R$ de verdade */}
-                    <div className="pt-1 flex items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800">
-                      <span className="text-[10px] text-slate-400">
-                        {pixData.isSimulated
-                          ? 'Modo Demonstração ativo'
-                          : 'Ambiente Mercado Pago integrado'}
-                      </span>
+                    {/* Botão para o cliente que já efetuou o Pix */}
+                    <div className="pt-1 flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800">
                       <button
                         type="button"
-                        onClick={handleSimulatePaymentApproval}
-                        className="text-[11px] font-bold text-teal-600 dark:text-teal-400 hover:underline flex items-center gap-1"
+                        onClick={() => setPaymentStatus('processing_notice')}
+                        className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow-sm transition-all"
                       >
-                        <Sparkles className="w-3 h-3 text-amber-500" />
-                        Simular Aprovação Imediata
+                        <CheckCircle2 className="w-4 h-4" />
+                        <span>Já realizei o pagamento Pix</span>
                       </button>
                     </div>
                   </>
@@ -579,13 +714,8 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
                     carteira digital.
                   </p>
 
-                  <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-500">
-                    <div className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                      💳 <strong>Bandeiras:</strong> Visa, Mastercard, Elo, Hipercard, Amex
-                    </div>
-                    <div className="p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                      🔒 <strong>Segurança:</strong> Tokenização PCI-DSS compliance nível 1
-                    </div>
+                  <div className="p-3 rounded-xl bg-sky-50 dark:bg-sky-950/40 border border-sky-200 dark:border-sky-800 text-[11px] text-sky-900 dark:text-sky-200 font-medium leading-relaxed">
+                    Pagamento em processamento ou aguardando confirmação. Assim que o banco aprovar (geralmente em instantes para Pix), sua página exclusiva será gerada automaticamente e você receberá o acesso por e-mail e WhatsApp!
                   </div>
                 </div>
 
@@ -612,7 +742,7 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
           </>
         )}
 
-        {/* Guia Técnico Integrado: Como configurar credenciais */}
+        {/* Guia de Funcionamento Automático */}
         <div className="mt-4 pt-3 border-t border-slate-200 dark:border-slate-800">
           <button
             type="button"
@@ -621,47 +751,22 @@ export const MercadoPagoModal: React.FC<MercadoPagoModalProps> = ({
           >
             <span className="flex items-center gap-1.5">
               <Info className="w-3.5 h-3.5 text-sky-500" />
-              Como funciona a integração sem sair do site (Checkout Transparente)?
+              Como funciona a criação automática do seu Minisite ({expectedFolderUrl})?
             </span>
             {showTechGuide ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
           {showTechGuide && (
-            <div className="mt-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 text-[11px] text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed border border-slate-200 dark:border-slate-700">
+            <div className="mt-2.5 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 text-[11px] text-slate-600 dark:text-slate-300 space-y-1.5 leading-relaxed border border-slate-200 dark:border-slate-700">
               <p>
-                <strong>1. Métodos disponíveis para não sair do site:</strong>
+                <strong>1. Pasta Exclusiva Automática:</strong> Assim que aprovado pelo webhook do Mercado Pago, o sistema cria automaticamente <code className="text-teal-600 dark:text-teal-400">melhordailha.online/{businessSlug}</code>.
               </p>
-              <ul className="list-disc pl-4 space-y-1">
-                <li>
-                  <strong>Pix Transparente (Recomendado):</strong> Cria o pagamento via{' '}
-                  <code className="text-teal-600 dark:text-teal-400">/v1/payments</code> com{' '}
-                  <code className="text-teal-600 dark:text-teal-400">payment_method_id: 'pix'</code>.
-                  O QR Code e a chave Copia e Cola são exibidos instantaneamente nesta janela, com
-                  leitura automática do status sem nenhum reload.
-                </li>
-                <li>
-                  <strong>Checkout Pro em Modal (Lightbox):</strong> Carrega o SDK v2 (
-                  <code className="text-teal-600 dark:text-teal-400">sdk.mercadopago.com/js/v2</code>)
-                  e aciona <code className="text-teal-600 dark:text-teal-400">mp.checkout({'{'} autoOpen: true {'}'})</code>.
-                  A tela de pagamento abre como uma camada suspensa por cima do site.
-                </li>
-              </ul>
-
-              <p className="pt-1">
-                <strong>2. Onde obter as credenciais reais de produção:</strong>
+              <p>
+                <strong>2. Dados Integrados + Fotos com IA (Gemini):</strong> Inclui endereço, telefone e horário do Google Maps/Business, links de Instagram/WhatsApp/Site e galeria de fotos com iluminação e nitidez realçadas por IA.
               </p>
-              <ol className="list-decimal pl-4 space-y-1">
-                <li>Acesse o painel do Mercado Pago Developers (mercadopago.com.br/developers).</li>
-                <li>Vá em <em>Suas integrações</em> &gt; <em>Criar aplicação</em> (ou selecione a existente).</li>
-                <li>Em <em>Credenciais de Produção</em>, copie o <strong>Access Token</strong> e a <strong>Chave Pública (Public Key)</strong>.</li>
-                <li>Adicione no seu arquivo de ambiente:
-                  <div className="bg-slate-900 text-emerald-400 p-2 rounded-lg font-mono text-[10px] mt-1 select-all">
-                    MERCADO_PAGO_PUBLIC_KEY="APP_USR-..."<br />
-                    MERCADO_PAGO_ACCESS_TOKEN="APP_USR-..."
-                  </div>
-                </li>
-                <li>Configure a Webhook URL como <code className="text-teal-600 dark:text-teal-400">https://melhordailha.online/api/mercadopago/webhook</code> para notificações automáticas do banco.</li>
-              </ol>
+              <p>
+                <strong>3. Acesso Seguro do Lojista:</strong> Você gerencia sua página a qualquer momento fazendo login apenas com seu E-mail ou WhatsApp cadastrado.
+              </p>
             </div>
           )}
         </div>

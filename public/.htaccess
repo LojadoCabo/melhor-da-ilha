@@ -6,23 +6,17 @@
   RewriteEngine On
   RewriteBase /
 
-  # 1. Reverse Proxy voor Node.js backend (indien mod_proxy actief is)
-  # Stuurt alle /api verzoeken door naar de lokale Node.js server (standaard poort 3000)
-  <IfModule mod_proxy.c>
-    RewriteCond %{REQUEST_URI} ^/api/
-    RewriteRule ^api/(.*)$ http://127.0.0.1:3000/api/$1 [P,L]
-  </IfModule>
+  # 1. Roteamento Nativo para Hospedagem Compartilhada HostGator (Apache + PHP)
+  # Encaminha todas as rotas /api/* para o motor PHP local (api.php)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_URI} ^/api/(.*)$
+  RewriteRule ^api/(.*)$ /api.php?endpoint=/api/$1 [QSA,L]
 
-  # 2. Bescherming tegen HTML-fallback op API-routes:
-  # Als Apache het verzoek verwerkt (en er geen Node reverse proxy is),
-  # voorkom dat /api verzoeken naar index.html worden herschreven!
-  # Dit lost de fout op: "Unexpected token '<', <!doctype... is not valid JSON"
-  RewriteCond %{REQUEST_URI} ^/api(/|$)
-  RewriteRule ^api/ - [R=404,L]
-  ErrorDocument 404 "Not Found"
+  # 2. Permite acesso direto ao api.php sem cair no SPA index.html
+  RewriteRule ^api\.php$ - [L]
 
   # 3. SPA (Single Page Application) Routing:
-  # Stuur alle overige routes (bijv. /brotas, /?business=123) naar index.html
+  # Encaminha as demais rotas amigaveis (ex: /brotas, /perfil/...) para index.html
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

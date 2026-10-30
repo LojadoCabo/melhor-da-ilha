@@ -25,7 +25,14 @@ import { Business } from '../types';
 import { useFavorites } from '../context/FavoritesContext';
 import { MercadoPagoModal } from './MercadoPagoModal';
 import { getCategoryCoverImage } from '../utils/categoryImages';
-import { saveCustomBusiness } from '../utils/customBusinessesStorage';
+import {
+  saveCustomBusiness,
+  findBusinessByCredential,
+  getLoggedClientSession,
+  saveLoggedClientSession,
+  clearLoggedClientSession,
+  toBusinessSlug
+} from '../utils/customBusinessesStorage';
 
 interface AdvertiseModalProps {
   isOpen: boolean;
@@ -53,13 +60,22 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
     planType: 'destaque' | 'premium';
   } | null>(null);
 
+  // Lojista / Empresário Login State (E-mail ou WhatsApp)
+  const existingSession = getLoggedClientSession();
+  const [isLojistaLoggedIn, setIsLojistaLoggedIn] = useState<boolean>(!!existingSession);
+  const [lojistaCredential, setLojistaCredential] = useState<string>(
+    existingSession?.email || existingSession?.whatsapp || ''
+  );
+  const [lojistaEmail, setLojistaEmail] = useState<string>(existingSession?.email || '');
+  const [loginError, setLoginError] = useState<string>('');
+
   const [formData, setFormData] = useState({
     name: '',
     category: CATEGORIES[0].name,
     city: 'Vera Cruz',
     neighborhood: 'Mar Grande',
     phone: '',
-    whatsapp: '',
+    whatsapp: existingSession?.whatsapp || '',
     instagram: '',
     description: '',
     services: ''
@@ -82,6 +98,64 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
   const contextualCoverImage = useMemo(() => {
     return getCategoryCoverImage(formData.category, formData.name);
   }, [formData.category, formData.name]);
+
+  const handleLojistaLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError('');
+    const input = lojistaCredential.trim();
+    if (!input) {
+      setLoginError('Informe seu E-mail ou número de WhatsApp para continuar.');
+      return;
+    }
+
+    const isEmail = input.includes('@');
+    const digits = input.replace(/\D/g, '');
+    if (!isEmail && digits.length < 8) {
+      setLoginError('Informe um E-mail válido ou número de WhatsApp com DDD (ex: 71 99999-9999).');
+      return;
+    }
+
+    const catalog = businesses && businesses.length > 0 ? businesses : fallbackBusinesses;
+    const found = findBusinessByCredential(input, catalog);
+
+    if (isEmail) {
+      setLojistaEmail(input);
+    } else {
+      setFormData(prev => ({ ...prev, whatsapp: input, phone: prev.phone || input }));
+    }
+
+    if (found) {
+      const slug = found.slug || toBusinessSlug(found.name);
+      saveLoggedClientSession({
+        businessId: found.id,
+        businessSlug: slug,
+        businessName: found.name,
+        email: isEmail ? input : found.email,
+        whatsapp: !isEmail ? input : found.whatsapp,
+        loggedAt: Date.now()
+      });
+      setFormData(prev => ({
+        ...prev,
+        name: found.name,
+        whatsapp: found.whatsapp || (!isEmail ? input : prev.whatsapp)
+      }));
+      setDismissMatch(false);
+      setIsLojistaLoggedIn(true);
+      showToast(`🔓 Bem-vindo(a)! Empresa "${found.name}" localizada.`);
+      return;
+    }
+
+    // Novo lojista que deseja cadastrar / anunciar sua empresa
+    setIsLojistaLoggedIn(true);
+    showToast('✅ Acesso liberado! Preencha os dados da sua empresa para anunciar.');
+  };
+
+  const handleLogoutLojista = () => {
+    clearLoggedClientSession();
+    setIsLojistaLoggedIn(false);
+    setLojistaCredential('');
+    setDismissMatch(false);
+  };
 
   const handleCepChange = async (val: string) => {
     const raw = val.replace(/\D/g, '').slice(0, 8);
@@ -292,10 +366,12 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
     const fullFormattedAddress = addressParts.join(', ') || `${formData.neighborhood}, ${formData.city} - BA`;
     const finalCoverImage = customCoverImage.trim() || contextualCoverImage;
 
+    const newBizSlug = toBusinessSlug(formData.name);
     const newBiz: Business = {
       id: `custom-${Date.now()}`,
       name: formData.name.trim(),
-      slug: formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+      slug: newBizSlug,
+      miniSiteSlug: newBizSlug,
       tagline: formData.services.slice(0, 80) || `Atendimento de referência em ${formData.category}`,
       description: formData.description.trim() || `Cadastrado no guia oficial MELHOR DA ILHA em ${formData.city} (${formData.neighborhood}).`,
       categoryId: selectedCatObj.id,
@@ -306,6 +382,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
       address: fullFormattedAddress,
       phone: formData.phone || formData.whatsapp,
       whatsapp: formData.whatsapp.replace(/\D/g, ''),
+      email: lojistaEmail.trim() || undefined,
       instagram: formData.instagram.trim() || undefined,
       rating: 5.0,
       reviewCount: 1,
@@ -325,6 +402,14 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
     };
 
     saveCustomBusiness(newBiz);
+    saveLoggedClientSession({
+      businessId: newBiz.id,
+      businessSlug: newBizSlug,
+      businessName: newBiz.name,
+      email: lojistaEmail.trim() || undefined,
+      whatsapp: formData.whatsapp.trim(),
+      loggedAt: Date.now()
+    });
 
     setCreatedBiz(newBiz);
 
@@ -338,7 +423,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
       import('../lib/firebase').then(({ db, doc, setDoc }) => {
         setDoc(doc(db, 'inquiries', inqId), {
           name: formData.name.trim(),
-          email: `${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'anuncio'}@anunciante.local`,
+          email: lojistaEmail.trim() || `${formData.name.toLowerCase().replace(/[^a-z0-9]/g, '') || 'anuncio'}@anunciante.local`,
           phone: formData.whatsapp || formData.phone,
           businessName: formData.name.trim(),
           message: `Plano: ${selectedPlan}. Cidade: ${formData.city} (${formData.neighborhood}). Serviços: ${formData.services || 'Não especificado'}. Descrição: ${formData.description}`,
@@ -387,10 +472,12 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
             </div>
             <div>
               <h2 id="advertise-modal-title" className="text-lg sm:text-2xl font-bold text-slate-900 dark:text-white leading-tight">
-                Anuncie no Melhor da Ilha
+                {!isLojistaLoggedIn ? 'Acesso do Lojista / Anunciante' : 'Anuncie no Melhor da Ilha'}
               </h2>
               <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                Cadastre sua empresa ou ative seu plano comercial na Ilha de Itaparica e RMS
+                {!isLojistaLoggedIn
+                  ? 'Identifique-se com E-mail ou WhatsApp para anunciar ou gerenciar sua página'
+                  : 'Cadastre sua empresa ou gerencie seu plano comercial na Ilha de Itaparica e RMS'}
               </p>
             </div>
           </div>
@@ -403,10 +490,70 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
           </button>
         </div>
 
-        {/* Form Wrap */}
+        {/* Step 1: Login exclusivo para Lojistas / Empresários (E-mail ou WhatsApp) */}
+        {!isLojistaLoggedIn ? (
+          <div className="flex-1 overflow-y-auto p-5 sm:p-8 space-y-5">
+            <div className="p-4 rounded-2xl bg-teal-50/80 dark:bg-teal-950/40 border border-teal-200 dark:border-teal-800/60 text-xs text-slate-700 dark:text-slate-200 space-y-1.5">
+              <p className="font-bold text-teal-900 dark:text-teal-300">
+                🔓 Visitantes e Clientes não precisam de login para navegar no site.
+              </p>
+              <p className="leading-relaxed">
+                O login abaixo é exclusivo para <strong>Lojistas e Empresários</strong> que desejam cadastrar, anunciar ou editar sua página exclusiva (<strong>melhordailha.online/nome-da-empresa</strong>).
+              </p>
+            </div>
+
+            <form onSubmit={handleLojistaLoginSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-1.5">
+                  Informe seu E-mail ou Número de WhatsApp *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Ex: contato@suaempresa.com ou (71) 99999-9999"
+                  value={lojistaCredential}
+                  onChange={e => setLojistaCredential(e.target.value)}
+                  className="w-full px-4 py-3 text-sm rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-teal-500"
+                />
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1.5">
+                  Se sua empresa já estiver cadastrada, abriremos seu painel. Se for seu primeiro anúncio, liberaremos o formulário de cadastro imediatamente.
+                </p>
+              </div>
+
+              {loginError && (
+                <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 text-xs text-rose-700 dark:text-rose-200 font-medium">
+                  {loginError}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="w-full py-3.5 px-6 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm shadow-md transition-colors flex items-center justify-center gap-2"
+              >
+                <Lock className="w-4 h-4" />
+                <span>Continuar com E-mail ou WhatsApp</span>
+              </button>
+            </form>
+          </div>
+        ) : (
+        /* Step 2: Formulário de Anúncio / Gerenciamento para Lojista Autenticado */
         <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
           {/* Scrollable Content Body */}
           <div className="flex-1 overflow-y-auto p-5 sm:p-8 pt-4 custom-scrollbar">
+            {/* Barra de identificação do Lojista logado */}
+            <div className="mb-4 px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 flex items-center justify-between gap-2 text-xs">
+              <span className="text-slate-700 dark:text-slate-300 truncate">
+                Lojista identificado: <strong>{lojistaCredential || formData.whatsapp || 'Autenticado'}</strong>
+              </span>
+              <button
+                type="button"
+                onClick={handleLogoutLojista}
+                className="text-teal-600 dark:text-teal-400 font-bold hover:underline shrink-0"
+              >
+                Trocar conta
+              </button>
+            </div>
+
             {!submitted ? (
               <>
               {/* Smart Detection Banner */}
@@ -418,21 +565,51 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500 text-slate-950 text-[10px] font-black uppercase tracking-wider mb-1">
-                        VOCÊ JÁ FAZ PARTE DO NOSSO TIME!
+                        EMPRESA LOCALIZADA NO PORTAL!
                       </div>
                       <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight">
                         "{matchedBusiness.name}" já está cadastrado no Guia Melhor da Ilha!
                       </h3>
                       <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
-                        Identificamos o seu negócio cadastrado em <strong>{matchedBusiness.cityName}</strong> ({matchedBusiness.neighborhood}). Seu perfil já está ativo no catálogo básico.
+                        Localizado em <strong>{matchedBusiness.cityName}</strong> ({matchedBusiness.neighborhood}). Você pode editar sua página exclusiva ou ativar um plano de destaque abaixo:
                       </p>
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-4 border-t border-amber-500/30 space-y-3">
+                  {/* Direct button to open & manage the business's exclusive minisite */}
+                  <div className="mt-3 pt-3 border-t border-amber-500/30">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const slug = matchedBusiness.slug || toBusinessSlug(matchedBusiness.name);
+                        saveLoggedClientSession({
+                          businessId: matchedBusiness.id,
+                          businessSlug: slug,
+                          businessName: matchedBusiness.name,
+                          email: lojistaEmail || matchedBusiness.email,
+                          whatsapp: formData.whatsapp || matchedBusiness.whatsapp,
+                          loggedAt: Date.now()
+                        });
+                        onClose();
+                        if (onOpenMiniSite) {
+                          onOpenMiniSite(matchedBusiness);
+                        } else {
+                          window.location.href = `/${slug}`;
+                        }
+                      }}
+                      className="w-full py-2.5 px-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-950 font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm hover:opacity-95 transition-opacity"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>
+                        Gerenciar / Editar Minha Página Exclusiva (melhordailha.online/{matchedBusiness.slug || toBusinessSlug(matchedBusiness.name)})
+                      </span>
+                    </button>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-amber-500/30 space-y-3">
                     <p className="text-xs font-bold text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
                       <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
-                      <span>Assine um plano mensal para subir ao topo:</span>
+                      <span>Ou assine um plano mensal para subir ao topo:</span>
                     </p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -492,7 +669,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
 
                   <div className="text-right mt-3">
                     <button type="button" onClick={() => setDismissMatch(true)} className="text-[10px] text-slate-500 hover:underline">
-                      Não é o meu negócio? Continuar cadastro.
+                      Quero cadastrar outra empresa diferente
                     </button>
                   </div>
                 </div>
@@ -862,10 +1039,10 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
               </div>
 
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-                {selectedPlan === 'premium' ? '🎉 Mini-Site Ativo & Perfil no Topo!' : 'Parabéns! Cadastro Ativado com Sucesso!'}
+                {selectedPlan !== 'free' ? '🎉 Minisite Exclusivo Criado Automaticamente!' : 'Parabéns! Cadastro Ativado com Sucesso!'}
               </h3>
 
-              {selectedPlan === 'premium' ? (
+              {selectedPlan !== 'free' ? (
                 <div className="space-y-4 text-left">
                   {/* Simulated Browser Bar */}
                   <div className="rounded-2xl overflow-hidden border border-slate-700 bg-slate-950 text-white shadow-xl">
@@ -874,10 +1051,12 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                         <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
                         <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
                         <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-                        <span className="ml-2 text-slate-400">melhordailha.online/meu-site</span>
+                        <span className="ml-2 text-emerald-400 font-bold">
+                          melhordailha.online/{createdBiz?.slug || 'nome-da-empresa'}
+                        </span>
                       </div>
                       <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[10px] font-black uppercase">
-                        ⭐ CLIENTE PREMIUM
+                        ⭐ {selectedPlan === 'premium' ? 'CLIENTE PREMIUM' : 'DESTAQUE ILHA'}
                       </span>
                     </div>
 
@@ -887,10 +1066,10 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                         <div>
                           <div className="flex items-center gap-1.5">
                             <span className="px-2 py-0.5 rounded-md bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 font-black text-[10px]">
-                              CLIENTE PREMIUM ⭐
+                              {selectedPlan === 'premium' ? 'CLIENTE PREMIUM ⭐' : 'DESTAQUE VERIFICADO'}
                             </span>
                             <span className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
-                              <ShieldCheck className="w-3.5 h-3.5" /> Verificado
+                              <ShieldCheck className="w-3.5 h-3.5" /> Fotos Melhoradas por IA
                             </span>
                           </div>
                           <h4 className="text-lg sm:text-xl font-extrabold text-white mt-1">
@@ -905,7 +1084,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                           <div className="text-amber-400 font-black text-sm flex items-center gap-1 justify-end">
                             <Star className="w-4 h-4 fill-amber-400" /> 5.0
                           </div>
-                          <span className="text-[10px] text-slate-400">Página Oficial</span>
+                          <span className="text-[10px] text-slate-400">Minisite Oficial</span>
                         </div>
                       </div>
 
@@ -932,21 +1111,21 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                         if (onOpenMiniSite && createdBiz) {
                           onOpenMiniSite(createdBiz);
                         } else {
-                          window.location.href = `/perfil/${createdBiz?.slug || 'novo-cliente'}`;
+                          window.location.href = `/${createdBiz?.slug || 'novo-cliente'}`;
                         }
                       }}
                       className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-teal-900/30 flex items-center justify-center gap-2 transition-all hover:scale-101 text-center"
                     >
-                      <span>Abrir Mini-Site Oficial ↗ (melhordailha.online/perfil/{createdBiz?.slug || 'seu-negocio'})</span>
+                      <span>Abrir Meu Minisite & Painel de Gerenciamento ↗ (melhordailha.online/{createdBiz?.slug || 'sua-empresa'})</span>
                     </button>
                     <p className="text-[11px] text-center text-slate-500 dark:text-slate-400">
-                      O link do seu mini-site está ativo e pode ser divulgado no seu Instagram, cartões e WhatsApp!
+                      Você pode acessar e editar seu minisite a qualquer momento fazendo login com seu <strong>E-mail ou WhatsApp</strong> cadastrado!
                     </p>
                   </div>
                 </div>
               ) : (
                 <p className="max-w-md mx-auto text-sm text-slate-600 dark:text-slate-300">
-                  O seu negócio <strong>{createdBiz?.name || formData.name}</strong> foi atualizado com sucesso no Guia Melhor da Ilha no plano {selectedPlan === 'destaque' ? 'Destaque Ilha (R$ 29/mês)' : 'Gratuito'}.
+                  O seu negócio <strong>{createdBiz?.name || formData.name}</strong> foi atualizado com sucesso no Guia Melhor da Ilha no plano Gratuito.
                 </p>
               )}
 
@@ -1013,6 +1192,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
             </div>
           )}
         </form>
+        )}
 
         {/* Modal de Checkout Mercado Pago sem sair do site */}
         <MercadoPagoModal

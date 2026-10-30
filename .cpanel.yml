@@ -3,5 +3,7 @@ deployment:
   tasks:
     - export DEPLOYPATH=/home1/comot852/melhordailha.online
     - /bin/cp -R dist/* $DEPLOYPATH/
+    - /bin/cp dist/api.php $DEPLOYPATH/ 2>/dev/null || true
+    - /bin/cp public/api.php $DEPLOYPATH/ 2>/dev/null || true
     - /bin/cp dist/.htaccess $DEPLOYPATH/ 2>/dev/null || true
     - /bin/cp public/.htaccess $DEPLOYPATH/ 2>/dev/null || true

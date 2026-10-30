@@ -12,6 +12,12 @@ var app = express();
 var PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3e3;
 var isProd = process.env.NODE_ENV === "production";
 app.use(express.json({ limit: "10mb" }));
+app.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+    return res.status(400).json({ error: "JSON mal formatado", details: err.message });
+  }
+  next();
+});
 var ai = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
   httpOptions: {
@@ -300,7 +306,7 @@ app.get(["/baixar", "/download"], (_req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Download \u2014 Pacote Node.js HostGator | MELHOR DA ILHA</title>
+  <title>Download \u2014 Pacote Pronto HostGator | MELHOR DA ILHA</title>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
     .card { background: #1e293b; border: 1px solid #334155; border-radius: 24px; padding: 36px; max-width: 560px; width: 100%; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
@@ -318,27 +324,20 @@ app.get(["/baixar", "/download"], (_req, res) => {
 <body>
   <div class="card">
     <div class="icon">\u{1F680}</div>
-    <h1>Pacote HostGator (Node.js)</h1>
-    <p>O arquivo <strong>site.zip</strong> cont\xE9m a compila\xE7\xE3o completa do frontend (<code>dist/</code>), o backend Node.js (<code>server.js</code>), e o <code>package.json</code> pronto para rodar no cPanel.</p>
-    <a href="/site.zip" download="melhor-da-ilha-nodejs.zip" class="btn">
-      \u{1F4E5} Baixar melhor-da-ilha-nodejs.zip
+    <h1>Pacote Pronto HostGator (Sem Node.js)</h1>
+    <p>O arquivo <strong>site.zip</strong> j\xE1 vem compilado com <code>index.html</code>, <code>assets/</code>, <code>api.php</code> e <code>.htaccess</code> prontos para Hospedagem Compartilhada (custo zero).</p>
+    <a href="/site.zip" download="site-hostgator-pronto.zip" class="btn">
+      \u{1F4E5} Baixar site-hostgator-pronto.zip
     </a>
     
     <div class="instructions">
-      <h3>Passo a passo no cPanel HostGator:</h3>
+      <h3>Passo a passo simples no cPanel HostGator:</h3>
       <ol>
-        <li>No cPanel, acesse <strong>"Setup Node.js App"</strong> (Configurar Aplicativo Node.js).</li>
-        <li>Clique em <strong>"Create Application"</strong>:
-          <br>\u2022 Node.js version: <strong>18.x</strong>, <strong>20.x</strong> ou superior.
-          <br>\u2022 Application mode: <strong>Production</strong>.
-          <br>\u2022 Application startup file: <code>server.js</code>.
-        </li>
-        <li>Envie o arquivo <strong>site.zip</strong> para a pasta do aplicativo e extraia.</li>
-        <li>No painel do Node.js, clique em <strong>"Run NPM Install"</strong>.</li>
-        <li>Em <strong>Environment variables</strong>, adicione:
-          <br>\u2022 <code>NODE_ENV</code> = <code>production</code>
-        </li>
-        <li>Clique em <strong>"Restart"</strong> e acesse seu dom\xEDnio!</li>
+        <li>No cPanel, abra o <strong>"Gerenciador de Arquivos"</strong>.</li>
+        <li>Entre na pasta do seu dom\xEDnio (ex: <code>public_html</code> ou <code>melhordailha.online</code>).</li>
+        <li>Clique em <strong>"Carregar" (Upload)</strong> e envie o arquivo baixado.</li>
+        <li>Clique com o bot\xE3o direito no arquivo <code>.zip</code> e escolha <strong>"Extract" (Extrair)</strong> na pr\xF3pria pasta.</li>
+        <li>Pronto! Seu site e o Checkout Mercado Pago j\xE1 funcionar\xE3o sem precisar de Node.js nem terminal!</li>
       </ol>
     </div>
   </div>
@@ -354,7 +353,7 @@ app.get(["/download/site.zip", "/site.zip", "/dist-hostgator.zip"], (_req, res) 
   ];
   for (const p of possiblePaths) {
     if (fs.existsSync(p)) {
-      res.setHeader("Content-Disposition", 'attachment; filename="melhor-da-ilha-nodejs.zip"');
+      res.setHeader("Content-Disposition", 'attachment; filename="site-hostgator-pronto.zip"');
       res.setHeader("Content-Type", "application/zip");
       return res.sendFile(p);
     }
