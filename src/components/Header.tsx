@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useFavorites } from '../context/FavoritesContext';
+import { useAuth } from '../context/AuthContext';
 import { Business } from '../types';
 
 interface HeaderProps {
@@ -43,6 +44,7 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const { theme, toggleTheme } = useTheme();
   const { favorites } = useFavorites();
+  const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -145,6 +147,28 @@ export const Header: React.FC<HeaderProps> = ({
             <span className="hidden sm:inline">Anunciar / Lojista</span>
             <span className="sm:hidden">Anunciar</span>
           </button>
+
+          {/* User Auth Section */}
+          {user && (
+            <div className="hidden md:flex items-center gap-2 pl-3 border-l border-slate-200 dark:border-slate-800 ml-1">
+              <div className="flex flex-col items-end">
+                <span className="text-[10px] font-bold text-slate-900 dark:text-white truncate max-w-[100px]">
+                  {user.displayName || user.email?.split('@')[0]}
+                </span>
+                <button
+                  onClick={() => logout()}
+                  className="text-[9px] font-black text-rose-500 hover:text-rose-600 uppercase tracking-tighter"
+                >
+                  Sair da Conta
+                </button>
+              </div>
+              <img 
+                src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.email}&background=0D9488&color=fff`} 
+                alt="User" 
+                className="w-8 h-8 rounded-full border border-teal-500 shadow-sm"
+              />
+            </div>
+          )}
 
           {/* Mobile hamburger menu */}
           <button
@@ -249,19 +273,32 @@ export const Header: React.FC<HeaderProps> = ({
             <span>Fale Conosco / Contato</span>
           </button>
 
-          <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
-            <button
-              type="button"
-              onClick={() => {
-                onOpenAdvertise();
-                setMobileMenuOpen(false);
-              }}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-teal-600 text-white font-bold text-sm shadow-sm"
-            >
-              <PlusCircle className="w-4 h-4" />
-              <span>Anunciar Negócio / Área do Lojista</span>
-            </button>
-          </div>
+          {user && (
+            <div className="pt-2 flex items-center justify-between px-3 py-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-200 dark:border-slate-800">
+              <div className="flex items-center gap-2">
+                <img 
+                  src={user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || user.email}&background=0D9488&color=fff`} 
+                  alt="User" 
+                  className="w-8 h-8 rounded-full border border-teal-500"
+                />
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-bold text-slate-900 dark:text-white truncate max-w-[120px]">
+                    {user.displayName || user.email}
+                  </span>
+                  <span className="text-[9px] text-slate-500 dark:text-slate-400">Usuário Logado</span>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  logout();
+                  setMobileMenuOpen(false);
+                }}
+                className="px-3 py-1 rounded-lg bg-rose-50 dark:bg-rose-950/30 text-rose-600 dark:text-rose-400 text-[10px] font-bold border border-rose-200 dark:border-rose-900/50"
+              >
+                Sair da Conta
+              </button>
+            </div>
+          )}
         </div>
       )}
     </header>

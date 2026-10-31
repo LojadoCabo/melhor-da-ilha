@@ -31,7 +31,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Todos os dias: 11:30 às 23:00',
-    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'paris-6-shopping-bahia',
@@ -57,7 +58,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Diário: 12:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'camarada-camarao-shopping-bahia',
@@ -83,7 +85,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 11:30 às 23:00 | Domingo: 11:30 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'restaurante-popular-pernambues',
@@ -107,7 +110,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 11:00 às 14:00',
-    coverImage: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'pizzaria-do-vovo-pernambues',
@@ -132,7 +137,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: false,
     openingHoursText: 'Terça a Domingo: 18:00 às 23:30',
-    coverImage: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'churrascaria-ponte-aerea-pernambues',
@@ -157,7 +163,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Todos os dias: 11:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'padaria-paes-e-delicias-pernambues',
@@ -181,7 +188,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 06:00 às 21:00',
-    coverImage: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'mamma-jamma-shopping-bahia',
@@ -205,7 +214,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 12:00 às 22:30',
-    coverImage: 'https://images.unsplash.com/photo-1574126154517-d1e0d89ef734?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1574126154517-d1e0d89ef734?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'oliva-gourmet-shopping-bahia',
@@ -229,7 +240,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 11:30 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1473093226795-af9932fe5856?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'hamburgueria-artesanal-pernambues',
@@ -254,7 +267,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: false,
     openingHoursText: 'Quarta a Segunda: 17:30 às 23:00',
-    coverImage: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'delicatessen-vitoria-pernambues',
@@ -278,7 +292,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 06:30 às 21:30',
-    coverImage: 'https://images.unsplash.com/photo-1550617931-e17a7b70dce2?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1550617931-e17a7b70dce2?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'acai-do-posto-pernambues',
@@ -302,7 +318,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 10:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1590301157890-4810ed352733?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'churrasquinho-da-praca-pernambues',
@@ -325,7 +343,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: false,
     openingHoursText: 'Diário: 17:00 às 23:00',
-    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'temaki-cia-shopping-bahia',
@@ -349,7 +370,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 11:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'divino-fogao-shopping-bahia',
@@ -372,7 +395,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 11:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1547573854-74d2a71d0826?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1547573854-74d2a71d0826?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'mcdonalds-shopping-bahia',
@@ -395,7 +421,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 09:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1561758033-d89a9ad46330?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'spoleto-shopping-bahia',
@@ -418,7 +447,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 11:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'giraffas-shopping-bahia',
@@ -441,7 +473,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 11:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1594212699903-ec8a3eca50f5?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'subway-pernambues',
@@ -465,7 +500,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 10:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1534353436294-0dbd4bdac845?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'pastellaria-da-vovo-pernambues',
@@ -488,7 +525,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 19:00',
-    coverImage: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'restaurante-tabuleiro-baiano-pernambues',
@@ -512,7 +552,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Terça a Domingo: 11:30 às 16:00',
-    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'tapioca-da-mainha-pernambues',
@@ -535,7 +577,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 11:00 e 16:00 às 20:00',
-    coverImage: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'espetinho-do-jorge-pernambues',
@@ -558,7 +603,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: false,
     openingHoursText: 'Segunda a Sábado: 17:30 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'sorveteria-da-ribeira-shopping-bahia',
@@ -581,7 +629,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 09:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1501443762994-82bd5dace89a?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'reidomate-shopping-bahia',
@@ -604,7 +655,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 09:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1572283088235-9e6631b79878?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1572283088235-9e6631b79878?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
 
   // MERCADOS, DISTRIBUIDORAS & VAREJO (20)
@@ -630,7 +684,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 22:00 | Domingo: 07:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'supermercado-bom-viver-pernambues',
@@ -654,7 +710,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:30 às 20:30 | Domingo: 07:30 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'frutaria-do-povo-pernambues',
@@ -677,7 +735,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 19:00',
-    coverImage: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1610348725531-843dff563e2c?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'mercadinho-da-ladeira-pernambues',
@@ -700,7 +761,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 07:00 às 21:00',
-    coverImage: 'https://images.unsplash.com/photo-1534723452862-4c874e70d58d?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1534723452862-4c874e70d58d?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'distribuidora-de-bebidas-geladao-pernambues',
@@ -725,7 +789,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Todos os dias: 09:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1528498033563-3013b063162b?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1528498033563-3013b063162b?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'lojas-americanas-shopping-bahia',
@@ -748,7 +813,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 09:00 às 22:00 | Domingo: 12:00 às 21:00',
-    coverImage: 'https://images.unsplash.com/photo-1540959733332-e94e1b389e7a?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1540959733332-e94e1b389e7a?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'casa-e-video-shopping-bahia',
@@ -771,7 +839,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 09:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'le-biscuit-shopping-bahia',
@@ -794,7 +865,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 09:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'kalunga-shopping-bahia',
@@ -817,7 +891,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 09:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'precolandia-shopping-bahia',
@@ -840,7 +917,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 09:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'loja-do-condominio-pernambues',
@@ -864,7 +944,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1584622781564-1d9876a13d00?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1584622781564-1d9876a13d00?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'acougue-do-centro-pernambues',
@@ -887,7 +969,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 19:00 | Domingo: 07:00 às 12:00',
-    coverImage: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'bomboniere-do-bahia-pernambues',
@@ -910,7 +995,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 19:00',
-    coverImage: 'https://images.unsplash.com/photo-1534073828943-f801091bb18c?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1534073828943-f801091bb18c?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'loja-de-variedades-iguatemi',
@@ -933,7 +1021,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:30 às 18:30',
-    coverImage: 'https://images.unsplash.com/photo-1540959733332-e94e1b389e7a?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1540959733332-e94e1b389e7a?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'pet-shop-amigo-fiel-pernambues',
@@ -957,7 +1048,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'casa-de-racao-nordeste-pernambues',
@@ -980,7 +1073,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:30 às 19:30',
-    coverImage: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'papelaria-central-pernambues',
@@ -1003,7 +1099,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 19:00',
-    coverImage: 'https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1456735190827-d1262f71b8a3?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'loja-de-ferragens-pernambues',
@@ -1026,7 +1125,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'distribuidora-de-agua-mineral-pernambues',
@@ -1051,7 +1153,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Diário: 07:00 às 21:00',
-    coverImage: 'https://images.unsplash.com/photo-1548685913-fe6678babe8d?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1548685913-fe6678babe8d?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'sac-shopping-da-bahia',
@@ -1074,7 +1177,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 09:00 às 18:00 | Sábado: 09:00 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1541873676-a181ec9d97bc?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1541873676-a181ec9d97bc?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
 
   // SAÚDE, FARMÁCIAS & BEM-ESTAR (15)
@@ -1100,7 +1206,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Diário: 09:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'pague-menos-pernambues',
@@ -1124,7 +1232,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Diário: 07:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1576602976047-174e57a47881?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'farmacia-do-trabalhador-pernambues',
@@ -1147,7 +1257,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:30 às 20:30',
-    coverImage: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'drogaria-sao-paulo-iguatemi',
@@ -1170,7 +1283,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: '24 Horas',
-    coverImage: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'clinica-saude-familiar-pernambues',
@@ -1194,7 +1310,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 07:00 às 18:00 | Sábado: 07:00 às 12:00',
-    coverImage: 'https://images.unsplash.com/photo-1576091160550-2173dad99901?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1576091160550-2173dad99901?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'laboratorio-sabin-shopping-bahia',
@@ -1217,7 +1335,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 06:30 às 16:00 | Sábado: 06:30 às 12:00',
-    coverImage: 'https://images.unsplash.com/photo-1581594658553-fac5944111d4?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1581594658553-fac5944111d4?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'oticas-diniz-shopping-bahia',
@@ -1240,7 +1361,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 09:00 às 22:00',
-    coverImage: 'https://images.unsplash.com/photo-1511499767350-a1590fdb7307?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1511499767350-a1590fdb7307?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'farmacia-dose-certa-pernambues',
@@ -1263,7 +1387,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 20:00',
-    coverImage: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1587854692152-cbe660dbde88?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'studio-fitness-pernambues',
@@ -1287,7 +1414,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 05:30 às 22:00 | Sábado: 07:00 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'smart-fit-shopping-bahia',
@@ -1310,7 +1439,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 05:00 às 23:00 | Sábado: 08:00 às 17:00 | Domingo: 08:00 às 14:00',
-    coverImage: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'odontoclinic-pernambues',
@@ -1334,7 +1466,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:00 | Sábado: 08:00 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'fisioterapia-pernambues-center',
@@ -1357,7 +1491,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 07:00 às 19:00',
-    coverImage: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'espaco-beleza-pernambues',
@@ -1380,7 +1517,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Terça a Sábado: 09:00 às 19:00',
-    coverImage: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'salao-do-messias-pernambues',
@@ -1403,7 +1543,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Terça a Sábado: 08:30 às 20:00',
-    coverImage: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'laboratorio-linus-pauling-pernambues',
@@ -1426,7 +1569,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 06:30 às 15:00 | Sábado: 06:30 às 11:00',
-    coverImage: 'https://images.unsplash.com/photo-1579154235602-3c2ae2492583?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1579154235602-3c2ae2492583?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
 
   // OFICINAS & SERVIÇOS AUTOMOTIVOS (20)
@@ -1453,7 +1599,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:00 | Sábado: 08:00 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'auto-eletrica-do-baiano-pernambues',
@@ -1477,7 +1624,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:30 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'borracharia-24h-pernambues',
@@ -1500,7 +1649,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: '24 Horas',
-    coverImage: 'https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'lava-jato-brilho-total-pernambues',
@@ -1523,7 +1675,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 08:00 às 17:30',
-    coverImage: 'https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1520340356584-f9917d1eea6f?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'oficina-de-motos-pernambues',
@@ -1546,7 +1701,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'centro-automotivo-iguatemi',
@@ -1570,7 +1728,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 07:30 às 18:00 | Sábado: 07:30 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'lanternagem-pintura-pernambues',
@@ -1593,7 +1753,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 17:30',
-    coverImage: 'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'auto-pecas-central-pernambues',
@@ -1617,7 +1780,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:30',
-    coverImage: 'https://images.unsplash.com/photo-1506774518161-b710d10e2733?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1506774518161-b710d10e2733?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'ar-condicionado-automotivo-pernambues',
@@ -1640,7 +1805,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1621905252507-b35482cd84b4?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1621905252507-b35482cd84b4?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'estetica-automotiva-tancredo-neves',
@@ -1663,7 +1831,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1601362840469-51e4d8d59085?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1601362840469-51e4d8d59085?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'parafusos-pernambues-cia',
@@ -1686,7 +1857,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'radiadores-pernambues',
@@ -1709,7 +1883,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 17:30',
-    coverImage: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'escapamentos-pernambues',
@@ -1732,7 +1909,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'alinhamento-rodoviaria-service',
@@ -1755,7 +1935,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 07:30 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'estofados-pernambues-auto',
@@ -1778,7 +1961,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'auto-vidros-pernambues',
@@ -1801,7 +1987,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'freios-pernambues-center',
@@ -1824,7 +2013,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'guincho-rapido-pernambues',
@@ -1849,7 +2041,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: '24 Horas',
-    coverImage: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'chaveiro-automotivo-pernambues',
@@ -1872,7 +2065,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 20:00',
-    coverImage: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'motos-j-pernambues',
@@ -1895,7 +2091,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
 
   // LOJAS, SERVIÇOS & OUTROS (14)
@@ -1920,7 +2119,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:30 às 19:00',
-    coverImage: 'https://images.unsplash.com/photo-1512428559083-a401a30c4550?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1512428559083-a401a30c4550?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'info-iguatemi-tech',
@@ -1943,7 +2145,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:30',
-    coverImage: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'contabilidade-pernambues-associados',
@@ -1966,7 +2171,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1454165833767-027ff3302724?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1454165833767-027ff3302724?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'escola-infantil-pernambues-creche',
@@ -1989,7 +2197,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 07:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'advocacia-pernambues-civil-trabalhista',
@@ -2012,7 +2223,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 09:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1505664194779-8beaceb93744?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'grafica-rapida-pernambues',
@@ -2035,7 +2249,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:30 às 18:30',
-    coverImage: 'https://images.unsplash.com/photo-1562654508-4c8274f1d01d?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1562654508-4c8274f1d01d?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'material-de-construcao-pernambues-forte',
@@ -2059,7 +2276,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:30 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1581244277943-fe4a9c777189?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'vidracaria-iguatemi-vidros',
@@ -2082,7 +2301,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'loja-de-moveis-pernambues',
@@ -2105,7 +2327,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 09:00 às 19:00',
-    coverImage: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'imobiliaria-pernambues-center',
@@ -2128,7 +2353,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:30 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'estudio-de-tatuagem-pernambues',
@@ -2151,7 +2379,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Terça a Sábado: 10:00 às 19:00',
-    coverImage: 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'casa-de-festas-pernambues-alegria',
@@ -2174,7 +2405,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Sob Reserva',
-    coverImage: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'posto-pernambues-shell',
@@ -2197,7 +2431,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: '24 Horas',
-    coverImage: 'https://images.unsplash.com/photo-1545142822-48206d2c499c?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1545142822-48206d2c499c?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'banca-de-revistas-iguatemi',
@@ -2220,7 +2457,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 07:00 às 20:00',
-    coverImage: 'https://images.unsplash.com/photo-1540959733332-e94e1b389e7a?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1540959733332-e94e1b389e7a?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
 
   // ADICIONANDO MAIS 25 PARA COMPLETAR A LISTA ROBUSTA (80-94 e extras)
@@ -2245,7 +2485,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Quarta a Domingo: 11:30 às 17:00',
-    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'boutique-das-unhas-pernambues',
@@ -2268,7 +2511,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Terça a Sábado: 09:00 às 19:00',
-    coverImage: 'https://images.unsplash.com/photo-1604071353603-44673f8863f6?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1604071353603-44673f8863f6?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'loja-de-pecas-para-moto-pernambues',
@@ -2291,7 +2537,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'reforma-de-sofas-pernambues',
@@ -2314,7 +2563,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'clinica-veterinaria-pernambues-pet',
@@ -2338,7 +2590,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 08:00 às 19:00 | Sábado: 08:00 às 14:00',
-    coverImage: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=700&q=80',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'academia-bio-ritmo-pernambues',
@@ -2361,7 +2615,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 05:30 às 22:00 | Sábado: 07:00 às 12:00',
-    coverImage: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'laboratorio-linus-pauling-pernambues-2',
@@ -2384,7 +2641,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sexta: 06:30 às 15:00',
-    coverImage: 'https://images.unsplash.com/photo-1579154235602-3c2ae2492583?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1579154235602-3c2ae2492583?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'mercearia-do-seu-ze-pernambues',
@@ -2407,7 +2667,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Diário: 06:00 às 20:00',
-    coverImage: 'https://images.unsplash.com/photo-1534723452862-4c874e70d58d?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1534723452862-4c874e70d58d?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'pizzaria-estrela-pernambues',
@@ -2432,7 +2695,8 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: false,
     openingHoursText: 'Diário: 18:00 às 23:30',
-    coverImage: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80',
+    hasDelivery: false,
   },
   {
     id: 'hamburgueria-iguatemi-burger',
@@ -2455,7 +2719,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: true,
     isOpenNow: true,
     openingHoursText: 'Diário: 11:30 às 22:30',
-    coverImage: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'oficina-de-eletronicos-pernambues',
@@ -2478,7 +2745,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isFeatured: false,
     isOpenNow: true,
     openingHoursText: 'Segunda a Sábado: 08:30 às 18:00',
-    coverImage: 'https://images.unsplash.com/photo-1512428559083-a401a30c4550?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1512428559083-a401a30c4550?auto=format&fit=crop&w=700&q=80',
+    phone: '(71) 99999-0000',
+    whatsapp: '5571999990000',
+    hasDelivery: false,
   },
   {
     id: 'salao-social-pernambues',
@@ -2500,29 +2770,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: false,
     isOpenNow: true,
-    openingHoursText: 'Terça a Sábado: 09:00 às 20:00',
-    coverImage: 'https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&w=700&q=80'
-  },
-  {
-    id: 'vidracaria-pernambues-transparencia',
-    name: 'Transparência Vidros Pernambués',
-    slug: 'transparencia-vidros-pernambues',
-    tagline: 'Instalação de janelas, portas e fechamentos de sacada',
-    description: 'Qualidade em vidros temperados e esquadrias de alumínio no bairro.',
-    categoryId: 'construcao-reforma',
-    categoryName: 'Casa, Construção e Reformas',
-    cityId: 'salvador',
-    cityName: 'Salvador',
-    neighborhood: 'Pernambués',
-    address: 'Rua Tomaz Gonzaga, Pernambués',
-    rating: 4.7,
-    reviewCount: 48,
-    priceLevel: '$$',
-    tags: ['Vidros', 'Esquadrias', 'Alumínio'],
-    services: ['Instalação'],
-    isVerified: true,
-    isFeatured: false,
-    isOpenNow: true,
+    hasDelivery: false,
+    phone: '(71) 3431-0000',
+    whatsapp: '557134310000',
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
     coverImage: 'https://images.unsplash.com/photo-1597872200969-2b65d56bd16b?auto=format&fit=crop&w=700&q=80'
   },
@@ -2546,6 +2796,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: true,
+    phone: '(71) 3431-1111',
+    whatsapp: '557134311111',
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:30',
     coverImage: 'https://images.unsplash.com/photo-1562654508-4c8274f1d01d?auto=format&fit=crop&w=700&q=80'
   },
@@ -2569,6 +2822,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: false,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: false,
+    phone: '(71) 98888-0000',
+    whatsapp: '5571988880000',
     openingHoursText: 'Segunda a Sábado: 08:30 às 18:00',
     coverImage: 'https://images.unsplash.com/photo-1511994298241-608e28f14fde?auto=format&fit=crop&w=700&q=80'
   },
@@ -2594,6 +2850,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: true,
+    phone: '(71) 3431-2222',
+    whatsapp: '557134312222',
     openingHoursText: 'Segunda a Sábado: 08:00 às 19:00',
     coverImage: 'https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?auto=format&fit=crop&w=700&q=80'
   },
@@ -2617,6 +2876,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: true,
     isOpenNow: true,
+    hasDelivery: true,
+    phone: '(71) 3431-3333',
+    whatsapp: '557134313333',
     openingHoursText: 'Segunda a Sábado: 08:30 às 18:30',
     coverImage: 'https://images.unsplash.com/photo-1511499767350-a1590fdb7307?auto=format&fit=crop&w=700&q=80'
   },
@@ -2640,6 +2902,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: true,
+    phone: '(71) 3431-4444',
+    whatsapp: '557134314444',
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
     coverImage: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?auto=format&fit=crop&w=700&q=80'
   },
@@ -2663,6 +2928,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: false,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: false,
+    phone: '(71) 98777-6666',
+    whatsapp: '5571987776666',
     openingHoursText: 'Diário: 07:00 às 20:00',
     coverImage: 'https://images.unsplash.com/photo-1534723452862-4c874e70d58d?auto=format&fit=crop&w=700&q=80'
   },
@@ -2686,6 +2954,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: false,
+    phone: '(71) 3431-5555',
+    whatsapp: '557134315555',
     openingHoursText: 'Segunda a Sexta: 07:30 às 18:30',
     coverImage: 'https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=700&q=80'
   },
@@ -2709,6 +2980,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: false,
+    phone: '(71) 3431-6666',
+    whatsapp: '557134316666',
     openingHoursText: 'Segunda a Sábado: 08:00 às 21:00',
     coverImage: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=700&q=80'
   },
@@ -2732,6 +3006,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: false,
+    phone: '(71) 3431-7777',
+    whatsapp: '557134317777',
     openingHoursText: 'Segunda a Sábado: 08:00 às 18:00',
     coverImage: 'https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=700&q=80'
   },
@@ -2755,6 +3032,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: false,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: true,
+    phone: '(71) 3431-8888',
+    whatsapp: '557134318888',
     openingHoursText: 'Segunda a Sábado: 09:00 às 19:00',
     coverImage: 'https://images.unsplash.com/photo-1532330393533-443990a51d10?auto=format&fit=crop&w=700&q=80'
   },
@@ -2778,6 +3058,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: false,
+    phone: '(71) 99111-0000',
+    whatsapp: '5571991110000',
     openingHoursText: 'Segunda a Sexta: 07:00 às 20:00',
     coverImage: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&w=700&q=80'
   },
@@ -2801,6 +3084,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: true,
+    phone: '(71) 3431-9999',
+    whatsapp: '557134319999',
     openingHoursText: 'Segunda a Sábado: 08:00 às 19:00',
     coverImage: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=700&q=80'
   },
@@ -2824,6 +3110,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: false,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: true,
+    phone: '(71) 3432-0000',
+    whatsapp: '557134320000',
     openingHoursText: 'Segunda a Sexta: 08:00 às 18:00 | Sábado: 08:00 às 13:00',
     coverImage: 'https://images.unsplash.com/photo-1517677208171-0bc6725a3e60?auto=format&fit=crop&w=700&q=80'
   },
@@ -2847,6 +3136,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: true,
+    phone: '(71) 3432-1111',
+    whatsapp: '557134321111',
     openingHoursText: 'Segunda a Sábado: 09:00 às 19:00',
     coverImage: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80'
   },
@@ -2870,6 +3162,9 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: false,
     isFeatured: false,
     isOpenNow: true,
+    hasDelivery: false,
+    phone: '(71) 98111-2222',
+    whatsapp: '5571981112222',
     openingHoursText: 'Segunda a Sexta: 08:30 às 18:00',
     coverImage: 'https://images.unsplash.com/photo-1524234107056-1c1f48f64ab8?auto=format&fit=crop&w=700&q=80'
   },
@@ -2893,7 +3188,10 @@ export const PERNAMBUES_IGUATEMI_BATCH40: Business[] = [
     isVerified: true,
     isFeatured: true,
     isOpenNow: true,
+    hasDelivery: true,
+    phone: '(71) 3432-2222',
+    whatsapp: '557134322222',
     openingHoursText: 'Segunda a Sábado: 08:00 às 20:00 | Domingo: 08:00 às 13:00',
-    coverImage: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=700&q=80'
+    coverImage: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=700&q=80',
   }
 ];

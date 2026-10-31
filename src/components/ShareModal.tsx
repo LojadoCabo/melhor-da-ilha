@@ -25,7 +25,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClos
   const shareUrl = `${origin}/${encodeURIComponent(businessIdentifier)}`;
 
   const shareTitle = `${business.name} | MELHOR DA ILHA`;
-  const shareText = `Link direto do estabelecimento no guia MELHOR DA ILHA:\n${shareUrl}`;
+  const shareText = shareUrl;
 
   const copyToClipboard = async (urlToCopy: string = shareUrl) => {
     try {

@@ -36,18 +36,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-64 bg-teal-400/10 dark:bg-teal-500/10 blur-3xl pointer-events-none rounded-full" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
-        {/* Prominent CTA for mobile and highlighted area */}
-        <div className="flex justify-center mb-6">
+        {/* Top Highlighted CTA - Requested prominent position */}
+        <div className="flex justify-center mb-8">
           <button
             type="button"
             onClick={onOpenAdvertise}
-            className="group relative inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-teal-600 hover:bg-teal-500 text-white font-black text-sm sm:text-base shadow-xl shadow-teal-700/20 hover:scale-105 transition-all animate-bounce"
+            className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-[2rem] bg-gradient-to-r from-teal-600 via-teal-500 to-emerald-500 hover:from-teal-500 hover:to-emerald-400 text-white font-black text-sm sm:text-lg shadow-[0_20px_50px_rgba(13,148,136,0.3)] hover:shadow-[0_25px_60px_rgba(13,148,136,0.4)] hover:-translate-y-1 transition-all active:scale-95 animate-in fade-in slide-in-from-top-4 duration-700"
           >
-            <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6" />
-            <span>ANUNCIAR MEU NEGÓCIO</span>
-            <div className="absolute -top-1.5 -right-1.5 flex h-4 w-4">
+            <div className="p-1 bg-white/20 rounded-lg">
+              <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+            </div>
+            <span className="tracking-tight">ANUNCIAR MEU NEGÓCIO / ÁREA LOJISTA</span>
+            
+            {/* Animated attention seeker */}
+            <div className="absolute -top-2 -right-2 flex h-6 w-6">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-4 w-4 bg-amber-500"></span>
+              <span className="relative inline-flex rounded-full h-6 w-6 bg-amber-500 border-2 border-white dark:border-slate-900 flex items-center justify-center">
+                <Sparkles className="w-3 h-3 text-white fill-white" />
+              </span>
             </div>
           </button>
         </div>

@@ -145,6 +145,7 @@ function MainAppContent() {
 
   const handleOpenMiniSite = (biz?: Business) => {
     const target = biz || businesses.find(b => b.isRmsPremium) || businesses[0];
+    if (!target) return; // Safety check
     setMiniSiteBusiness(target);
     setIsMiniSiteOpen(true);
     const targetSlug = target.slug || target.id;
@@ -402,7 +403,7 @@ function MainAppContent() {
           {/* Business Listings Grid */}
           {filteredList.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-4">
                 {displayedBusinesses.map(business => (
                   <BusinessCard
                     key={business.id}
@@ -550,7 +551,6 @@ function MainAppContent() {
         onClose={() => handleSelectBusiness(null)}
         onShare={biz => setSharingBusiness(biz)}
         onEdit={biz => setEditingBusiness(biz)}
-        onOpenMiniSite={biz => handleOpenMiniSite(biz)}
         onOpenWorkspaceWithBiz={biz => {
           setWorkspaceSelectedBiz(biz);
           setIsWorkspaceOpen(true);
