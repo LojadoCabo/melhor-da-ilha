@@ -94,39 +94,28 @@ function MainAppContent() {
 
       let targetSlug = '';
 
-      if (pathname.startsWith('/perfil/')) {
-        targetSlug = decodeURIComponent(pathname.replace('/perfil/', ''));
-      } else if (pathname.startsWith('/p/')) {
-        targetSlug = decodeURIComponent(pathname.replace('/p/', ''));
-      } else if (pathname === '/meu-site' || hash.includes('/meu-site') || search.includes('meu-site')) {
+      if (pathname === '/meu-site' || hash.includes('/meu-site') || search.includes('meu-site')) {
         const urlParams = new URLSearchParams(window.location.search);
         targetSlug = urlParams.get('biz') || '';
-      } else if (pathname && pathname !== '/' && pathname !== '/index.html') {
-        const potentialSlug = decodeURIComponent(pathname.slice(1));
-        if (businesses.some(b => b.slug === potentialSlug || b.id === potentialSlug)) {
-          targetSlug = potentialSlug;
-        }
-      }
-
-      if (targetSlug || pathname.startsWith('/perfil/') || pathname === '/meu-site') {
-        const match =
-          businesses.find(b => b.slug === targetSlug || b.id === targetSlug) ||
-          businesses.find(b => b.isRmsPremium) ||
-          businesses[0];
-        setMiniSiteBusiness(match || businesses[0]);
+        const match = businesses.find(b => b.slug === targetSlug || b.id === targetSlug) || businesses[0];
+        setMiniSiteBusiness(match);
         setIsMiniSiteOpen(true);
-      } else if (pathname === '' || pathname === '/' || pathname === '/index.html') {
+      } else if (pathname.startsWith('/perfil/') || pathname.startsWith('/p/')) {
+        targetSlug = decodeURIComponent(pathname.replace(/^\/(perfil|p)\//, ''));
+        const match = businesses.find(b => b.slug === targetSlug || b.id === targetSlug) || businesses[0];
+        setMiniSiteBusiness(match);
+        setIsMiniSiteOpen(true);
+      } else {
         setIsMiniSiteOpen(false);
-      }
-
-      // Suporte a deep link para abrir o modal do estabelecimento (/:slug)
-      if (pathname && pathname !== '/' && pathname !== '/index.html' && !pathname.startsWith('/meu-site')) {
-        const potentialSlug = decodeURIComponent(pathname.slice(1));
-        const matchedBiz = businesses.find(
-          b => b.id.toLowerCase() === potentialSlug.toLowerCase() || (b.slug && b.slug.toLowerCase() === potentialSlug.toLowerCase())
-        );
-        if (matchedBiz) {
-          setSelectedBusiness(matchedBiz);
+        // Deep link para abrir o modal do estabelecimento (/:slug)
+        if (pathname && pathname !== '/' && pathname !== '/index.html') {
+          const potentialSlug = decodeURIComponent(pathname.slice(1));
+          const matchedBiz = businesses.find(
+            b => b.id.toLowerCase() === potentialSlug.toLowerCase() || (b.slug && b.slug.toLowerCase() === potentialSlug.toLowerCase())
+          );
+          if (matchedBiz) {
+            setSelectedBusiness(matchedBiz);
+          }
         }
       }
 

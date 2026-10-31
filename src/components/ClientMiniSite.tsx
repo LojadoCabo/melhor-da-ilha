@@ -349,6 +349,10 @@ export const ClientMiniSite: React.FC<ClientMiniSiteProps> = ({
   const handleAddGalleryPhoto = () => {
     const url = editForm.newPhotoUrl.trim();
     if (!url) return;
+    if (galleryPhotos.length >= 6) {
+      alert('O limite máximo é de 6 fotos na galeria.');
+      return;
+    }
     setGalleryPhotos(prev => [url, ...prev]);
     setEditForm(prev => ({ ...prev, newPhotoUrl: '' }));
   };

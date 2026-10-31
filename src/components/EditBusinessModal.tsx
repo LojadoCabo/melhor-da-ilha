@@ -110,6 +110,37 @@ export const EditBusinessModal: React.FC<EditBusinessModalProps> = ({ business, 
           </div>
 
           <div>
+            <label className="block text-sm font-medium mb-2 dark:text-slate-300">Galeria de Fotos (Até 6 links de imagens)</label>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {[0, 1, 2, 3, 4, 5].map((idx) => (
+                <div key={idx} className="space-y-1">
+                  <div className="aspect-video rounded-lg bg-slate-100 dark:bg-slate-800 border border-dashed border-slate-300 dark:border-slate-700 overflow-hidden flex items-center justify-center">
+                    {formData.galleryImages?.[idx] ? (
+                      <img src={formData.galleryImages[idx]} alt={`Foto ${idx + 1}`} className="w-full h-full object-cover" />
+                    ) : (
+                      <span className="text-[10px] text-slate-400">Vazio</span>
+                    )}
+                  </div>
+                  <input
+                    type="url"
+                    placeholder="Link da foto..."
+                    value={formData.galleryImages?.[idx] || ''}
+                    onChange={(e) => {
+                      const newGallery = [...(formData.galleryImages || [])];
+                      // Ensure array is at least 6 long
+                      while(newGallery.length <= idx) newGallery.push('');
+                      newGallery[idx] = e.target.value;
+                      setFormData({ ...formData, galleryImages: newGallery.filter(u => u || idx >= newGallery.length - 1) });
+                    }}
+                    className="w-full px-2 py-1 text-[10px] border rounded bg-white dark:bg-slate-800 dark:border-slate-700 dark:text-white"
+                  />
+                </div>
+              ))}
+            </div>
+            <p className="text-[10px] text-slate-500 mt-1">Dica: Use links diretos de imagens (terminados em .jpg, .png) para melhor resultado.</p>
+          </div>
+
+          <div>
             <label className="block text-sm font-medium mb-1 dark:text-slate-300">Link do Google Maps</label>
             <input
               type="text"

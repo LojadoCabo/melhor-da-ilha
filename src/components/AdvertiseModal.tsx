@@ -78,7 +78,8 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
     whatsapp: existingSession?.whatsapp || '',
     instagram: '',
     description: '',
-    services: ''
+    services: '',
+    galleryImages: ['', '', '', '', '', '']
   });
 
   // Smart CEP State & ViaCEP auto-fill
@@ -398,6 +399,7 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
       isOpenNow: true,
       openingHoursText: 'Segunda a Sábado: Horário Comercial',
       coverImage: finalCoverImage,
+      galleryImages: formData.galleryImages.filter(url => url.trim() !== ''),
       badgeText: isRmsPremium ? 'CLIENTE PREMIUM ⭐' : (selectedPlan === 'destaque' ? 'Destaque Ilha' : undefined)
     };
 
@@ -973,6 +975,51 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
                 </div>
               </div>
 
+              {/* 3. Galeria de Fotos Reais (Novidade solicitada pelo usuário) */}
+              <div className="p-3.5 rounded-2xl bg-amber-50/40 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40 space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-amber-950 dark:text-amber-200 flex items-center gap-1.5">
+                    <Camera className="w-4 h-4 text-amber-600 dark:text-amber-500" />
+                    <span>Galeria de Fotos Reais (Até 6 fotos)</span>
+                  </label>
+                  <span className="text-[10px] font-semibold text-amber-600 dark:text-amber-400 bg-amber-100/50 dark:bg-amber-900/30 px-2 py-0.5 rounded-full border border-amber-200 dark:border-amber-800">
+                    Links de Fotos
+                  </span>
+                </div>
+                
+                <p className="text-[10px] text-slate-600 dark:text-slate-400 leading-tight">
+                  Insira links de fotos reais do seu estabelecimento, produtos ou serviços (Instagram, Facebook ou sites de hospedagem de imagens).
+                </p>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {formData.galleryImages.map((url, idx) => (
+                    <div key={idx} className="space-y-1">
+                      <div className="relative group aspect-video rounded-lg bg-slate-100 dark:bg-slate-800 border border-dashed border-slate-300 dark:border-slate-700 overflow-hidden">
+                        {url.trim() ? (
+                          <img src={url} alt={`Preview ${idx + 1}`} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-slate-400">
+                            <PlusCircle className="w-4 h-4 mb-1" />
+                            <span className="text-[9px]">Foto {idx + 1}</span>
+                          </div>
+                        )}
+                      </div>
+                      <input
+                        type="url"
+                        placeholder="Link da foto..."
+                        value={url}
+                        onChange={e => {
+                          const newGallery = [...formData.galleryImages];
+                          newGallery[idx] = e.target.value;
+                          setFormData({ ...formData, galleryImages: newGallery });
+                        }}
+                        className="w-full px-2 py-1 text-[9px] rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-1 focus:ring-teal-500"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">
@@ -1039,95 +1086,16 @@ export const AdvertiseModal: React.FC<AdvertiseModalProps> = ({
               </div>
 
               <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
-                {selectedPlan !== 'free' ? '🎉 Minisite Exclusivo Criado Automaticamente!' : 'Parabéns! Cadastro Ativado com Sucesso!'}
+                {selectedPlan !== 'free' ? '🎉 Pagamento Processado com Sucesso!' : 'Parabéns! Cadastro Ativado com Sucesso!'}
               </h3>
 
-              {selectedPlan !== 'free' ? (
-                <div className="space-y-4 text-left">
-                  {/* Simulated Browser Bar */}
-                  <div className="rounded-2xl overflow-hidden border border-slate-700 bg-slate-950 text-white shadow-xl">
-                    <div className="px-3 py-2 bg-slate-900 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
-                      <div className="flex items-center gap-1.5">
-                        <span className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-                        <span className="ml-2 text-emerald-400 font-bold">
-                          melhordailha.online/{createdBiz?.slug || 'nome-da-empresa'}
-                        </span>
-                      </div>
-                      <span className="px-2 py-0.5 rounded-md bg-amber-500 text-slate-950 text-[10px] font-black uppercase">
-                        ⭐ {selectedPlan === 'premium' ? 'CLIENTE PREMIUM' : 'DESTAQUE ILHA'}
-                      </span>
-                    </div>
-
-                    {/* Mini-site Preview Card */}
-                    <div className="p-4 sm:p-5 bg-gradient-to-b from-slate-900 to-slate-950 space-y-3">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="px-2 py-0.5 rounded-md bg-gradient-to-r from-amber-400 to-yellow-300 text-slate-950 font-black text-[10px]">
-                              {selectedPlan === 'premium' ? 'CLIENTE PREMIUM ⭐' : 'DESTAQUE VERIFICADO'}
-                            </span>
-                            <span className="text-[11px] text-emerald-400 font-bold flex items-center gap-1">
-                              <ShieldCheck className="w-3.5 h-3.5" /> Fotos Melhoradas por IA
-                            </span>
-                          </div>
-                          <h4 className="text-lg sm:text-xl font-extrabold text-white mt-1">
-                            {createdBiz?.name || formData.name}
-                          </h4>
-                          <p className="text-xs text-slate-300">
-                            {createdBiz?.neighborhood || formData.neighborhood}, {createdBiz?.cityName || formData.city} · {createdBiz?.categoryName || formData.category}
-                          </p>
-                        </div>
-
-                        <div className="text-right">
-                          <div className="text-amber-400 font-black text-sm flex items-center gap-1 justify-end">
-                            <Star className="w-4 h-4 fill-amber-400" /> 5.0
-                          </div>
-                          <span className="text-[10px] text-slate-400">Minisite Oficial</span>
-                        </div>
-                      </div>
-
-                      <p className="text-xs text-slate-300 italic bg-slate-800/50 p-2.5 rounded-xl border border-slate-700/50">
-                        "{createdBiz?.description || formData.description || 'Atendimento de alta qualidade na Ilha de Itaparica e RMS.'}"
-                      </p>
-
-                      <div className="flex flex-wrap gap-1.5 pt-1">
-                        {(createdBiz?.services || (formData.services ? formData.services.split(',') : ['Atendimento no WhatsApp', 'Orçamento Rápido'])).map((s: string, idx: number) => (
-                          <span key={idx} className="px-2 py-0.5 rounded-md bg-teal-950/80 border border-teal-800 text-[10px] text-teal-300 font-medium">
-                            ✓ {s.trim()}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Open in new tab CTA */}
-                  <div className="space-y-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        onClose();
-                        if (onOpenMiniSite && createdBiz) {
-                          onOpenMiniSite(createdBiz);
-                        } else {
-                          window.location.href = `/${createdBiz?.slug || 'novo-cliente'}`;
-                        }
-                      }}
-                      className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs sm:text-sm shadow-lg shadow-teal-900/30 flex items-center justify-center gap-2 transition-all hover:scale-101 text-center"
-                    >
-                      <span>Abrir Meu Minisite & Painel de Gerenciamento ↗ (melhordailha.online/{createdBiz?.slug || 'sua-empresa'})</span>
-                    </button>
-                    <p className="text-[11px] text-center text-slate-500 dark:text-slate-400">
-                      Você pode acessar e editar seu minisite a qualquer momento fazendo login com seu <strong>E-mail ou WhatsApp</strong> cadastrado!
-                    </p>
-                  </div>
-                </div>
-              ) : (
+              <div className="space-y-4 text-center">
                 <p className="max-w-md mx-auto text-sm text-slate-600 dark:text-slate-300">
-                  O seu negócio <strong>{createdBiz?.name || formData.name}</strong> foi atualizado com sucesso no Guia Melhor da Ilha no plano Gratuito.
+                  {selectedPlan !== 'free' 
+                    ? `O seu negócio ${createdBiz?.name || formData.name} agora está em destaque no Guia Melhor da Ilha! Nossa equipe entrará em contato para os próximos passos.`
+                    : `O seu negócio ${createdBiz?.name || formData.name} foi atualizado com sucesso no Guia Melhor da Ilha no plano Gratuito.`}
                 </p>
-              )}
+              </div>
 
               <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <button

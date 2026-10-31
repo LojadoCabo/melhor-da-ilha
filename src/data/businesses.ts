@@ -39,8 +39,10 @@ import { CATALOG_EXPANSION_BATCH36 } from './catalogExpansionBatch36';
 import { CATALOG_EXPANSION_BATCH37 } from './catalogExpansionBatch37';
 import { CATALOG_EXPANSION_BATCH38 } from './catalogExpansionBatch38';
 import { BROTAS_EXPANSION_BATCH39 } from './brotasBusinessesBatch39';
+import { PERNAMBUES_IGUATEMI_BATCH40 } from './pernambuesIguatemiBatch40';
 
 export const BUSINESSES: Business[] = [
+  ...PERNAMBUES_IGUATEMI_BATCH40,
   // ==========================================
   // 1. SIMÕES FILHO (6 Negócios)
   // ==========================================
