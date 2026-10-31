@@ -84,7 +84,7 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
       ? window.location.origin
       : 'https://melhordailha.online';
     const identifier = business.slug || business.id;
-    const directUrl = `${origin}/?business=${encodeURIComponent(identifier)}`;
+    const directUrl = `${origin}/${encodeURIComponent(identifier)}`;
     try {
       await navigator.clipboard.writeText(directUrl);
       setCopiedDirect(true);
@@ -399,7 +399,7 @@ export const BusinessModal: React.FC<BusinessModalProps> = ({
                   <div className="text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-1.5 flex-wrap">
                     <span>Link Direto</span>
                     <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-teal-100 dark:bg-teal-900/60 text-teal-800 dark:text-teal-300">
-                      ?business={business.slug || business.id}
+                      /{business.slug || business.id}
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400 truncate">

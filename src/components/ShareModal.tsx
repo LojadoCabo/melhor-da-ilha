@@ -11,7 +11,6 @@ interface ShareModalProps {
 
 export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClose }) => {
   const [copied, setCopied] = useState(false);
-  const [copiedMiniSite, setCopiedMiniSite] = useState(false);
   const { showToast } = useFavorites();
 
   if (!isOpen || !business) return null;
@@ -22,22 +21,17 @@ export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClos
 
   // Usar slug amigável ou o ID do estabelecimento
   const businessIdentifier = business.slug || business.id;
-  // Link direto com o parâmetro ?business= para abrir o modal imediatamente
-  const shareUrl = `${origin}/?business=${encodeURIComponent(businessIdentifier)}`;
+  // Link direto amigável para abrir o estabelecimento (/:slug)
+  const shareUrl = `${origin}/${encodeURIComponent(businessIdentifier)}`;
 
-  const shareTitle = `${business.name} - ${business.tagline} | MELHOR DA ILHA`;
-  const shareText = `Confira ${business.name} (${business.categoryName}) em ${business.cityName} no guia MELHOR DA ILHA:\n${shareUrl}`;
+  const shareTitle = `${business.name} | MELHOR DA ILHA`;
+  const shareText = `Link direto do estabelecimento no guia MELHOR DA ILHA:\n${shareUrl}`;
 
-  const copyToClipboard = async (urlToCopy: string = shareUrl, isMiniSite: boolean = false) => {
+  const copyToClipboard = async (urlToCopy: string = shareUrl) => {
     try {
       await navigator.clipboard.writeText(urlToCopy);
-      if (isMiniSite) {
-        setCopiedMiniSite(true);
-        setTimeout(() => setCopiedMiniSite(false), 2500);
-      } else {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2500);
-      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
       showToast('Link copiado! Ao abrir, vai direto para este estabelecimento 📋');
     } catch {
       showToast('Não foi possível copiar o link.');
@@ -175,7 +169,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ business, isOpen, onClos
               />
               <button
                 type="button"
-                onClick={() => copyToClipboard(shareUrl, false)}
+                onClick={() => copyToClipboard(shareUrl)}
                 className="flex items-center gap-1.5 px-3.5 py-2 bg-teal-600 hover:bg-teal-500 text-white rounded-lg text-xs font-bold transition-all shadow-sm shrink-0"
               >
                 {copied ? <Check className="w-4 h-4 text-emerald-200" /> : <Copy className="w-4 h-4" />}

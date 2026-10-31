@@ -666,7 +666,7 @@ export const ClientMiniSite: React.FC<ClientMiniSiteProps> = ({
       <main className="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 py-6 sm:py-8 space-y-8">
         {/* HERO BANNER & CABEÇALHO */}
         <div className="relative rounded-3xl overflow-hidden bg-slate-900 text-white shadow-2xl border border-slate-200 dark:border-slate-800">
-          <div className="relative h-72 sm:h-96 w-full overflow-hidden">
+          <div className="relative h-[500px] sm:h-96 w-full overflow-hidden">
             <img
               src={galleryPhotos[0] || business.coverImage || getCategoryCoverImage(business.categoryId, business.name)}
               alt={editForm.name}
@@ -679,7 +679,7 @@ export const ClientMiniSite: React.FC<ClientMiniSiteProps> = ({
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/65 to-transparent" />
 
             {/* Selos Topo do Banner */}
-            <div className="absolute top-4 left-4 right-4 flex items-center justify-between flex-wrap gap-2">
+            <div className="absolute top-2 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between flex-wrap gap-2">
               <div className="flex flex-wrap items-center gap-1.5">
                 <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400 text-slate-950 shadow-lg border border-amber-200">
                   <Star className="w-3 h-3 fill-slate-950 text-slate-950" />
@@ -707,38 +707,38 @@ export const ClientMiniSite: React.FC<ClientMiniSiteProps> = ({
             </div>
 
             {/* Informações Centrais do Cabeçalho */}
-            <div className="absolute bottom-6 left-4 right-4 sm:left-6 sm:right-6">
-              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                <div className="space-y-2">
+            <div className="absolute bottom-4 sm:bottom-6 left-3 sm:left-6 right-3 sm:right-6">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 sm:gap-4">
+                <div className="space-y-1.5 sm:space-y-2">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-500/90 text-white">
+                    <span className="px-2 py-0.5 rounded-md text-[10px] sm:text-xs font-bold bg-emerald-500/90 text-white">
                       {editForm.categoryName}
                     </span>
-                    <span className="text-xs text-slate-200 font-semibold bg-black/40 px-2.5 py-0.5 rounded-md backdrop-blur-sm border border-white/10 flex items-center gap-1">
-                      <MapPin className="w-3 h-3 text-rose-400" />
+                    <span className="text-[10px] sm:text-xs text-slate-200 font-semibold bg-black/40 px-2 py-0.5 rounded-md backdrop-blur-sm border border-white/10 flex items-center gap-1">
+                      <MapPin className="w-2.5 h-2.5 text-rose-400" />
                       {business.cityName} · {business.neighborhood}
                     </span>
                   </div>
 
-                  <h1 className="text-xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-md leading-tight">
+                  <h1 className="text-lg sm:text-4xl lg:text-5xl font-black text-white tracking-tight drop-shadow-md leading-tight">
                     {editForm.name}
                   </h1>
 
-                  <p className="text-xs sm:text-sm text-slate-200 max-w-2xl leading-relaxed drop-shadow">
+                  <p className="text-[10px] sm:text-sm text-slate-200 max-w-2xl leading-relaxed drop-shadow line-clamp-2 sm:line-clamp-none">
                     {business.tagline}
                   </p>
                 </div>
 
                 {/* Avaliações do Google Maps */}
-                <div className="flex sm:flex-col items-center sm:items-end gap-1.5 bg-slate-950/85 backdrop-blur-md p-2.5 rounded-2xl border border-slate-700/80 shrink-0 shadow-lg">
-                  <div className="flex items-center gap-1 text-amber-400 font-black text-lg">
-                    <Star className="w-4 h-4 fill-amber-400" />
+                <div className="flex sm:flex-col items-center sm:items-end gap-1.5 bg-slate-950/85 backdrop-blur-md p-2 sm:p-2.5 rounded-xl sm:rounded-2xl border border-slate-700/80 shrink-0 shadow-lg">
+                  <div className="flex items-center gap-1 text-amber-400 font-black text-base sm:text-lg text-lg">
+                    <Star className="w-3.5 h-3.5 sm:w-4 sm:h-4 fill-amber-400" />
                     <span>{business.rating.toFixed(1)}</span>
                   </div>
-                  <div className="text-[10px] text-slate-300 font-medium">
+                  <div className="text-[9px] sm:text-[10px] text-slate-300 font-medium">
                     {business.reviewCount} avaliações
                   </div>
-                  <span className="text-[9px] text-emerald-400 font-black uppercase tracking-wider">
+                  <span className="text-[8px] sm:text-[9px] text-emerald-400 font-black uppercase tracking-wider hidden sm:block">
                     Perfil Verificado
                   </span>
                 </div>

@@ -326,6 +326,7 @@ function MainAppContent() {
           onSearchChange={q => handleFilterChange({ query: q })}
           onQuickSearch={handleQuickSearch}
           totalCount={businesses.length}
+          onOpenAdvertise={() => setIsAdvertiseOpen(true)}
         />
 
 

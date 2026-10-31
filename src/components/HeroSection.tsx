@@ -1,18 +1,20 @@
 import React from 'react';
-import { Search, X, Compass, Sparkles, Shield, PhoneCall } from 'lucide-react';
+import { Search, X, Compass, Sparkles, Shield, PhoneCall, PlusCircle } from 'lucide-react';
 
 interface HeroSectionProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onQuickSearch: (query: string) => void;
   totalCount: number;
+  onOpenAdvertise: () => void;
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({
   searchQuery,
   onSearchChange,
   onQuickSearch,
-  totalCount
+  totalCount,
+  onOpenAdvertise
 }) => {
   const quickSearches = [
     'Motos & Peças',
@@ -34,6 +36,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-64 bg-teal-400/10 dark:bg-teal-500/10 blur-3xl pointer-events-none rounded-full" />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
+        {/* Prominent CTA for mobile and highlighted area */}
+        <div className="flex justify-center mb-6">
+          <button
+            type="button"
+            onClick={onOpenAdvertise}
+            className="group relative inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-teal-600 hover:bg-teal-500 text-white font-black text-sm sm:text-base shadow-xl shadow-teal-700/20 hover:scale-105 transition-all animate-bounce"
+          >
+            <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+            <span>ANUNCIAR MEU NEGÓCIO</span>
+            <div className="absolute -top-1.5 -right-1.5 flex h-4 w-4">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-4 w-4 bg-amber-500"></span>
+            </div>
+          </button>
+        </div>
+
         {/* Badge */}
         <div className="inline-flex items-center gap-1.5 xs:gap-2 px-2.5 xs:px-3.5 py-1.5 rounded-full bg-teal-100/80 dark:bg-teal-950/60 text-teal-800 dark:text-teal-300 border border-teal-200/80 dark:border-teal-800/60 text-[10px] xs:text-xs font-bold xs:font-semibold mb-4 shadow-xs max-w-full">
           <Compass className="w-3 h-3 xs:w-3.5 h-3.5 text-teal-600 dark:text-teal-400 shrink-0" />

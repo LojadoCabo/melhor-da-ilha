@@ -139,7 +139,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             type="button"
             onClick={onOpenAdvertise}
-            className="inline-flex items-center gap-1 px-2 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-[10px] sm:text-xs font-bold shadow-sm transition-colors whitespace-nowrap shrink-0"
+            className="hidden md:inline-flex items-center gap-1 px-2 py-1.5 rounded-xl bg-teal-600 hover:bg-teal-500 text-white text-[10px] sm:text-xs font-bold shadow-sm transition-colors whitespace-nowrap shrink-0"
           >
             <PlusCircle className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
             <span className="hidden sm:inline">Anunciar / Lojista</span>
